@@ -3,6 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import { styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
+
 
 const CoolButton = styled(Button)({
   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -15,6 +18,10 @@ const CoolButton = styled(Button)({
 });
 
 
+function handleChange(e) {
+  console.log(e.target.value);
+}
+
 class App extends Component {
   render() {
     return (
@@ -25,7 +32,11 @@ class App extends Component {
         </div>
         <p className="App-intro">I'm the best front-end developer in the world.</p>
         <p className="App-intro">However, I only barely know how to put components here... I have no idea how to get them to do anything.</p>
-        <CoolButton >Do nothing</CoolButton>
+        <form>
+            <TextField id="standard-basic" label="Standard" onChange={handleChange}/>
+            <CoolButton className="App-logo">{this.props.hola} Do nothing</CoolButton>
+        </form>
+        
       </div>
     );
   }
