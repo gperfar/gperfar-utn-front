@@ -19,28 +19,40 @@ const CoolButton = styled(Button)({
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: 'Hola'};
+    this.state = {
+      email: '',
+      password:''
+    };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);    
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  handleEmailChange(event) {
+    this.setState({email: event.target.value});
+  }
+
+  handlePasswordChange(event) {
+    this.setState({password: event.target.value});
   }
 
   handleSubmit(event) {
-    // alert('Hello ' + this.state.value + '!');
-    window.location.href = "http://google.com/search?q=" + this.state.value;    
-    event.preventDefault();
+    alert('I can\'t log you in ' + this.state.email + '! ' + this.state.password);
+    // window.location.href = "http://google.com/search?q=" + this.state.value;    
+    // event.preventDefault();
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <TextField type="text" label='Google Query' onChange={this.handleChange} />
-        <CoolButton type="submit" className="App-logo"> HIT IT! </CoolButton>
-      </form>
+      <div>
+        <h3>Log in (insert fake credentials! not that I know how to store them anywhere, but still...)</h3>
+        <form onSubmit={this.handleSubmit}>
+          <TextField type="text" label='Email' onChange={this.handleEmailChange} />
+          <TextField type="text" label='Password' type = 'password' onChange={this.handlePasswordChange} />
+          <CoolButton type="submit" className="App-logo"> HIT IT! </CoolButton>
+        </form>
+      </div>
     );
   }
 }
