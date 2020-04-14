@@ -38,7 +38,7 @@ class NameForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('I can\'t log you in ' + this.state.email + '! ' + this.state.password);
+    alert('I can\'t log you in ' + this.state.email + '! But I won\'t tell anyone your password is ' + this.state.password);
     // window.location.href = "http://google.com/search?q=" + this.state.value;    
     // event.preventDefault();
   }
