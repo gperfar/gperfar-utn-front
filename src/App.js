@@ -27,7 +27,7 @@ class LoginForm extends React.Component {
     };
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);    
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this); //I think it's not necessary to bind them with this way of having it... but it doesn't break anything!
   }
   handleEmailChange(event) {
     this.setState({email: event.target.value});
@@ -37,8 +37,11 @@ class LoginForm extends React.Component {
   }
   handleSubmit(event) {
     alert('I can\'t log you in, ' + this.state.email + '! But worry not, I won\'t tell anyone your password is ' + this.state.password);
-    // window.location.href = "http://google.com/search?q=" + this.state.value;    
-    // event.preventDefault();
+    event.preventDefault();
+  }
+  handleRegister(event) {
+    alert('You don\'t want to register to this crappy platform, my man.');
+    event.preventDefault();
   }
   render() {
     return (
@@ -48,8 +51,8 @@ class LoginForm extends React.Component {
           <label ><TextField className="Base login-input" type="text" label='Email' onChange={this.handleEmailChange} /></label>
           <label ><TextField className="Base login-input" type="text" label='Password' type='password' onChange={this.handlePasswordChange} /></label>
           <div className="Container">
-            <label className="Base"><CoolButton type="submit"> Log In </CoolButton></label>
-            <label className="Base"><CoolButton type="submit"> Register </CoolButton></label>
+            <label className="Base" name="login"><CoolButton type="submit"> Log In </CoolButton></label>
+            <label className="Base" name="register"><CoolButton onClick={this.handleRegister}> Register </CoolButton></label>
           </div>
         </form>
       </div>
