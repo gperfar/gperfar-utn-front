@@ -66,7 +66,6 @@ class App extends React.Component {
           <img src={landing} className="Landing"/>
           <div className = "landing-text">
             <p>Welcome to the most powerful Data Analysis tool in the world.</p>
-            <p>Oh, and it's affordable, too!</p>
           </div>
           <label className="login-form"><LoginForm/></label>
         </div>
