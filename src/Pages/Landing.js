@@ -26,6 +26,10 @@ display: flex;
 flex-direction: column;
 text-align: center;
 
+@media (max-width: 600px) {
+height:auto;
+}
+
 `;
 
 const Header = styled.div`
