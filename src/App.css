@@ -1,6 +1,6 @@
 body{
-  background: rgb(2,0,36);
-  background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
+  /* background: rgb(2,0,36);
+  background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%); */
   color: whitesmoke
 }
 .landing-text {

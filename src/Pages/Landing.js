@@ -12,6 +12,8 @@ const GlobalStyle = createGlobalStyle`
 
 body {
   margin: 0;
+  background: rgb(2,0,36);
+  background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
 }
 
 body * {
@@ -68,6 +70,9 @@ const SidePanel = styled.div`
 flex:1;
 min-width: 6em;
 border: 1px solid black;
+background-color: rgb(75, 98, 160);
+padding-top:2em;
+
 
 @media (max-width: 600px) {
   flex: 3;
