@@ -13,6 +13,7 @@ flex-direction: column;
 
 const LoginSideContainer = styled.div`
 height: 100vh;
+justify-content:center;
 display: flex;
 margin: 1em;
 flex-direction: row;

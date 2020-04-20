@@ -46,7 +46,7 @@ overflow-y: hidden;
 `
 
 const Content = styled.div`
-flex: 1;
+flex: 75;
 overflow-y: scroll;
 
 > div {
@@ -59,6 +59,7 @@ overflow-y: scroll;
 `;
 
 const SidePanel = styled.div`
+flex:25;
 min-width: 3em;
 border-left: 1px solid black;
 
