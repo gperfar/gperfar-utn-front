@@ -11,37 +11,33 @@ body{
 }
 .landing-text {
   position:absolute;  
+  top: 5%;
   width: 70%;
   font-size: x-large;
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-transform: uppercase;
-  
 }
 
 .Base {
   margin: 1em;
   display:block;
   text-align: center;
-  width:80%
+  /* width:80%; */
+  /* flex-shrink: ; */
 }
 
-.login-input{
-  width:73%
-}
-
-.Container {
-  display:flex;
-}
 .Landing {
+  position: absolute;
   width: 70%;
 }
 
 .login-form{
-  position: absolute;
-  width:30%;  
-  left:70%;
+  /* position: absolute; */
+  /* width:30%;   */
+  /* left:70%; */
+justify-content: center;
 }
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

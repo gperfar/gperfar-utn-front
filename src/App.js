@@ -1,80 +1,96 @@
-import React, { Component } from 'react';
-import logo from './Assets/logo.svg';
+import React, { Component, useState, useEffect }  from 'react';
 import landing from './Assets/landing.jpg';
 import './App.css';
-import { styled } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import {LoginForm} from './Components/LoginForm'
+import styled, { createGlobalStyle } from "styled-components";
 
-const CoolButton = styled(Button)({
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-  border: 0,
-  borderRadius: 1,
-  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-  color: 'white',
-  height: 40,
-  width: 100
-  // padding: '0 30px',
-});
-
-
-class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password:''
-    };
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);    
-    this.handleSubmit = this.handleSubmit.bind(this); //I think it's not necessary to bind them with this way of having it... but it doesn't break anything!
-  }
-  handleEmailChange(event) {
-    this.setState({email: event.target.value});
-  }
-  handlePasswordChange(event) {
-    this.setState({password: event.target.value});
-  }
-  handleSubmit(event) {
-    alert('I can\'t log you in, ' + this.state.email + '! But worry not, I won\'t tell anyone your password is ' + this.state.password);
-    event.preventDefault();
-  }
-  handleRegister(event) {
-    alert('You don\'t want to register to this crappy platform, my man.');
-    event.preventDefault();
-  }
-  render() {
-    return (
-      <div>
-        <p className="Base">Insert fake credentials!</p>
-        <form onSubmit={this.handleSubmit}>
-          <label ><TextField className="Base login-input" type="text" label='Email' onChange={this.handleEmailChange} /></label>
-          <label ><TextField className="Base login-input" type="text" label='Password' type='password' onChange={this.handlePasswordChange} /></label>
-          <div className="Container">
-            <label className="Base" name="login"><CoolButton type="submit"> Log In </CoolButton></label>
-            <label className="Base" name="register"><CoolButton onClick={this.handleRegister}> Register </CoolButton></label>
-          </div>
-        </form>
-      </div>
-    );
-  }
+const GlobalStyle = createGlobalStyle`
+* {
+  box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+}
 
-class App extends React.Component {
-  render() {
+body * {
+  border: 1px solid black;
+}
+`;
+
+const MainContainer = styled.div`
+height: 100vh;
+display: flex;
+flex-direction: column;
+`;
+
+const Header = styled.div`
+padding: 1em;
+`;
+
+const Footer = styled.div``;
+
+const ContentWrapper = styled.div`
+flex: 1;
+display: flex;
+overflow-y: hidden;
+
+@media (max-width: 300px) {
+  flex-direction: column;
+}
+`
+
+const Content = styled.div`
+flex: 1;
+overflow-y: scroll;
+
+> div {
+  padding: 1em;
+
+  :not(:last-child) {
+    margin-bottom: 1em;
+  }
+}
+`;
+
+const SidePanel = styled.div`
+min-width: 7em;
+`;
+
+
+export default function App()  {
+    const url = "https://gperfar-utn.herokuapp.com/users";
+    // "https://dummy.restapiexample.com/api/v1/employees";
+    
+    async function getResults() {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data["result"].users)
+      return data;
+    }
+    const [results, setResults] = useState([]);
+      console.log(results);
+      useEffect(() => {
+        getResults().then(data => setResults(data["result"].users));
+      }, []);
+
     return (
       <div className="App">
-        <div className="Container">
-          <img src={landing} className="Landing"/>
-          <div className = "landing-text">
-            <p>Welcome to the most powerful Data Analysis tool in the world.</p>
-          </div>
-          <label className="login-form"><LoginForm/></label>
-        </div>
+        <MainContainer>
+          <GlobalStyle />
+          <Header>Header</Header>
+          <ContentWrapper>
+            <Content>
+              {results.map(result => (
+                <div>{result.name}</div>
+              ))}
+            </Content>
+            <SidePanel>
+              <LoginForm />
+            </SidePanel>
+          </ContentWrapper>
+          <Footer>Footer</Footer>
+        </MainContainer>
       </div>
     );
   }
-}
-
-export default App;
