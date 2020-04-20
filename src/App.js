@@ -39,15 +39,20 @@ const ContentWrapper = styled.div`
 flex: 1;
 display: flex;
 overflow-y: hidden;
-
-@media (max-width: 300px) {
+flex-direction: row;
+@media (max-width: 600px) {
   flex-direction: column;
 }
 `
 
 const Content = styled.div`
-flex: 75;
+flex: 7;
 overflow-y: scroll;
+
+@media (max-width: 600px) {
+  flex: 3;
+}
+
 
 > div {
   padding: 1em;
@@ -59,9 +64,13 @@ overflow-y: scroll;
 `;
 
 const SidePanel = styled.div`
-flex:25;
+flex:3;
 min-width: 6em;
-border-left: 1px solid black;
+border: 1px solid black;
+
+@media (max-width: 600px) {
+  flex: 7;
+}
 
 `;
 
