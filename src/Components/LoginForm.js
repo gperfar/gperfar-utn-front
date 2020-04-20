@@ -2,6 +2,21 @@ import React, { Component } from 'react';
 import '../App.css';
 import TextField from '@material-ui/core/TextField';
 import {CoolButton} from './CoolButton'
+import styled, { createGlobalStyle } from "styled-components";
+
+const LoginMainContainer = styled.div`
+height: 100vh;
+display: flex;
+margin: 1em;
+flex-direction: column;
+`;
+
+const LoginSideContainer = styled.div`
+height: 100vh;
+display: flex;
+margin: 1em;
+flex-direction: row;
+`;
 
 export class LoginForm extends React.Component {
     constructor(props) {
@@ -30,15 +45,17 @@ export class LoginForm extends React.Component {
     }
     render() {
       return (
-        <div className="Base">
+        <div>
           <p>Insert fake credentials!</p>
           <form onSubmit={this.handleSubmit}>
-            <label ><TextField className="login-input" type="text" label='Email' onChange={this.handleEmailChange} /></label>
-            <label ><TextField className="login-input" type="text" label='Password' type='password' onChange={this.handlePasswordChange} /></label>
-            <div className="Container">
-              <label className="Base" name="login"><CoolButton type="submit"> Log In </CoolButton></label>
-              <label className="Base" name="register"><CoolButton onClick={this.handleRegister}> Register </CoolButton></label>
-            </div>
+            <LoginMainContainer>
+                <TextField type="text" label='Email' onChange={this.handleEmailChange} />
+                <TextField type="text" label='Password' type='password' onChange={this.handlePasswordChange} />
+                <LoginSideContainer>
+                    <CoolButton type="submit"> Log In </CoolButton>
+                    <CoolButton onClick={this.handleRegister}> Register </CoolButton>
+                </LoginSideContainer>
+            </LoginMainContainer>
           </form>
         </div>
       );

@@ -14,7 +14,6 @@ body {
 }
 
 body * {
-  border: 1px solid black;
 }
 `;
 
@@ -26,9 +25,15 @@ flex-direction: column;
 
 const Header = styled.div`
 padding: 1em;
+border-bottom: 1px solid black;
+
 `;
 
-const Footer = styled.div``;
+const Footer = styled.div`
+border-top: 1px solid black;
+padding: 1em;
+
+`;
 
 const ContentWrapper = styled.div`
 flex: 1;
@@ -54,42 +59,45 @@ overflow-y: scroll;
 `;
 
 const SidePanel = styled.div`
-min-width: 7em;
+min-width: 3em;
+border-left: 1px solid black;
+
 `;
 
 
 export default function App()  {
-    const url = "https://gperfar-utn.herokuapp.com/users";
-    // "https://dummy.restapiexample.com/api/v1/employees";
+    // const url = "https://gperfar-utn.herokuapp.com/users";
+    // // "https://dummy.restapiexample.com/api/v1/employees";
     
-    async function getResults() {
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data["result"].users)
-      return data;
-    }
-    const [results, setResults] = useState([]);
-      console.log(results);
-      useEffect(() => {
-        getResults().then(data => setResults(data["result"].users));
-      }, []);
+    // async function getResults() {
+    //   const response = await fetch(url);
+    //   const data = await response.json();
+    //   console.log(data["result"].users)
+    //   return data;
+    // }
+    // const [results, setResults] = useState([]);
+    //   console.log(results);
+    //   useEffect(() => {
+    //     getResults().then(data => setResults(data.result.users));
+    //   }, []);
 
     return (
       <div className="App">
         <MainContainer>
           <GlobalStyle />
-          <Header>Header</Header>
-          <ContentWrapper>
-            <Content>
-              {results.map(result => (
-                <div>{result.name}</div>
-              ))}
-            </Content>
-            <SidePanel>
-              <LoginForm />
-            </SidePanel>
-          </ContentWrapper>
-          <Footer>Footer</Footer>
+            <Header>Smplified Data Analysis</Header>
+            <ContentWrapper>
+              <Content>
+                <h3>Welcome to the most powerful data analysis tool in the world</h3>
+                {/* {results.map(result => (
+                  <div>{result.name}</div>
+                ))} */}
+              </Content>
+              <SidePanel>
+                <LoginForm />
+              </SidePanel>
+            </ContentWrapper>
+            <Footer>Proyecto Final - Gonzalo Pérez Fariña</Footer>
         </MainContainer>
       </div>
     );

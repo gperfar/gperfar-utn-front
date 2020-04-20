@@ -28,11 +28,6 @@ body{
   /* flex-shrink: ; */
 }
 
-.Landing {
-  position: absolute;
-  width: 70%;
-}
-
 .login-form{
   /* position: absolute; */
   /* width:30%;   */
