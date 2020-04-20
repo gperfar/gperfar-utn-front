@@ -60,7 +60,7 @@ overflow-y: scroll;
 
 const SidePanel = styled.div`
 flex:25;
-min-width: 3em;
+min-width: 6em;
 border-left: 1px solid black;
 
 `;

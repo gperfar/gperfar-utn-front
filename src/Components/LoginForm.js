@@ -5,18 +5,22 @@ import {CoolButton} from './CoolButton'
 import styled, { createGlobalStyle } from "styled-components";
 
 const LoginMainContainer = styled.div`
-height: 100vh;
 display: flex;
-margin: 1em;
+padding: 1em;
 flex-direction: column;
+justify-content:center;
+
 `;
 
 const LoginSideContainer = styled.div`
-height: 100vh;
 justify-content:center;
 display: flex;
-margin: 1em;
+padding: 1em;
 flex-direction: row;
+
+@media (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;
 
 export class LoginForm extends React.Component {
