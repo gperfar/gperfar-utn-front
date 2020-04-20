@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
-import {CoolTextField} from './CoolTextField';
-import {CoolButton} from './CoolButton'
+import {CoolTextField} from '../Components/CoolTextField';
+import {CoolButton} from '../Components/CoolButton'
 import styled, { createGlobalStyle } from "styled-components";
 
 const LoginMainContainer = styled.div`
@@ -23,7 +23,7 @@ flex-direction: row;
   }
 `;
 
-export class LoginForm extends React.Component {
+export class About extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
