@@ -10,7 +10,6 @@ const MainWrapper = styled.div`
 
 const LoginMainContainer = styled.div`
 display: flex;
-padding: 0.5em;
 flex-direction: column;
 justify-content:center;
 

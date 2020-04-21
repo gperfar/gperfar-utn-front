@@ -21,7 +21,7 @@ h1 {
   font-size: 48pt;  
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;  
 }
 
 h2, h4 {
@@ -51,11 +51,9 @@ height:auto;
 
 const Header = styled.div`
 padding: 1em;
-// border-bottom: 1px solid black;
 `;
 
 const Footer = styled.div`
-// border-top: 1px solid black;
 padding: 1em;
 
 `;
@@ -73,7 +71,7 @@ flex-direction: row;
 const Content = styled.div`
 flex: 3;
 overflow-y: auto;
-margin: 2em;
+// margin: 1em;
 @media (max-width: 600px) {
   flex: 1;
 }
@@ -90,11 +88,10 @@ margin: 2em;
 const SidePanel = styled.div`
 flex:1;
 min-width: 6em;
-// border: 1px solid black;
 background-color: rgb(75, 98, 160);
 padding: 1em;
-padding-top:2em;
-
+padding-top:1em;
+overflow-y:auto;
 @media (max-width: 600px) {
   flex: 3;
 }
@@ -140,7 +137,7 @@ export function Landing()  {
                 </Content>
                 <SidePanel>
                 <LoginForm />
-                <p classname="a" > If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.</p>
+                If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.
                 </SidePanel>
             </ContentWrapper>
             {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}

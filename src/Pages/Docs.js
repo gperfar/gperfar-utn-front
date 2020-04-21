@@ -10,7 +10,6 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body {
-  margin: 0;
   background: rgb(2,0,36);
   background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
 }
@@ -26,11 +25,18 @@ h2, h4 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: 1em;
 }
-
+h2 {
+  padding: 0.5em;
+}
+h4{
+  padding-right: 1em;
+}
 p{
   text-indent: 40px;
+}
+ul{
+  margin:0;
 }
 `;
 
@@ -39,10 +45,13 @@ display: flex;
 flex-direction: row;
 box-sizing: border-box;
 justify-content:center;
-
 background: rgb(2,0,36);
 background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
 height:100vh;
+@media (max-width: 600px) {
+  flex-direction: column;
+  height: auto;
+}
 
 `;
 
@@ -52,6 +61,7 @@ display: flex;
 flex-direction: column;
 justify-content:left;
 padding: 2em;
+
 `;
 
 const DocsContent = styled.div`
@@ -67,7 +77,15 @@ export class Docs extends React.Component {
       return (
         <DocsMainContainer>
           <GlobalStyle />
-            <DocsSideContainer />
+            <DocsSideContainer>
+              <h4><Link to="/">Go Home</Link></h4>
+              <h4>Table of Contents</h4>
+              <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#connectors">Available Connectors</a></li>
+                <li><a href="#transformations">Transformations</a></li>
+              </ul>
+            </DocsSideContainer>
             <DocsContent>
               <h1> Simplified Data Analysis </h1>
               <h2 id="overview">Overview</h2>
@@ -87,15 +105,7 @@ export class Docs extends React.Component {
               <p>Executing SQL queries is good. Doing it without knowing SQL is awesome. Building queries based on other queries (what from now on we will call transformations) is beyond this universe!</p>
             </DocsContent>
             <DocsSideContainer>
-              <Link to="/">Go Home</Link>
-              <nav>
-                <h4>Table of Contents</h4>
-                <ul>
-                  <li><a href="#overview">Overview</a></li>
-                  <li><a href="#connectors">Available Connectors</a></li>
-                  <li><a href="#transformations">Transformations</a></li>
-                </ul>
-              </nav>
+
             </DocsSideContainer>
         </DocsMainContainer>
       );
