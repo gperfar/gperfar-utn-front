@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import '../App.css';
+// import '../App.css';
 import {CoolTextField} from './CoolTextField';
 import {CoolButton} from './CoolButton'
 import styled, { createGlobalStyle } from "styled-components";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+const MainWrapper = styled.div`
+`
 
 const LoginMainContainer = styled.div`
 display: flex;
-padding: 1em;
+padding: 0.5em;
 flex-direction: column;
 justify-content:center;
 
@@ -18,7 +22,7 @@ display: flex;
 padding: 1em;
 flex-direction: row;
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
     flex-direction: column;
   }
 `;
@@ -50,8 +54,8 @@ export class LoginForm extends React.Component {
     }
     render() {
       return (
-        <div>
-          <h3 className="landing-text">Insert fake credentials!</h3>
+        <MainWrapper>
+          <h4>INSERT FAKE CREDENTIALS!</h4>
           <form onSubmit={this.handleSubmit}>
             <LoginMainContainer>
                 <CoolTextField type="text" label='Email' onChange={this.handleEmailChange} />
@@ -62,7 +66,7 @@ export class LoginForm extends React.Component {
                 </LoginSideContainer>
             </LoginMainContainer>
           </form>
-        </div>
+        </MainWrapper>
       );
     }
   }

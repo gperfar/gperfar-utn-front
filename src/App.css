@@ -1,21 +1,14 @@
 body{
   /* background: rgb(2,0,36);
   background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%); */
-  color: whitesmoke
+  /* color: whitesmoke; */
 }
 .landing-text {
   /* font-size: x-large; */
+  /* padding: 0.5em; */
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-}
+  /* text-transform: uppercase; */
 
-h1{
-  font-size: 60pt;
-  /* margin: 1em; */
-}
-
-.footer{
-  background-color: rgb(44, 61, 112);
 }
