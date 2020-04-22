@@ -10,8 +10,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body {
-  background: rgb(2,0,36);
-  background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
+  rgb(75, 98, 160)
 }
 
 h1 {
@@ -45,8 +44,7 @@ display: flex;
 flex-direction: row;
 box-sizing: border-box;
 justify-content:center;
-background: rgb(2,0,36);
-background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
+background-color: rgb(75, 98, 160);
 height:100vh;
 @media (max-width: 600px) {
   flex-direction: column;

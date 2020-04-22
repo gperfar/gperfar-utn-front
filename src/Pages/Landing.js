@@ -22,6 +22,8 @@ h1 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;  
+  line-height: 1.5em;
+  
 }
 
 h2, h4 {
@@ -30,6 +32,8 @@ h2, h4 {
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 1em;
+  line-height: 1.5em;
+  
 }
 
 p{
@@ -105,6 +109,7 @@ const ContentText = styled.div`
   text-indent: 40px;
   margin: 0em 1em;
   font-size: x-large;
+  line-height: 1.5em;
 `
 export function Landing()  {
     // const url = "https://gperfar-utn.herokuapp.com/users";
@@ -129,7 +134,7 @@ export function Landing()  {
             <ContentWrapper>
                 <Content>
                 <h1>WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
-                <h2>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</h2>
+                <h2>SDA is the Business Intelligence platform all small and medium-sized business were waiting for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. </h2>
                 <ContentText>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
