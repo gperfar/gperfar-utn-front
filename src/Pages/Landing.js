@@ -26,22 +26,20 @@ h1 {
   
 }
 
-h2, h4 {
+h2 {
   font-size: xx-large;
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: 1em;
+  padding: 2em 1em 0.5em;
   line-height: 1.5em;
   
 }
 
-p{
-  color: #FFAE83;
-}
-
-.info{
-  font-size: normal;
+.nomargin{
+  margin:0;
+  font-size:18px;
+  color: #FFDEB3;
 }
 `;
 
@@ -110,6 +108,8 @@ const ContentText = styled.div`
   margin: 0em 1em;
   font-size: x-large;
   line-height: 1.5em;
+  color: #FFAE83;
+  
 `
 export function Landing()  {
     // const url = "https://gperfar-utn.herokuapp.com/users";
@@ -134,17 +134,25 @@ export function Landing()  {
             <ContentWrapper>
                 <Content>
                 <h1>WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
-                <h2>SDA is the Business Intelligence platform all small and medium-sized business were waiting for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. </h2>
+                <h2>SDA is the Business Intelligence platform all small and medium-sized businesses are looking for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. All you need is a working database on which to perform these queries.</h2>
                 <ContentText>
-                  <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
+                  <p>We are convinced that data analysis is key for improving a company's decision making. There is an endless number of questions we could answer just looking at our data...</p>
+                  <ul>
+                    <li>Which products are driving our revenue?</li>
+                    <p className="nomargin">Desarrollo</p>
+                    <li>Who should I promote to Customer Success Manager?</li>
+                    <p className="nomargin">Desarrollo</p>
+                    <li>Are we really improving our delivery time since we implemented the new system?</li>
+                    <p className="nomargin">Desarrollo</p>
+                    <li>Where should we open our new branch?</li>
+                    <p className="nomargin">Desarrollo</p>
+                    <li>What's the age distribution of our employees?</li>
+                    <p className="nomargin">Desarrollo</p>
+                  </ul>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                 </ContentText>
                 <h2>This is great... but who is it for?</h2>
                 <ContentText>
-                  <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
-                  <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
-                  <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
-                  <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
@@ -155,7 +163,7 @@ export function Landing()  {
                 </Content>
                 <SidePanel>
                 <LoginForm />
-                <p>If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.</p>
+                <p className="nomargin">If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.</p>
                 </SidePanel>
             </ContentWrapper>
             {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}

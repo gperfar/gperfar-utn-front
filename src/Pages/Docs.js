@@ -2,34 +2,30 @@ import React, { Component } from 'react';
 import '../App.css';
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
+import {CoolButton} from '../Components/CoolButton';
 
 const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;
 }
 
-body {
-  rgb(75, 98, 160)
+h1, h2 {
+  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+	-webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 h1 {
   font-size: 48pt;  
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-	-webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-h2, h4 {
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-	-webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 h2 {
   padding: 0.5em;
 }
 h4{
   padding-right: 1em;
+  margin-bottom:10px;
+  margin-left:10px;
+  color: #FFDEB3;
 }
 p{
   text-indent: 40px;
@@ -76,7 +72,7 @@ export class Docs extends React.Component {
         <DocsMainContainer>
           <GlobalStyle />
             <DocsSideContainer>
-              <h4><Link to="/">Go Home</Link></h4>
+              <Link to="/"><h4>Home</h4></Link>
               <h4>Table of Contents</h4>
               <ul>
                 <li><a href="#overview">Overview</a></li>

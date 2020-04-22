@@ -5,16 +5,6 @@ import {CoolButton} from './CoolButton'
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-const GlobalStyle = createGlobalStyle`
-* {
-  box-sizing: border-box;
-}
-
-h4 {
-  margin: 0;
-  padding-bottom: 0;
-}`
-
 const MainWrapper = styled.div`
 `
 
@@ -35,6 +25,14 @@ flex-direction: row;
     flex-direction: column;
   }
 `;
+
+const Title = styled.h4`
+color: #FFDEB3;  
+margin: 0;
+font-size: xx-large;
+padding: 2em 1em 0.5em;
+line-height: 1.5em;
+`
 
 export class LoginForm extends React.Component {
     constructor(props) {
@@ -64,8 +62,7 @@ export class LoginForm extends React.Component {
     render() {
       return (
         <MainWrapper>
-          <GlobalStyle />
-          <h4>Log In</h4>
+          <Title>Log In</Title>
           <form onSubmit={this.handleSubmit}>
             <LoginMainContainer>
                 <CoolTextField type="text" label='Email' onChange={this.handleEmailChange} />
