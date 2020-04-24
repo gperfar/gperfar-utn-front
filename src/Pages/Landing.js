@@ -112,25 +112,10 @@ const ContentText = styled.div`
   
 `
 export function Landing()  {
-    // const url = "https://gperfar-utn.herokuapp.com/users";
-    // // "https://dummy.restapiexample.com/api/v1/employees";
-    
-    // async function getResults() {
-    //   const response = await fetch(url);
-    //   const data = await response.json();
-    //   console.log(data["result"].users)
-    //   return data;
-    // }
-    // const [results, setResults] = useState([]);
-    //   console.log(results);
-    //   useEffect(() => {
-    //     getResults().then(data => setResults(data.result.users));
-    //   }, []);
 
     return (
         <MainContainer>
             <GlobalStyle />
-            {/* <Header className="landing-text">Smplified Data Analysis</Header> */}
             <ContentWrapper>
                 <Content>
                 <h1>WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
@@ -157,13 +142,11 @@ export function Landing()  {
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                 </ContentText>
-                {/* {results.map(result => (
-                    <div>{result.name}</div>
-                ))} */}
                 </Content>
                 <SidePanel>
                 <LoginForm />
                 <p className="nomargin">If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.</p>
+                <p className="nomargin">If you want to check out our users' actual connections, visit <Link to="/connections">connections</Link>.</p>
                 </SidePanel>
             </ContentWrapper>
             {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}
