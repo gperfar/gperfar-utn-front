@@ -95,7 +95,7 @@ export function Connections (){
                   <h2>{result.name}</h2>
                   <p>Type: {result.type}  </p>
                   <p>Comment: {result.comment} </p>
-                  <ConnectionCard />
+                  <ConnectionCard connection={result}/>
                 </div>
                 ))}
             </DocsContent>

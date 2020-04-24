@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useState, useEffect }  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function ConnectionCard() {
+export function ConnectionCard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -32,20 +32,37 @@ export function ConnectionCard() {
     setOpen(!open);
   };
 
+//   const url = "https://gperfar-utn.herokuapp.com/connections?id="+props.connection._id;
+  
+//   async function getConnectionDetails() {
+//     const response = await fetch(url);
+//     const data = await response.json();
+//     return data;
+//   }
+//   const [results, setResults] = useState([]);
+//     console.log(results);
+//     useEffect(() => {
+//       getConnectionDetails().then(data => setResults(data.result.connection_details));
+//       results.pop("name")
+//     }, []);
+
   return (
     <List
       component="nav"
       className={classes.root}
     >
       <ListItem button onClick={handleClick}>
-        <ListItemText primary="See details" />
+        <ListItemText primary="See conneciton details" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" >
-          <ListItem className={classes.nested}>
-            <ListItemText primary="Username" secondary="asdf" />
-          </ListItem>
+        <List component="div" >   
+            {console.log(Object.keys(props.connection))}
+            {Object.entries(props.connection).map(attr => (
+                <ListItem className={classes.nested}>
+                    <ListItemText primary= {attr[0].charAt(0).toUpperCase() + attr[0].substring(1)} secondary={attr[1]} />
+                </ListItem>
+            ))}
         </List>
       </Collapse>
     </List>
