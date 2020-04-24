@@ -93,8 +93,6 @@ export function Connections (){
               {results.map(result => (
                 <div>
                   <h2>{result.name}</h2>
-                  <p>Type: {result.type}  </p>
-                  <p>Comment: {result.comment} </p>
                   <ConnectionCard connection={result}/>
                 </div>
                 ))}
