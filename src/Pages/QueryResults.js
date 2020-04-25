@@ -4,7 +4,7 @@ import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {CoolButton} from '../Components/CoolButton';
 import {ConnectionCard} from '../Components/ConnectionCard';
-
+import EnhancedTable from '../Components/Table';
 const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;
@@ -33,30 +33,29 @@ ul{
 }
 `;
 
-const ConnectionsMainContainer = styled.div`
+const QueryResultsMainContainer = styled.div`
 display: flex;
-flex-direction: row;
+flex-direction: column;
 box-sizing: border-box;
 justify-content:center;
 background-color: rgb(75, 98, 160);
 height:100vh;
 @media (max-width: 600px) {
-  flex-direction: column;
+//   flex-direction: column;
   height: auto;
 }
 
 `;
 
-const ConnectionsSideContainer = styled.div`
-flex:1;
+const QueryResultsTopContainer = styled.div`
 display: flex;
-flex-direction: column;
+flex-direction: row;
 justify-content:left;
 padding: 2em;
 
 `;
 
-const ConnectionsContent = styled.div`
+const QueryResultsContent = styled.div`
 flex:3;
 justify-content:center;
 padding: 1em;
@@ -66,9 +65,9 @@ overflow-y: auto;
 
 
 
-export function Connections (){
+export function QueryResults (){
 
-    const url = "https://gperfar-utn.herokuapp.com/connections";
+    const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=2";
     
     async function getResults() {
       const response = await fetch(url);
@@ -78,29 +77,21 @@ export function Connections (){
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {
-        getResults().then(data => setResults(data.result.connections));
+        getResults().then(data => setResults(data.results));
       }, []);
 
     return (
-        <ConnectionsMainContainer>
+        <QueryResultsMainContainer>
           <GlobalStyle />
-            <ConnectionsSideContainer>
+            <QueryResultsTopContainer>
               <Link to="/"><h4>Home</h4></Link>
               <Link to="/docs"><h4>Docs</h4></Link>
-            </ConnectionsSideContainer>
-            <ConnectionsContent>
-              <h1>Connections</h1>
-              {results.map(result => (
-                <div>
-                  <h2>{result.name}</h2>
-                  <ConnectionCard connection={result}/>
-                </div>
-                ))}
-            </ConnectionsContent>
-            <ConnectionsSideContainer>
-
-            </ConnectionsSideContainer>
-        </ConnectionsMainContainer>
+            </QueryResultsTopContainer>
+            <QueryResultsContent>
+              <h1>Query Results</h1>
+              <EnhancedTable info={results}/>
+            </QueryResultsContent>
+        </QueryResultsMainContainer>
       );
     }
   

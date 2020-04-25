@@ -58,7 +58,7 @@ export function ConnectionCard(props) {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" >   
             {console.log(Object.keys(props.connection))}
-            {Object.entries(props.connection).map(attr => (
+            {Object.entries(props.connection).map(attr => ( //Don't show ID, name or User ID. Sort them better!
                 <ListItem className={classes.nested}>
                     <ListItemText primary= {attr[0].charAt(0).toUpperCase() + attr[0].substring(1)} secondary={attr[1]} />
                 </ListItem>
