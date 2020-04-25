@@ -88,7 +88,7 @@ export function QueryResults (){
               <Link to="/docs"><h4>Docs</h4></Link>
             </QueryResultsTopContainer>
             <QueryResultsContent>
-              <h1>Query Results</h1>
+              <h1>Query Results (sample sentence)</h1>
               <EnhancedTable info={results}/>
             </QueryResultsContent>
         </QueryResultsMainContainer>
