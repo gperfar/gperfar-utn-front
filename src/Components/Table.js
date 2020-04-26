@@ -20,7 +20,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-  
+import styled, { createGlobalStyle } from "styled-components";
+import {CoolButton} from './CoolButton'
+
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -139,7 +141,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
       marginBottom: theme.spacing(2),
     },
     table: {
-      minWidth: 750,
+      minWidth: 1200,
+      whiteSpace: 'nowrap',
     },
     visuallyHidden: {
       border: 0,
@@ -151,6 +154,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
       position: 'absolute',
       top: 20,
       width: 1,
+    },
+    formControlLabel: {
+        marginLeft: 20,
+        marginTop: 10,
     },
   }));
   
@@ -170,6 +177,22 @@ import FilterListIcon from '@material-ui/icons/FilterList';
         headCells.push(key)
       } 
     //   console.log(headCells)
+
+    function json2csvCallback (err, csv) {
+        if (err) throw err;
+        console.log(csv);
+    };
+
+      function downloadObjectAsJson(exportObj, exportName){
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href",     dataStr);
+        downloadAnchorNode.setAttribute("download", exportName + ".json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+      }
+
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
@@ -193,12 +216,21 @@ import FilterListIcon from '@material-ui/icons/FilterList';
       setDense(event.target.checked);
     };
     
+    const handleDownloadJSON = (event) => {
+        console.log("consider them downloaded!")
+        downloadObjectAsJson(rows,"SDA Download");
+    }
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <EnhancedTableToolbar />
+                {/* <EnhancedTableToolbar /> */}
+                <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Compact"
+                    className={classes.formControlLabel}
+                    />
           <TableContainer>
             <Table
               className={classes.table}
@@ -242,7 +274,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10, 25, 50, { value: -1, label: 'All' }]}
             component="div"
             count={rows.length}
             rowsPerPage={rowsPerPage}
@@ -250,11 +282,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
+            <CoolButton onClick={handleDownloadJSON}> Export results (JSON) </CoolButton>
         </Paper>
-        <FormControlLabel
-          control={<Switch checked={dense} onChange={handleChangeDense} />}
-          label="Dense padding"
-        />
+
       </div>
     );
   }

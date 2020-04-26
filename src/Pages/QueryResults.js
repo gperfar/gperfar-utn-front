@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {CoolButton} from '../Components/CoolButton';
 import {ConnectionCard} from '../Components/ConnectionCard';
 import EnhancedTable from '../Components/Table';
+import SDALineChart from '../Components/LineChart';
+
 const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;
@@ -64,6 +66,10 @@ overflow-y: auto;
 `;
 
 
+const data = [
+    {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
+    {name: 'Page B', uv: 1400, pv: 2700, amt: 2400} 
+];
 
 export function QueryResults (){
 
@@ -90,6 +96,7 @@ export function QueryResults (){
             <QueryResultsContent>
               <h1>Query Results (sample sentence)</h1>
               <EnhancedTable info={results}/>
+              <SDALineChart />
             </QueryResultsContent>
         </QueryResultsMainContainer>
       );
