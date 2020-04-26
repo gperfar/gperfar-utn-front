@@ -178,20 +178,34 @@ import {CoolButton} from './CoolButton'
       } 
     //   console.log(headCells)
 
-    function json2csvCallback (err, csv) {
-        if (err) throw err;
-        console.log(csv);
-    };
+    function downloadJSON(exportObj, filename){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", filename + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+    }
 
-      function downloadObjectAsJson(exportObj, exportName){
-        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
-        var downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href",     dataStr);
-        downloadAnchorNode.setAttribute("download", exportName + ".json");
-        document.body.appendChild(downloadAnchorNode); // required for firefox
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-      }
+    const downloadCSV = (arrayOfJson, filename) => {
+        // convert JSON to CSV
+        const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+        const header = Object.keys(arrayOfJson[0])
+        let csv = arrayOfJson.map(row => header.map(fieldName => 
+        JSON.stringify(row[fieldName], replacer)).join(','))
+        csv.unshift(header.join(','))
+        csv = csv.join('\r\n')
+      
+        // Create link and download
+        var link = document.createElement('a');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv));
+        link.setAttribute('download', filename + '.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
 
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -217,8 +231,13 @@ import {CoolButton} from './CoolButton'
     };
     
     const handleDownloadJSON = (event) => {
-        console.log("consider them downloaded!")
-        downloadObjectAsJson(rows,"SDA Download");
+        console.log("consider them downloaded in JSON!")
+        downloadJSON(rows,"SDA Download");
+    }
+
+    const handleDownloadCSV = (event) => {
+        console.log("consider them downloaded in CSV!");
+        downloadCSV(rows, 'SDA Download');
     }
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
@@ -283,6 +302,7 @@ import {CoolButton} from './CoolButton'
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
             <CoolButton onClick={handleDownloadJSON}> Export results (JSON) </CoolButton>
+            <CoolButton onClick={handleDownloadCSV}> Export results (CSV) </CoolButton>
         </Paper>
 
       </div>
