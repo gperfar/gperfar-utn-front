@@ -52,7 +52,7 @@ flex:1;
 display: flex;
 flex-direction: column;
 justify-content:left;
-padding: 2em;
+padding: 1em;
 
 `;
 
@@ -85,8 +85,11 @@ export function Connections (){
         <ConnectionsMainContainer>
           <GlobalStyle />
             <ConnectionsSideContainer>
-              <Link to="/"><h4>Home</h4></Link>
+              <Link to="/panel"><h4>Panel</h4></Link>
+              <Link to="/connections"><h4>Connections</h4></Link>
+              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
               <Link to="/docs"><h4>Docs</h4></Link>
+              <Link to="/"><h4>Log out</h4></Link>
             </ConnectionsSideContainer>
             <ConnectionsContent>
               <h1>Connections</h1>

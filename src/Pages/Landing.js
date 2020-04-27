@@ -5,7 +5,6 @@ import {LoginForm} from '../Components/LoginForm'
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-
 const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;
@@ -22,7 +21,7 @@ h1 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;  
-  line-height: 1.5em;
+  line-height: 2em;
   
 }
 
@@ -31,7 +30,7 @@ h2 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: 2em 1em 0.5em;
+  padding: 20px 20px 10px;
   line-height: 1.5em;
   
 }
@@ -84,6 +83,10 @@ overflow-y: auto;
 > div {
   padding: 1em;
 
+> p {
+  // font-size: 20px;
+}
+
   :not(:last-child) {
     margin-bottom: 1em;
   }
@@ -105,11 +108,11 @@ overflow-y:auto;
 const ContentText = styled.div`
   text-align: left;
   text-indent: 40px;
-  margin: 0em 1em;
+  margin: 0em 0em 0em;
   font-size: x-large;
   line-height: 1.5em;
   color: #FFAE83;
-  
+  padding: 20px 20px 10px;
 `
 export function Landing()  {
 
@@ -135,9 +138,7 @@ export function Landing()  {
                     <p className="nomargin">Desarrollo</p>
                   </ul>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
-                </ContentText>
                 <h2>This is great... but who is it for?</h2>
-                <ContentText>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>

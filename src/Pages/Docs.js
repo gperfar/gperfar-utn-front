@@ -54,7 +54,7 @@ flex:1;
 display: flex;
 flex-direction: column;
 justify-content:left;
-padding: 2em;
+padding: 1em;
 
 `;
 
@@ -73,6 +73,10 @@ export class Docs extends React.Component {
           <GlobalStyle />
             <DocsSideContainer>
               <Link to="/"><h4>Home</h4></Link>
+              <Link to="/panel"><h4>Panel</h4></Link>
+              <Link to="/connections"><h4>Connections</h4></Link>
+              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
+              <Link to="/"><h4>Log out</h4></Link>
               <h4>Table of Contents</h4>
               <ul>
                 <li><a href="#overview">Overview</a></li>

@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
   box-sizing: border-box;
 }
 
-h1, h2 {
+h1, h2, h3 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -20,9 +20,12 @@ h1, h2 {
 
 h1 {
   font-size: 48pt;  
+  padding: 10px; 
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-h2 {
-  padding: 0.5em;
+h2,h3 {
+  padding: 10px;
 }
 h4{
   padding-right: 1em;
@@ -53,8 +56,6 @@ const QueryResultsTopContainer = styled.div`
 display: flex;
 flex-direction: row;
 justify-content:left;
-padding: 2em;
-
 `;
 
 const QueryResultsContent = styled.div`
@@ -65,12 +66,6 @@ background: whitesmoke;
 overflow-y: auto;
 `;
 
-
-const data = [
-    {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
-    {name: 'Page B', uv: 1400, pv: 2700, amt: 2400} 
-];
-
 export function QueryResults (){
 
     const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=2";
@@ -80,21 +75,39 @@ export function QueryResults (){
       const data = await response.json();
       return data;
     }
+
     const [results, setResults] = useState([]);
-      console.log(results);
       useEffect(() => {
         getResults().then(data => setResults(data.results));
       }, []);
+
+
+    const [sentence, setSentence] = useState([]);
+      useEffect(() => {
+        getResults().then(data => setSentence(data.sentence));
+      }, []);
+
+
+    const [connection, setConnection] = useState([]);
+      useEffect(() => {
+        getResults().then(data => setConnection(data['connection name']));
+      }, []);
+
 
     return (
         <QueryResultsMainContainer>
           <GlobalStyle />
             <QueryResultsTopContainer>
-              <Link to="/"><h4>Home</h4></Link>
+              <Link to="/panel"><h4>Panel</h4></Link>
+              <Link to="/connections"><h4>Connections</h4></Link>
+              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
               <Link to="/docs"><h4>Docs</h4></Link>
+              <Link to="/"><h4>Log out</h4></Link>
             </QueryResultsTopContainer>
             <QueryResultsContent>
-              <h1>Query Results (sample sentence)</h1>
+              <h1>Query Results</h1>
+              <h2>Connection: {connection}</h2>
+              <h3>Query: {sentence}</h3>
               <EnhancedTable info={results}/>
               <SDALineChart />
             </QueryResultsContent>
