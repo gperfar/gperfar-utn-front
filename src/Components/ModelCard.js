@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function ConnectionCard(props) {
+export function ModelCard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -32,33 +32,19 @@ export function ConnectionCard(props) {
     setOpen(!open);
   };
 
-//   const url = "https://gperfar-utn.herokuapp.com/connections?id="+props.connection._id;
-  
-//   async function getConnectionDetails() {
-//     const response = await fetch(url);
-//     const data = await response.json();
-//     return data;
-//   }
-//   const [results, setResults] = useState([]);
-//     console.log(results);
-//     useEffect(() => {
-//       getConnectionDetails().then(data => setResults(data.result.connection_details));
-//       results.pop("name")
-//     }, []);
-
   return (
     <List
       component="nav"
       className={classes.root}
     >
       <ListItem button onClick={handleClick}>
-        <ListItemText primary="See conneciton details" />
+        <ListItemText primary="See details..." />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" >   
-            {console.log(Object.keys(props.connection))}
-            {Object.entries(props.connection).map(attr => ( //Don't show ID, name or User ID. Sort them better! Backend
+            {console.log(Object.keys(props.object))}
+            {Object.entries(props.object).map(attr => (
                 <ListItem className={classes.nested}>
                     <ListItemText primary= {attr[0].charAt(0).toUpperCase() + attr[0].substring(1)} secondary={attr[1]} />
                 </ListItem>

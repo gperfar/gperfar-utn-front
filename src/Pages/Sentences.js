@@ -66,9 +66,9 @@ overflow-y: auto;
 
 
 
-export function Connections (){
+export function Sentences (){
 
-    const url = "https://gperfar-utn.herokuapp.com/connections";
+    const url = "https://gperfar-utn.herokuapp.com/sentences";
     
     async function getResults() {
       const response = await fetch(url);
@@ -78,7 +78,7 @@ export function Connections (){
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {
-        getResults().then(data => setResults(data.result.connections));
+        getResults().then(data => setResults(data.result.sentences));
       }, []);
 
     return (
@@ -92,7 +92,7 @@ export function Connections (){
               <Link to="/"><h4>Log out</h4></Link>
             </SideContainer>
             <Content>
-              <h1>Connections</h1>
+              <h1>Sentences</h1>
               {results.map(result => (
                 <div>
                   <h2>{result.name}</h2>

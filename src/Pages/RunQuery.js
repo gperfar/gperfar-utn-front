@@ -1,9 +1,8 @@
 import React, { Component, useState, useEffect }  from 'react';
 import '../App.css';
 import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom";
 import {CoolButton} from '../Components/CoolButton';
-import {ConnectionCard} from '../Components/ConnectionCard';
 import EnhancedTable from '../Components/Table';
 import SDALineChart from '../Components/LineChart';
 
@@ -16,17 +15,15 @@ h1, h2, h3 {
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding: 10px;   
 }
 
 h1 {
   font-size: 48pt;  
-  padding: 10px; 
   margin-top: 10px;
   margin-bottom: 10px;
 }
-h2,h3 {
-  padding: 10px;
-}
+
 h4{
   padding-right: 1em;
   margin-bottom:10px;
@@ -38,7 +35,7 @@ ul{
 }
 `;
 
-const QueryResultsMainContainer = styled.div`
+const MainContainer = styled.div`
 display: flex;
 flex-direction: column;
 box-sizing: border-box;
@@ -52,13 +49,13 @@ height:100vh;
 
 `;
 
-const QueryResultsTopContainer = styled.div`
+const TopContainer = styled.div`
 display: flex;
 flex-direction: row;
 justify-content:left;
 `;
 
-const QueryResultsContent = styled.div`
+const Content = styled.div`
 flex:3;
 justify-content:center;
 padding: 1em;
@@ -66,11 +63,14 @@ background: whitesmoke;
 overflow-y: auto;
 `;
 
-export function QueryResults (){
+export function RunQuery (){
 
-    const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=2";
+    let { id } = useParams();
+
+    const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=".concat(id);
     
     async function getResults() {
+      console.log("Fetching results from ".concat(url).concat("..."));
       const response = await fetch(url);
       const data = await response.json();
       return data;
@@ -95,23 +95,23 @@ export function QueryResults (){
 
 
     return (
-        <QueryResultsMainContainer>
+        <MainContainer>
           <GlobalStyle />
-            <QueryResultsTopContainer>
+            <TopContainer>
               <Link to="/panel"><h4>Panel</h4></Link>
               <Link to="/connections"><h4>Connections</h4></Link>
-              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
+              <Link to="/runquery/2"><h4>Sample Query Results</h4></Link>
               <Link to="/docs"><h4>Docs</h4></Link>
               <Link to="/"><h4>Log out</h4></Link>
-            </QueryResultsTopContainer>
-            <QueryResultsContent>
+            </TopContainer>
+            <Content>
               <h1>Query Results</h1>
               <h2>Connection: {connection}</h2>
               <h3>Query: {sentence}</h3>
               <EnhancedTable info={results}/>
               <SDALineChart />
-            </QueryResultsContent>
-        </QueryResultsMainContainer>
+            </Content>
+        </MainContainer>
       );
     }
   

@@ -90,7 +90,7 @@ export function Panel (){
             <TopContainer>
               <Link to="/panel"><h4>Panel</h4></Link>
               <Link to="/connections"><h4>Connections</h4></Link>
-              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
+              <Link to="/runquery"><h4>Sample Query Results</h4></Link>
               <Link to="/docs"><h4>Docs</h4></Link>
               <Link to="/"><h4>Log out</h4></Link>
             </TopContainer>

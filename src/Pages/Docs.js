@@ -35,7 +35,7 @@ ul{
 }
 `;
 
-const DocsMainContainer = styled.div`
+const MainContainer = styled.div`
 display: flex;
 flex-direction: row;
 box-sizing: border-box;
@@ -49,7 +49,7 @@ height:100vh;
 
 `;
 
-const DocsSideContainer = styled.div`
+const SideContainer = styled.div`
 flex:1;
 display: flex;
 flex-direction: column;
@@ -58,7 +58,7 @@ padding: 1em;
 
 `;
 
-const DocsContent = styled.div`
+const Content = styled.div`
 flex:3;
 justify-content:center;
 padding: 1em;
@@ -69,13 +69,13 @@ overflow-y: auto;
 export class Docs extends React.Component {
     render() {
       return (
-        <DocsMainContainer>
+        <MainContainer>
           <GlobalStyle />
-            <DocsSideContainer>
+            <SideContainer>
               <Link to="/"><h4>Home</h4></Link>
               <Link to="/panel"><h4>Panel</h4></Link>
               <Link to="/connections"><h4>Connections</h4></Link>
-              <Link to="/queryresults"><h4>Sample Query Results</h4></Link>
+              <Link to="/runquery/2"><h4>Sample Query Results</h4></Link>
               <Link to="/"><h4>Log out</h4></Link>
               <h4>Table of Contents</h4>
               <ul>
@@ -83,8 +83,8 @@ export class Docs extends React.Component {
                 <li><a href="#connectors">Available Connectors</a></li>
                 <li><a href="#transformations">Transformations</a></li>
               </ul>
-            </DocsSideContainer>
-            <DocsContent>
+            </SideContainer>
+            <Content>
               <h1> Simplified Data Analysis </h1>
               <h2 id="overview">Overview</h2>
               <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
@@ -101,11 +101,9 @@ export class Docs extends React.Component {
               <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
               <h2 id="transformations">Transformations</h2>
               <p>Executing SQL queries is good. Doing it without knowing SQL is awesome. Building queries based on other queries (what from now on we will call transformations) is beyond this universe!</p>
-            </DocsContent>
-            <DocsSideContainer>
-
-            </DocsSideContainer>
-        </DocsMainContainer>
+            </Content>
+            <SideContainer />
+        </MainContainer>
       );
     }
   }
