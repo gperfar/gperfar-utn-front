@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {CoolTextField} from './CoolTextField';
 import {CoolButton} from './CoolButton'
 import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
 const MainWrapper = styled.div`
 `
@@ -58,6 +58,9 @@ export class LoginForm extends React.Component {
     handleRegister(event) {
       alert('You don\'t want to register to this crappy platform, my man.');
       event.preventDefault();
+      return(
+        <Redirect to="/panel" />
+      )
     }
     render() {
       return (

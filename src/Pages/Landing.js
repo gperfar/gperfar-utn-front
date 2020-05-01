@@ -39,6 +39,7 @@ h2 {
   margin:0;
   font-size:18px;
   color: #FFDEB3;
+  text-indent: 0px;
 }
 `;
 
@@ -146,11 +147,7 @@ export function Landing()  {
                 </Content>
                 <SidePanel>
                 <LoginForm />
-                <p className="nomargin">If you want to learn more about SDA and how it works, visit the <Link to="/docs">documentation</Link>.</p>
-                <p className="nomargin">If you want to check out our users' actual connections, visit <Link to="/connections">connections</Link>.</p>
-                <p className="nomargin">If you want to check out how a query runs like the wind, visit <Link to="/runquery/2">query results</Link>.</p>
-                <p className="nomargin">If you want to simulate you've just logged in, visit your <Link to="/panel">panel</Link>.</p>
-                <p className="nomargin">If you want to see the sentences stored visit your <Link to="/sentences">sentences</Link>.</p>
+                <p className="nomargin"><Link to="/panel">Panel</Link></p>
                 </SidePanel>
             </ContentWrapper>
             {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}

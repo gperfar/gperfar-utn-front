@@ -161,7 +161,7 @@ import {CoolButton} from './CoolButton'
     },
   }));
   
-  export default function EnhancedTable(props) {
+  export default function SDATable(props) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('company_name');
