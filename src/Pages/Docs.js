@@ -41,7 +41,6 @@ export class Docs extends React.Component {
                 <p>Executing SQL queries is good. Doing it without knowing SQL is awesome. Building queries based on other queries (what from now on we will call transformations) is beyond this universe!</p>
               </Content>
               <SideBar />
-              <SideContainer />
           </SideContainer>
         </MainContainer>
       );

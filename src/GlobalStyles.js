@@ -88,6 +88,7 @@ box-sizing: border-box;
 justify-content:center;
 background-color: rgb(75, 98, 160);
 height:100vh;
+overflow-y: auto;
 @media (max-width: 600px) {
   flex-direction: column;
   height: auto;
@@ -108,5 +109,5 @@ flex:3;
 justify-content:center;
 padding: 1em;
 background: whitesmoke;
-overflow-y: auto;
+overflow-y: scroll;
 `;
