@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Label
 } from 'recharts';
 
 const data = [
@@ -23,16 +23,20 @@ export default class SDALineChart extends PureComponent {
         height={300}
         data={data}
         margin={{
-          top: 5, right: 30, left: 20, bottom: 5,
+          top: 5, right: 30, left: 20, bottom: 20,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
+        <CartesianGrid strokeDasharray="3 10" />
+        <XAxis dataKey="name">
+          <Label value="X Axis test" offset={5} position="bottom" />
+        </XAxis>
+        <YAxis>
+          <Label value="Y Axis test" angle={-90} position= "left" />
+        </YAxis>
         <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Legend verticalAlign="top" align="right"/>
+        <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 5 }}/>
+        <Line type="monotone" dataKey="uv" stroke="#82ca9d" activeDot={{ r: 5}}/>
       </LineChart>
     );
   }

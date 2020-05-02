@@ -33,27 +33,27 @@ export function Panel (){
               <GridContainer>
                 <GridItem>
                   <h2>My Dashboard 1</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
                 <GridItem>
                   <h2>My Dashboard 2</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
                 <GridItem>
                   <h2>My Dashboard 3</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
                 <GridItem>
                   <h2>My Dashboard 4</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
                 <GridItem>
                   <h2>My Dashboard 5</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
                 <GridItem>
                   <h2>My Dashboard 6</h2>
-                  <p> Some information about it </p>
+                  <p className="panel-card-p"> Some information about it </p>
                 </GridItem>
               </GridContainer>
             </Content>

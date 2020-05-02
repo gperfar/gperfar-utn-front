@@ -27,7 +27,10 @@ flex-direction: row;
 `;
 
 const Title = styled.h4`
-color: #FFDEB3;  
+text-align: center;
+background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
 margin: 0;
 font-size: xx-large;
 padding: 2em 1em 0.5em;

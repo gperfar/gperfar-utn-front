@@ -30,7 +30,7 @@ h4{
   padding-right: 1em;
   margin-bottom:10px;
   margin-left:10px;
-  color: #FFDEB3;
+  color: #E5E7E9;
 }
 ul{
   margin:0;
@@ -44,8 +44,30 @@ p{
     margin:0;
     font-size:18px;
     color: #FFDEB3;
+}
+
+.panel-card-p{
     text-indent: 0px;
-}  
+}
+
+.landing-title{
+    line-height: 2em;
+    text-align: center;
+    
+    @media (max-width: 600px) {
+      line-height: 1.2em;
+    }
+}
+
+.landing-subtitle {
+    font-size: 32px;
+    padding: 20px 20px 10px;
+    line-height: 1.5em;
+    text-align: center;
+    @media (max-width: 600px) {
+      line-height: 1.2 em;
+    }
+  }
 
 `;
 
@@ -55,7 +77,6 @@ flex-direction: column;
 background-color: rgb(75, 98, 160);
 height:100vh;
 @media (max-width: 600px) {
-  flex-direction: column;
   height: auto;
 }
 `;
@@ -79,7 +100,7 @@ display: flex;
 flex-direction: column;
 justify-content:left;
 padding: 1em;
-
+background-color: #E5E7E9;
 `;
 
 export const Content = styled.div`

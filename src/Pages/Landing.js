@@ -2,102 +2,25 @@ import React, { Component, useState, useEffect }  from 'react';
 import landing from '../Assets/landing.jpg';
 import '../App.css';
 import {LoginForm} from '../Components/LoginForm'
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {GlobalStyle, MainContainer, SideContainer} from '../GlobalStyles';
 
-const GlobalStyle = createGlobalStyle`
-* {
-  box-sizing: border-box;
-}
 
-body {
-  margin: 0;
-  background: rgb(2,0,36);
-  background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
-}
-
-h1 {
-  font-size: 48pt;  
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-	-webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;  
-  line-height: 2em;
-  
-}
-
-h2 {
-  font-size: xx-large;
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-	-webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding: 20px 20px 10px;
-  line-height: 1.5em;
-  
-}
-
-.nomargin{
-  margin:0;
-  font-size:18px;
-  color: #FFDEB3;
-  text-indent: 0px;
-}
-`;
-
-const MainContainer = styled.div`
-height: 100vh;
-display: flex;
-flex-direction: column;
-text-align: center;
-
-@media (max-width: 600px) {
-height:auto;
-}
-
-`;
-
-const Header = styled.div`
-padding: 1em;
-`;
-
-const Footer = styled.div`
-padding: 1em;
-
-`;
-
-const ContentWrapper = styled.div`
-flex: 1;
-display: flex;
-overflow-y: auto;
-flex-direction: row;
-@media (max-width: 600px) {
-  flex-direction: column;
-}
-`
-
-const Content = styled.div`
+const LandingContent = styled.div`
 flex: 3;
 overflow-y: auto;
+background: rgb(2,0,36);
+background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
 @media (max-width: 600px) {
   flex: 1;
 }
-
-> div {
-  padding: 1em;
-
-> p {
-  // font-size: 20px;
-}
-
-  :not(:last-child) {
-    margin-bottom: 1em;
-  }
-}
 `;
 
-const SidePanel = styled.div`
+const LandingSidePanel = styled.div`
 flex:1;
 min-width: 6em;
-background-color: rgb(75, 98, 160);
+background-color: #E5E7E9;
 padding: 1em;
 padding-top:1em;
 overflow-y:auto;
@@ -106,7 +29,7 @@ overflow-y:auto;
 }
 `;
 
-const ContentText = styled.div`
+const LandingContentText = styled.div`
   text-align: left;
   text-indent: 40px;
   margin: 0em 0em 0em;
@@ -120,11 +43,11 @@ export function Landing()  {
     return (
         <MainContainer>
             <GlobalStyle />
-            <ContentWrapper>
-                <Content>
-                <h1>WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
-                <h2>SDA is the Business Intelligence platform all small and medium-sized businesses are looking for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. All you need is a working database on which to perform these queries.</h2>
-                <ContentText>
+            <SideContainer>
+                <LandingContent>
+                <h1 className="landing-title">WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
+                <h2 className="landing-subtitle">SDA is the Business Intelligence platform all small and medium-sized businesses are looking for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. All you need is a working database on which to perform these queries.</h2>
+                <LandingContentText>
                   <p>We are convinced that data analysis is key for improving a company's decision making. There is an endless number of questions we could answer just looking at our data...</p>
                   <ul>
                     <li>Which products are driving our revenue?</li>
@@ -143,13 +66,13 @@ export function Landing()  {
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
-                </ContentText>
-                </Content>
-                <SidePanel>
+                </LandingContentText>
+                </LandingContent>
+                <LandingSidePanel>
                 <LoginForm />
                 <p className="nomargin"><Link to="/panel">Panel</Link></p>
-                </SidePanel>
-            </ContentWrapper>
+                </LandingSidePanel>
+            </SideContainer>
             {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}
         </MainContainer>
     );
