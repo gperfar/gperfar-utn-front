@@ -16,7 +16,6 @@ import StarBorder from '@material-ui/icons/StarBorder';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    // maxWidth: 300,
     backgroundColor: theme.palette.background.paper,
   },
   nested: {

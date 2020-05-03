@@ -12,6 +12,7 @@ body {
     margin: 0;
     background: rgb(2,0,36);
     background: linear-gradient(132deg, rgba(2,0,36,1) 0%, rgba(29,41,113,1) 60%);
+    
   }
 
 h1, h2, h3 {
@@ -21,7 +22,7 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: 48pt;  
+  font-size: 52pt;  
 }
 h2,h3 {
   padding: 12px;

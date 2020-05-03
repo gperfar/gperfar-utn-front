@@ -73,7 +73,6 @@ export function Landing()  {
                 <p className="nomargin"><Link to="/panel">Panel</Link></p>
                 </LandingSidePanel>
             </SideContainer>
-            {/* <Footer className="footer landing-text">Proyecto Final - Gonzalo Pérez Fariña</Footer> */}
         </MainContainer>
     );
   }
