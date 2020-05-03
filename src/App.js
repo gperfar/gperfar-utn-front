@@ -19,7 +19,7 @@ export default function App()  {
           <Route path="/connections"><Connections /></Route>
           <Route path="/visualizations"><Visualizations /></Route>
           <Route path="/sentences"><Sentences /></Route>
-          <Route path="/dashboards"><Sentences /></Route>
+          <Route path="/dashboards"><Dashboards /></Route>
           <Route path="/runquery/:id"><RunQuery /></Route>
           <Route path="/runquery"><RunQuery /></Route>
           <Route path="/panel"><Panel /></Route>
