@@ -10,7 +10,7 @@ import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../Gl
 
 export function Dashboards (){
 
-    const url = "https://gperfar-utn.herokuapp.com/connections";
+    const url = "https://gperfar-utn.herokuapp.com/dashboards";
     
     async function getResults() {
       const response = await fetch(url);
@@ -20,7 +20,7 @@ export function Dashboards (){
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {
-        getResults().then(data => setResults(data.result.connections));
+        getResults().then(data => setResults(data.result.dashboards));
       }, []);
 
     return (
