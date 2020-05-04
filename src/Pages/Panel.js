@@ -24,6 +24,20 @@ margin: 20px;
 `;
 
 export function Panel (){
+
+    const url = "https://gperfar-utn.herokuapp.com/dashboards";
+    
+    async function getResults() {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+    const [results, setResults] = useState([]);
+      console.log(results);
+      useEffect(() => {
+        getResults().then(data => setResults(data.result.dashboards));
+      }, []);
+
     return (
         <MainContainer>
           <GlobalStyle />
@@ -31,30 +45,12 @@ export function Panel (){
             <Content>
               <h1>Panel</h1>
               <GridContainer>
-                <GridItem>
-                  <h2>My Dashboard 1</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
-                <GridItem>
-                  <h2>My Dashboard 2</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
-                <GridItem>
-                  <h2>My Dashboard 3</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
-                <GridItem>
-                  <h2>My Dashboard 4</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
-                <GridItem>
-                  <h2>My Dashboard 5</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
-                <GridItem>
-                  <h2>My Dashboard 6</h2>
-                  <p className="panel-card-p"> Some information about it </p>
-                </GridItem>
+                {results.map(result => (
+                  <GridItem>
+                    <h2>{result.name}</h2>
+                    <p className="panel-card-p"> {result.comment} </p>
+                  </GridItem>
+                    ))}
               </GridContainer>
             </Content>
         </MainContainer>
