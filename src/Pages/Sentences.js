@@ -1,15 +1,15 @@
 import React, { Component, useState, useEffect }  from 'react';
 import '../App.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import {CoolButton} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
 
-export function Sentences (){
+export function Sentences (props){
 
     const url = "https://gperfar-utn.herokuapp.com/sentences";
-    
+
     async function getResults() {
       const response = await fetch(url);
       const data = await response.json();
@@ -20,7 +20,7 @@ export function Sentences (){
       useEffect(() => {
         getResults().then(data => setResults(data.result.sentences));
       }, []);
-
+          
     return (
         <MainContainer>
           <NavBar />
@@ -29,6 +29,7 @@ export function Sentences (){
               <SideBar />
               <Content>
                 <h1>Sentences</h1>
+                <h2><Link to='/sentences/new'> Create new Sentence... </Link></h2>
                 {results.map(result => (
                   <div>
                     <h2>{result.name}</h2>
@@ -42,3 +43,19 @@ export function Sentences (){
       );
     }
   
+  export function NewSentence (props){
+          
+    return (
+        <MainContainer>
+          <NavBar />
+          <SideContainer>
+            <GlobalStyle />
+              <SideBar />
+              <Content>
+                <h1>Add new Sentence</h1>
+              </Content>
+              <SideBar />
+          </SideContainer>
+        </MainContainer>
+      );
+    }
