@@ -36,62 +36,49 @@ padding: 2em 1em 0.5em;
 line-height: 1.5em;
 `
 
-export class LoginForm extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        email: '',
-        password:'',
-        redirect: ''
-      };
-      this.handleEmailChange = this.handleEmailChange.bind(this);
-      this.handlePasswordChange = this.handlePasswordChange.bind(this);    
-      this.handleSubmit = this.handleSubmit.bind(this); //I think it's not necessary to bind them with this way of having it... but it doesn't break anything!
-      this.handleRegister = this.handleRegister.bind(this);
-    }
-    handleEmailChange(event) {
-      this.setState({email: event.target.value});
-    }
-    handlePasswordChange(event) {
-      this.setState({password: event.target.value});
-    }
-    handleSubmit(event) {
-      this.setState(()=>({
-        redirect: 'panel'
-      }))
-      // alert('I can\'t log you in, ' + this.state.email + '! But worry not, I won\'t tell anyone your password is ' + this.state.password);
-    }
-    handleRegister(event) {
-      this.setState(()=>({
-        redirect: 'connections'
-      }))
-      // event.preventDefault();
-      // alert('You don\'t want to register to this crappy platform, my man.');
-    }
-    render() {
+export function LoginForm(props) {
 
-      if (this.state.redirect === 'panel') {
-        return <Redirect to='/panel' />
-      }
-      if (this.state.redirect === 'connections') {
-        return <Redirect to='/connections' />
-      }
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [redirect, setRedirect] = React.useState('');
 
-      return (
+    const handleEmailChange = (event) => {
+      setEmail(event.target.value);
+    }
+
+    const handlePasswordChange = (event) => {
+      setPassword(event.target.value);
+    }
+
+    const handleSubmit = (event) => {
+      // alert('I can\'t log you in, ' + email + '! But worry not, I won\'t tell anyone your password is ' + password);
+      setRedirect('panel');
+    }
+
+    const handleRegister =(event) => {
+      setRedirect('connections');
+    }
+
+    if (redirect === 'panel') {
+      return <Redirect to='/panel' />
+    }
+    if (redirect === 'connections') {
+      return <Redirect to='/connections' />
+    }
+    return(
         <MainWrapper>
           <Title>Log In</Title>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <LoginMainContainer>
-                <CoolTextField type="text" label='Email' onChange={this.handleEmailChange} />
-                <CoolTextField type="text" label='Password' type='password' onChange={this.handlePasswordChange} />
+                <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
+                <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} />
                 <LoginSideContainer>
                     <CoolButton type="submit"> Log In </CoolButton>
-                    <CoolButton onClick={this.handleRegister}> Register </CoolButton>
+                    <CoolButton onClick={handleRegister}> Register </CoolButton>
                 </LoginSideContainer>
             </LoginMainContainer>
           </form>
         </MainWrapper>
       );
     }
-  }
   

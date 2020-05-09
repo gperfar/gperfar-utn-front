@@ -112,3 +112,16 @@ padding: 1em;
 background: whitesmoke;
 overflow-y: scroll;
 `;
+
+export const ContainerHorizontal = styled.div`
+display:flex;
+flex-direction: row;
+justify-content: left;
+`
+
+export const ContainerVertical = styled.div`
+display:flex;
+flex-direction: column;
+justify-content: left;
+flex:10;
+`

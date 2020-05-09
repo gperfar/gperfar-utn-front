@@ -18,7 +18,10 @@ const useStyles = makeStyles((theme) => ({
 
 export function ConnectionSelect(props) {
   const classes = useStyles();
-  const [connectionID, setConnectionID] = React.useState('');
+
+  const {connectionID: [connectionID, setConnectionID]} = {connectionID: React.useState(0),...(props.state || {})};
+
+  // const [connectionID, setConnectionID] = React.useState('');
 
   const handleChange = (event) => {
     setConnectionID(event.target.value);
@@ -38,7 +41,6 @@ export function ConnectionSelect(props) {
             <option value={attr[1]._id}> {attr[1].name} </option>
             ))}
         </Select>
-        <h1>{connectionID}</h1>
       </FormControl>
     </div>
   );

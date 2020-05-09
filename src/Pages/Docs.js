@@ -7,8 +7,7 @@ import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
 
 
-export class Docs extends React.Component {
-    render() {
+export function Docs (props) {
       return (
         <MainContainer>
           <NavBar />
@@ -45,5 +44,4 @@ export class Docs extends React.Component {
         </MainContainer>
       );
     }
-  }
   

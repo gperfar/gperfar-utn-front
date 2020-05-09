@@ -5,6 +5,7 @@ import {CoolButton} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import {NewSentenceInput} from '../Components/NewSentenceInput';
 
 export function Sentences (props){
 
@@ -44,7 +45,6 @@ export function Sentences (props){
     }
   
   export function NewSentence (props){
-          
     return (
         <MainContainer>
           <NavBar />
@@ -53,6 +53,7 @@ export function Sentences (props){
               <SideBar />
               <Content>
                 <h1>Add new Sentence</h1>
+                <NewSentenceInput />
               </Content>
               <SideBar />
           </SideContainer>
