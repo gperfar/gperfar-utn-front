@@ -31,7 +31,7 @@ export default class SDALineChart extends PureComponent {
           <Label value="X Axis test" offset={5} position="bottom" />
         </XAxis>
         <YAxis>
-          <Label value="Y Axis test" angle={-90} position= "left" />
+          <Label value="Y Axis test" angle={-90} position="left" />
         </YAxis>
         <Tooltip />
         <Legend verticalAlign="top" align="right"/>

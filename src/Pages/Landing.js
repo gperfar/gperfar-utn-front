@@ -1,9 +1,7 @@
-import React, { Component, useState, useEffect }  from 'react';
-import landing from '../Assets/landing.jpg';
+import React  from 'react';
 import '../App.css';
 import {LoginForm} from '../Components/LoginForm'
 import styled from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {GlobalStyle, MainContainer, SideContainer} from '../GlobalStyles';
 
 

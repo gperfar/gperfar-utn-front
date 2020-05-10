@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Docs} from './Pages/Docs'
 import {Landing} from './Pages/Landing'
@@ -8,7 +8,6 @@ import {Visualizations} from './Pages/Visualizations'
 import {Dashboards} from './Pages/Dashboards'
 import {RunQuery} from './Pages/RunQuery'
 import {Panel} from './Pages/Panel'
-import styled, { createGlobalStyle } from "styled-components";
 import ScrollToTop from './Components/ScrollToTop';
 export default function App()  {
     return (

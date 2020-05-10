@@ -1,12 +1,11 @@
-import React, { Component, useState, useEffect }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import {CoolButton} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
-import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import {NewSentenceInput} from '../Components/NewSentenceInput';
-import SDATable from '../Components/Table';
+import {  Link } from "react-router-dom";
 
 export function Sentences (props){
 
@@ -22,7 +21,22 @@ export function Sentences (props){
       useEffect(() => {
         getResults().then(data => setResults(data.result.sentences));
       }, []);
-          
+
+      
+      const handleSentenceEdit= (event)=>{
+        console.log("Editing sentence " + event.target.getAttribute("data-index"));
+      }
+      
+      const handleSentenceDelete= function(event){
+        if (confirm('Are you sure you want to save this thing into the database?')) {
+          // Save it!
+          console.log("Deleting sentence " + event.target.getAttribute("data-index"));
+        } else {
+          // Do nothing!
+          console.log('You saved sentence ' + event.target.getAttribute("data-index") + '\'s ass');
+        }
+      }
+
     return (
         <MainContainer>
           <NavBar />
@@ -32,9 +46,21 @@ export function Sentences (props){
               <Content>
                 <h1>Sentences</h1>
                 <h2><Link to='/sentences/new'> Create new Sentence... </Link></h2>
-                {results.map(result => (
+                 {results.map(result => (
                   <div>
-                    <h2>{result.name}</h2>
+                    <ContainerHorizontal classname="align-v-center">
+                      <h2>{result.name}</h2>
+                      <CoolButton data-index={result._id} onClick={handleSentenceEdit}>
+                        <span data-index={result._id}>
+                          Edit
+                        </span>
+                      </CoolButton>
+                      <CoolButton data-index={result._id} onClick={handleSentenceDelete}>
+                        <span data-index={result._id}>
+                          Delete
+                        </span>
+                      </CoolButton>
+                    </ContainerHorizontal>
                     <ModelCard object={result}/>
                   </div>
                   ))}
@@ -55,7 +81,6 @@ export function Sentences (props){
               <Content>
                 <h1>Add new Sentence</h1>
                 <NewSentenceInput />
-                {/* <SDATable info={queryResults.results}/> */}
               </Content>
               <SideBar />
           </SideContainer>

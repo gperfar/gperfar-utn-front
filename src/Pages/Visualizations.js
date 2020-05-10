@@ -1,7 +1,5 @@
-import React, { Component, useState, useEffect }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import {CoolButton} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';

@@ -1,12 +1,17 @@
-import React, { Component, useState, useEffect }  from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import React, { useState, useEffect }  from 'react';
 import {CoolButton} from '../Components/CoolButton';
-import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal, ContainerVertical} from '../GlobalStyles';
+import {ContainerVertical} from '../GlobalStyles';
 import {ConnectionSelect} from '../Components/ConnectionSelect';
 import {CoolTextField} from './CoolTextField';
 import SDATable from './Table';
-import {ModelCard} from '../Components/ModelCard';
+import styled from "styled-components";
 
+export const ContainerHorizontal = styled.div`
+display:flex;
+flex-direction: row;
+justify-content: left;
+align-items: baseline;
+`
 
 export function NewSentenceInput (props){
     const url = "https://gperfar-utn.herokuapp.com/connections";

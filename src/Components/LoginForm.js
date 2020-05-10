@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-// import '../App.css';
+import React from 'react';
 import {CoolTextField} from './CoolTextField';
 import {CoolButton} from './CoolButton'
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import styled from "styled-components";
+import { Redirect } from "react-router-dom";
 const MainWrapper = styled.div`
 `
 

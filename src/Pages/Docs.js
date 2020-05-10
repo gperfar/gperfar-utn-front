@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../App.css';
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import {CoolButton} from '../Components/CoolButton';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
 

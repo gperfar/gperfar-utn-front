@@ -117,6 +117,7 @@ export const ContainerHorizontal = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: left;
+align-items: center;
 `
 
 export const ContainerVertical = styled.div`

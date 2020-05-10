@@ -1,10 +1,8 @@
-import React, { Component, useState, useEffect }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import {CoolButton} from '../Components/CoolButton';
+import styled from "styled-components";
 import {NavBar} from '../Components/NavBar';
-import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
 
 
 const GridContainer = styled.div`

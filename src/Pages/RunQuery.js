@@ -1,11 +1,10 @@
-import React, { Component, useState, useEffect }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom";
-import {CoolButton} from '../Components/CoolButton';
+import { useParams } from "react-router-dom";
 import SDATable from '../Components/Table';
 import SDALineChart from '../Components/Visualizations/LineChart';
 import {NavBar} from '../Components/NavBar';
-import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
 
 export function RunQuery (){
 

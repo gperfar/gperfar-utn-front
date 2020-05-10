@@ -7,5 +7,5 @@ export const CoolTextField = styled(TextField)({
     borderRadius: 1,
     color: 'white',
     height: 40,
-    margin: 10
+    margin: 12
 });
