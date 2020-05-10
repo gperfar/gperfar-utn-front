@@ -176,7 +176,6 @@ import {CoolButton} from './CoolButton'
     for(var key in row0){
         headCells.push(key)
       } 
-    //   console.log(headCells)
 
     function downloadJSON(exportObj, filename){
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));

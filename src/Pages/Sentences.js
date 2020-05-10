@@ -6,6 +6,7 @@ import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
 import {NewSentenceInput} from '../Components/NewSentenceInput';
+import SDATable from '../Components/Table';
 
 export function Sentences (props){
 
@@ -54,6 +55,7 @@ export function Sentences (props){
               <Content>
                 <h1>Add new Sentence</h1>
                 <NewSentenceInput />
+                {/* <SDATable info={queryResults.results}/> */}
               </Content>
               <SideBar />
           </SideContainer>
