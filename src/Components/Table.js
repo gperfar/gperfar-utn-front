@@ -141,7 +141,7 @@ import {CoolButton} from './CoolButton'
       marginBottom: theme.spacing(2),
     },
     table: {
-      minWidth: 1200,
+      minWidth: 600,
       whiteSpace: 'nowrap',
     },
     visuallyHidden: {
