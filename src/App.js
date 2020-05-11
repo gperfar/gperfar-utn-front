@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Docs} from './Pages/Docs'
 import {Landing} from './Pages/Landing'
 import {Connections} from './Pages/Connections'
-import {Sentences, NewSentence} from './Pages/Sentences'
+import {Sentences, NewSentence, EditSentence} from './Pages/Sentences'
 import {Visualizations} from './Pages/Visualizations'
 import {Dashboards} from './Pages/Dashboards'
 import {RunQuery} from './Pages/RunQuery'
@@ -17,6 +17,7 @@ export default function App()  {
           <Route path="/docs"><Docs /></Route>
           <Route path="/connections"><Connections /></Route>
           <Route path="/visualizations"><Visualizations /></Route>
+          <Route path="/sentences/edit/:id"><EditSentence /></Route>
           <Route path="/sentences/new"><NewSentence /></Route>
           <Route path="/sentences"><Sentences /></Route>
           <Route path="/dashboards"><Dashboards /></Route>

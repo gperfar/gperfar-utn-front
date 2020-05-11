@@ -5,7 +5,7 @@ import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import {NewSentenceInput} from '../Components/NewSentenceInput';
-import {  Link } from "react-router-dom";
+import { Redirect, Link, useParams } from "react-router-dom";
 
 export function Sentences (props){
 
@@ -22,14 +22,19 @@ export function Sentences (props){
         getResults().then(data => setResults(data.result.sentences));
       }, []);
 
-      
+      const [redirect, setRedirect] = React.useState('');      
+      const [selectedSentence, setSelectedSentence] = React.useState();      
+
       const handleSentenceEdit= (event)=>{
         console.log("Editing sentence " + event.target.getAttribute("data-index"));
+        setSelectedSentence(event.target.getAttribute("data-index"));
+        setRedirect('edit');
+        
       }
       
       const handleSentenceDelete= function(event){
-        if (confirm('Are you sure you want to save this thing into the database?')) {
-          // Save it!
+        if (confirm('Are you sure you want to delete this sentence?')) {
+          // Delete it!
           console.log("Deleting sentence " + event.target.getAttribute("data-index"));
         } else {
           // Do nothing!
@@ -37,6 +42,10 @@ export function Sentences (props){
         }
       }
 
+
+      if (redirect === 'edit') {
+        return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
+      }
     return (
         <MainContainer>
           <NavBar />
@@ -87,3 +96,22 @@ export function Sentences (props){
         </MainContainer>
       );
     }
+
+
+    export function EditSentence (props){
+      let { id } = useParams();
+      return (
+          <MainContainer>
+            <NavBar />
+            <SideContainer>
+              <GlobalStyle />
+                <SideBar />
+                <Content>
+                  <h1>Edit Sentence {id}</h1>
+                  {/* <NewSentenceInput /> */}
+                </Content>
+                <SideBar />
+            </SideContainer>
+          </MainContainer>
+        );
+      }

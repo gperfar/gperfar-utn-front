@@ -18,9 +18,7 @@ export function ConnectionSelect(props) {
   const classes = useStyles();
 
   const {connectionID: [connectionID, setConnectionID]} = {connectionID: React.useState(0),...(props.state || {})};
-
-  // const [connectionID, setConnectionID] = React.useState('');
-
+  
   const handleChange = (event) => {
     setConnectionID(event.target.value);
   };
