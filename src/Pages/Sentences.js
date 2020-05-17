@@ -1,11 +1,13 @@
 import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import {CoolButton} from '../Components/CoolButton';
+import {CoolButton, CoolButton2} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import {NewSentenceInput} from '../Components/NewSentenceInput';
+import {EditSentenceInput} from '../Components/EditSentenceInput';
 import { Redirect, Link, useParams } from "react-router-dom";
+import usePersistentState from '../usePersistentState'
 
 export function Sentences (props){
 
@@ -24,7 +26,7 @@ export function Sentences (props){
 
       const [redirect, setRedirect] = React.useState('');      
       const [selectedSentence, setSelectedSentence] = React.useState();      
-
+      
       const handleSentenceEdit= (event)=>{
         console.log("Editing sentence " + event.target.getAttribute("data-index"));
         setSelectedSentence(event.target.getAttribute("data-index"));
@@ -42,6 +44,13 @@ export function Sentences (props){
         }
       }
 
+      const handleCreateVisualization= (event)=>{
+        console.log("Editing sentence " + event.target.getAttribute("data-index"));
+        setSelectedSentence(event.target.getAttribute("data-index"));
+        setRedirect('edit');
+        
+      }
+
 
       if (redirect === 'edit') {
         return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
@@ -53,22 +62,26 @@ export function Sentences (props){
             <GlobalStyle />
               <SideBar />
               <Content>
-                <h1>Sentences</h1>
                 <h2><Link to='/sentences/new'> Create new Sentence... </Link></h2>
                  {results.map(result => (
                   <div>
                     <ContainerHorizontal classname="align-v-center">
                       <h2>{result.name}</h2>
-                      <CoolButton data-index={result._id} onClick={handleSentenceEdit}>
+                      <CoolButton2 data-index={result._id} onClick={handleSentenceEdit}>
                         <span data-index={result._id}>
                           Edit
                         </span>
-                      </CoolButton>
-                      <CoolButton data-index={result._id} onClick={handleSentenceDelete}>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleSentenceDelete}>
                         <span data-index={result._id}>
                           Delete
                         </span>
-                      </CoolButton>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
+                        <span data-index={result._id}>
+                          Create Visual
+                        </span>
+                      </CoolButton2>
                     </ContainerHorizontal>
                     <ModelCard object={result}/>
                   </div>
@@ -108,7 +121,7 @@ export function Sentences (props){
                 <SideBar />
                 <Content>
                   <h1>Edit Sentence {id}</h1>
-                  {/* <NewSentenceInput /> */}
+                  <EditSentenceInput sentenceID={id}/>
                 </Content>
                 <SideBar />
             </SideContainer>

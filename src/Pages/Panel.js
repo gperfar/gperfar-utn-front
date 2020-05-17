@@ -3,6 +3,7 @@ import '../App.css';
 import styled from "styled-components";
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
+import usePersistentState from '../usePersistentState'
 
 
 const GridContainer = styled.div`
@@ -35,7 +36,6 @@ export function Panel (){
       useEffect(() => {
         getResults().then(data => setResults(data.result.dashboards));
       }, []);
-
     return (
         <MainContainer>
           <GlobalStyle />

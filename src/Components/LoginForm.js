@@ -3,6 +3,9 @@ import {CoolTextField} from './CoolTextField';
 import {CoolButton} from './CoolButton'
 import styled from "styled-components";
 import { Redirect } from "react-router-dom";
+import usePersistentState from '../usePersistentState'
+
+
 const MainWrapper = styled.div`
 `
 
@@ -41,6 +44,24 @@ export function LoginForm(props) {
     const [password, setPassword] = React.useState('');
     const [redirect, setRedirect] = React.useState('');
 
+    async function tryLogin(){
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              'email': email,
+              'password': password})
+      };
+      const url = 'https://gperfar-utn.herokuapp.com/login';
+      console.log(requestOptions);
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      console.log(data.message);
+      return data;
+    }
+
+
+
     const handleEmailChange = (event) => {
       setEmail(event.target.value);
     }
@@ -51,7 +72,13 @@ export function LoginForm(props) {
 
     const handleSubmit = (event) => {
       // alert('I can\'t log you in, ' + email + '! But worry not, I won\'t tell anyone your password is ' + password);
-      setRedirect('panel');
+      // setRedirect('panel');
+      if (tryLogin()!=0){
+        setRedirect('panel')
+      }
+      if(tryLogin()==0){
+        setRedirect('connections')
+      }
     }
 
     const handleRegister =(event) => {
