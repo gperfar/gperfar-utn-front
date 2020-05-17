@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import usePersistentState from '../usePersistentState'
+
+
+
 
 const Container = styled.div`
 display: flex;
@@ -8,6 +12,7 @@ flex-direction: row;
 justify-content:left;
 `;
 export function NavBar () {
+    
     return(
     <Container>
         <Link to="/panel"><h4>Panel</h4></Link>

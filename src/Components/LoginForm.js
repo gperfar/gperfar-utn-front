@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {CoolTextField} from './CoolTextField';
 import {CoolButton} from './CoolButton'
 import styled from "styled-components";
@@ -44,6 +44,9 @@ export function LoginForm(props) {
     const [password, setPassword] = React.useState('');
     const [redirect, setRedirect] = React.useState('');
 
+    const [login,setLogin] = usePersistentState('login')
+
+
     async function tryLogin(){
       const requestOptions = {
           method: 'POST',
@@ -56,7 +59,7 @@ export function LoginForm(props) {
       console.log(requestOptions);
       const response = await fetch(url, requestOptions);
       const data = await response.json();
-      console.log(data.message);
+      console.log(data);
       return data;
     }
 
@@ -73,27 +76,32 @@ export function LoginForm(props) {
     const handleSubmit = (event) => {
       // alert('I can\'t log you in, ' + email + '! But worry not, I won\'t tell anyone your password is ' + password);
       // setRedirect('panel');
-      if (tryLogin()!=0){
-        setRedirect('panel')
-      }
-      if(tryLogin()==0){
-        setRedirect('connections')
-      }
+      tryLogin().then(data => setLogin(data.message));
+    }
+    const handleLogIn = (event) => {
+      tryLogin().then((data) => {
+        console.log(data);
+        if(data.success) setLogin(data.message);
+      });
+    }
+
+    const handleLogOut = (event) => {
+        setLogin(0);
     }
 
     const handleRegister =(event) => {
       setRedirect('connections');
     }
 
-    if (redirect === 'panel') {
-      return <Redirect to='/panel' />
+    if (login != 0) {
+      alert('welcome, '+ login.toString());
     }
     if (redirect === 'connections') {
       return <Redirect to='/connections' />
     }
     return(
         <MainWrapper>
-          <Title>Log In</Title>
+          <Title>Log In {login}</Title>
           <form onSubmit={handleSubmit}>
             <LoginMainContainer>
                 <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
@@ -104,6 +112,8 @@ export function LoginForm(props) {
                 </LoginSideContainer>
             </LoginMainContainer>
           </form>
+          <CoolButton onClick={handleLogIn}> Log in test </CoolButton>
+          <CoolButton onClick={handleLogOut}> Log out test </CoolButton>
         </MainWrapper>
       );
     }

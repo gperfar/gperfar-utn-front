@@ -31,6 +31,11 @@ export function Panel (){
       const data = await response.json();
       return data;
     }
+
+    const [login,setLogin] = usePersistentState('login')
+
+
+
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {
@@ -41,7 +46,7 @@ export function Panel (){
           <GlobalStyle />
             <NavBar />
             <Content>
-              <h1>Panel</h1>
+              <h1>Panel {login}</h1>
               <GridContainer>
                 {results.map(result => (
                   <GridItem>
