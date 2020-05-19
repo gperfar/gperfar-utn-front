@@ -44,7 +44,7 @@ export function LoginForm(props) {
     const [password, setPassword] = React.useState('');
     const [redirect, setRedirect] = React.useState('');
 
-    const [login,setLogin] = usePersistentState('login')
+    const [login,setLogin] = usePersistentState('login',0)
 
 
     async function tryLogin(){
