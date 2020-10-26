@@ -4,6 +4,7 @@ import {CoolButton} from './CoolButton'
 import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import usePersistentState from '../usePersistentState'
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 const MainWrapper = styled.div`
@@ -63,6 +64,39 @@ export function LoginForm(props) {
       return data;
     }
 
+    const LoginButton = () => {
+      const { loginWithRedirect } = useAuth0();
+    
+      return <button onClick={() => loginWithRedirect()}>Log In</button>;
+    }
+    
+    const LogoutButton = () => {
+      const { logout } = useAuth0();
+    
+      return (
+        <button onClick={() => logout({ returnTo: window.location.origin })}>
+          Log Out
+        </button>
+      );
+    }
+
+    const Profile = () => {
+      const { user, isAuthenticated, isLoading } = useAuth0();
+    
+      if (isLoading) {
+        return <div>Loading ...</div>;
+      }
+    
+      return (
+        isAuthenticated && (
+          <div>
+            <img src={user.picture} alt={user.name} />
+            <h2>{user.name}</h2>
+            <p>{user.email}</p>
+          </div>
+        )
+      );
+    }
 
 
     const handleEmailChange = (event) => {
@@ -96,6 +130,9 @@ export function LoginForm(props) {
           <Title>Log In {login}</Title>
           <form>
             <LoginMainContainer>
+              <LoginButton />
+              <LogoutButton />
+              <Profile />
                 <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
                 <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} />
                 <LoginSideContainer>
@@ -107,4 +144,3 @@ export function LoginForm(props) {
         </MainWrapper>
       );
     }
-  
