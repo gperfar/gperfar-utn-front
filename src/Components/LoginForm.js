@@ -41,29 +41,49 @@ line-height: 1.5em;
 
 export function LoginForm(props) {
 
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [redirect, setRedirect] = React.useState('');
+    // const [email, setEmail] = React.useState('');
+    // const [password, setPassword] = React.useState('');
+    // const [redirect, setRedirect] = React.useState('');
 
-    const [login,setLogin] = usePersistentState('login',0)
+    // const [login,setLogin] = usePersistentState('login',0)
 
 
-    async function tryLogin(){
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-              'email': email,
-              'password': password})
-      };
-      const url = 'https://gperfar-utn.herokuapp.com/login';
-      console.log(requestOptions);
-      const response = await fetch(url, requestOptions);
-      const data = await response.json();
-      console.log(data);
-      return data;
-    }
+    // async function tryLogin(){
+    //   const requestOptions = {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ 
+    //           'email': email,
+    //           'password': password})
+    //   };
+    //   const url = 'https://gperfar-utn.herokuapp.com/login';
+    //   console.log(requestOptions);
+    //   const response = await fetch(url, requestOptions);
+    //   const data = await response.json();
+    //   console.log(data);
+    //   return data;
+    // }
 
+    // const handleEmailChange = (event) => {
+    //   setEmail(event.target.value);
+    // }
+
+    // const handlePasswordChange = (event) => {
+    //   setPassword(event.target.value);
+    // }
+
+    // const handleLogIn = (event) => {
+    //   tryLogin().then((data) => {
+    //     if(data.success) setLogin(parseInt(data.message));
+    //   });
+    // }
+
+    // const handleRegister =(event) => {
+    //   setRedirect('connections');
+    // }
+
+
+//  AUTH0 SECTION OF CONSTS
     const LoginButton = () => {
       const { loginWithRedirect } = useAuth0();
     
@@ -89,55 +109,35 @@ export function LoginForm(props) {
     
       return (
         isAuthenticated && (
-          <div>
-            <img src={user.picture} alt={user.name} />
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
-          </div>
+          // <div>
+          //   <img src={user.picture} alt={user.name} />
+          //   <h2>{user.name}</h2>
+          //   <p>{user.email}</p>
+          // </div>
+          <Redirect to='/panel' />
         )
       );
     }
 
 
-    const handleEmailChange = (event) => {
-      setEmail(event.target.value);
-    }
 
-    const handlePasswordChange = (event) => {
-      setPassword(event.target.value);
-    }
+    // if (login != 0) {
+    //   return <Redirect to='/panel' />
+    // }
 
-    const handleLogIn = (event) => {
-      tryLogin().then((data) => {
-        console.log(data);
-        if(data.success) setLogin(parseInt(data.message));
-      });
-    }
-
-    const handleRegister =(event) => {
-      setRedirect('connections');
-    }
-
-    if (login != 0) {
-      console.log(login);
-      return <Redirect to='/panel' />
-    }
-    if (redirect === 'connections') {
-      return <Redirect to='/connections' />
-    }
     return(
         <MainWrapper>
-          <Title>Log In {login}</Title>
+          <Title>Log In</Title>
           <form>
             <LoginMainContainer>
-              <LoginButton />
-              <LogoutButton />
               <Profile />
-                <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
-                <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} />
+                {/* <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
+                <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} /> */}
                 <LoginSideContainer>
-                    <CoolButton onClick={handleLogIn}> Log In </CoolButton>
-                    <CoolButton onClick={handleRegister}> Register </CoolButton>
+                    <LoginButton />
+                    <LogoutButton />
+                    {/* <CoolButton onClick={handleLogIn}> Log In </CoolButton>
+                    <CoolButton onClick={handleRegister}> Register </CoolButton> */}
                 </LoginSideContainer>
             </LoginMainContainer>
           </form>
