@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import usePersistentState from '../usePersistentState'
 import { useAuth0 } from "@auth0/auth0-react";
+import {CoolButton} from './CoolButton'
 
 
 
@@ -28,9 +29,9 @@ export function NavBar () {
         const { logout } = useAuth0();
       
         return (
-          <button onClick={() => logout({ returnTo: window.location.origin })}>
+          <CoolButton onClick={() => logout({ returnTo: window.location.origin })}>
             Log Out
-          </button>
+          </CoolButton>
         );
       }
     return(

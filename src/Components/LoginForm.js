@@ -87,25 +87,25 @@ export function LoginForm(props) {
     const LoginButton = () => {
       const { loginWithRedirect } = useAuth0();
     
-      return <button onClick={() => loginWithRedirect()}>Log In</button>;
+      return <CoolButton onClick={() => loginWithRedirect()}>Log In / Register</CoolButton>;
     }
     
     const LogoutButton = () => {
       const { logout } = useAuth0();
     
       return (
-        <button onClick={() => logout({ returnTo: window.location.origin })}>
+        <CoolButton onClick={() => logout({ returnTo: window.location.origin })}>
           Log Out
-        </button>
+        </CoolButton>
       );
     }
 
     const Profile = () => {
       const { user, isAuthenticated, isLoading } = useAuth0();
     
-      if (isLoading) {
-        return <div>Loading ...</div>;
-      }
+      // if (isLoading) {
+      //   return <div>Loading ...</div>;
+      // }
     
       return (
         isAuthenticated && (
@@ -127,20 +127,20 @@ export function LoginForm(props) {
 
     return(
         <MainWrapper>
-          <Title>Log In</Title>
-          <form>
+          {/* <Title>Log In</Title> */}
+          {/* <form> */}
             <LoginMainContainer>
               <Profile />
                 {/* <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
                 <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} /> */}
                 <LoginSideContainer>
                     <LoginButton />
-                    <LogoutButton />
+                    {/* <LogoutButton /> */}
                     {/* <CoolButton onClick={handleLogIn}> Log In </CoolButton>
                     <CoolButton onClick={handleRegister}> Register </CoolButton> */}
                 </LoginSideContainer>
             </LoginMainContainer>
-          </form>
+          {/* </form> */}
         </MainWrapper>
       );
     }

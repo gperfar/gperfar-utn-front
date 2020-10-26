@@ -3,6 +3,7 @@ import '../App.css';
 import {LoginForm} from '../Components/LoginForm'
 import styled from "styled-components";
 import {GlobalStyle, MainContainer, SideContainer} from '../GlobalStyles';
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 const LandingContent = styled.div`
@@ -36,13 +37,40 @@ const LandingContentText = styled.div`
   color: #FFAE83;
   padding: 20px 20px 10px;
 `
+
+const Profile = () => {
+  const {  isLoading } = useAuth0();
+
+  if (isLoading) {
+    return (
+      // <div>Loading ...</div>
+      <MainContainer>
+      <GlobalStyle />
+      {/* <SideContainer> */}
+          <LandingContent>
+      <LoginForm />
+            <h1 className="landing-title">AAAAAAAAAAAAAAAAA</h1>
+            <h2 className="landing-subtitle">SDA is the Business Intelligence platform all small and medium-sized businesses are looking for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. All you need is a working database on which to perform these queries.</h2>
+            <LandingContentText>
+            </LandingContentText>
+          </LandingContent>
+          {/* <LandingSidePanel> */}
+            {/* <LoginForm /> */}
+          {/* </LandingSidePanel> */}
+      {/* </SideContainer> */}
+  </MainContainer>
+    );
+  }
+}
+
 export function Landing()  {
 
     return (
         <MainContainer>
             <GlobalStyle />
-            <SideContainer>
+            {/* <SideContainer> */}
                 <LandingContent>
+            <LoginForm />
                   <h1 className="landing-title">WELCOME TO THE MOST POWERFUL DATA ANALYSIS TOOL IN THE WORLD</h1>
                   <h2 className="landing-subtitle">SDA is the Business Intelligence platform all small and medium-sized businesses are looking for. Consisting of a completely online experience, powerful analysis tools and beautiful visualizations, you'll have to look no further in the quest for adding value to your organization. All you need is a working database on which to perform these queries.</h2>
                   <LandingContentText>
@@ -66,10 +94,10 @@ export function Landing()  {
                     <p>Gonzalo Pérez Fariña is the greatest wizard of all time. He's often compared to other warlocks like Dumbledore, Voldemort and Grindelwald, as well as other universes' characters like Sauron, Gandalf, Saruman, or even Thor.</p>
                   </LandingContentText>
                 </LandingContent>
-                <LandingSidePanel>
-                  <LoginForm />
-                </LandingSidePanel>
-            </SideContainer>
+                {/* <LandingSidePanel> */}
+                  {/* <LoginForm /> */}
+                {/* </LandingSidePanel> */}
+            {/* </SideContainer> */}
         </MainContainer>
     );
   }
