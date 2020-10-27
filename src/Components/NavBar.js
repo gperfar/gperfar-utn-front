@@ -14,12 +14,13 @@ justify-content:left;
 
 export function NavBar () {
 
+    const { logout, user } = useAuth0();
     const LogoutButton = () => {
-        const { logout, user } = useAuth0();
-      
+
         return (
           <CoolButton onClick={() => logout({ returnTo: window.location.origin })}>
-            Log Out, {user.name}
+            Log Out {user.name}
+            {/* {user.sub} */}
           </CoolButton>
         );
       }

@@ -1,3 +1,29 @@
+FRONT-END
+If it's the first time running the repo:
+npm install
+
+To start the server:
+npm run
+
+BACK-END
+
+To start the server:
+docker-compose up
+
+To stop the server: 
+docker-compose stop
+
+To rebuild the DB in dev:
+
+docker-compose exec app bash
+python manage.py recreate_db
+
+To rebuild the DB in prod:
+
+heroku login (and log in)
+heroku run bash -a gperfar-utn
+Once there, python manage.py recreate_db
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

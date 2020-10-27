@@ -29,7 +29,7 @@ const LandingContentText = styled.div`
 
 export function Landing()  {
 
-  const {  isLoading } = useAuth0();
+  const { isLoading } = useAuth0();
 
   if (isLoading) {
     return (
