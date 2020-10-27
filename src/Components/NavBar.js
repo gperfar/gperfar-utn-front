@@ -6,31 +6,20 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {CoolButton} from './CoolButton'
 
 
-
-
 const Container = styled.div`
 display: flex;
 flex-direction: row;
 justify-content:left;
 `;
 
-
-
-
 export function NavBar () {
 
-    const [login,setLogin] = usePersistentState('login')    
-    
-    // const handleLogOut = (event) => {
-    //     setLogin(0);
-    // }
-
     const LogoutButton = () => {
-        const { logout } = useAuth0();
+        const { logout, user } = useAuth0();
       
         return (
           <CoolButton onClick={() => logout({ returnTo: window.location.origin })}>
-            Log Out
+            Log Out, {user.name}
           </CoolButton>
         );
       }
@@ -43,7 +32,6 @@ export function NavBar () {
         <Link to="/dashboards"><h4>Dashboards</h4></Link>
         <Link to="/runquery/2"><h4>Sample Query Results</h4></Link>
         <Link to="/docs"><h4>Docs</h4></Link>
-        {/* <div onClick={handleLogOut}><Link to="/"><h4>Log out</h4></Link></div> */}
         <LogoutButton />
     </Container>
     )}

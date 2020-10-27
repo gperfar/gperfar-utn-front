@@ -46,7 +46,7 @@ export function Panel (){
           <GlobalStyle />
             <NavBar />
             <Content>
-              <h1>Panel {login}</h1>
+              <h1>Panel</h1>
               <GridContainer>
                 {results.map(result => (
                   <GridItem>

@@ -62,6 +62,7 @@ export function Sentences (props){
             <GlobalStyle />
               <SideBar />
               <Content>
+                <h1>Sentences</h1>
                 <h2><Link to='/sentences/new'> Create new Sentence... </Link></h2>
                  {results.map(result => (
                   <div>

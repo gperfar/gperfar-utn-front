@@ -41,106 +41,31 @@ line-height: 1.5em;
 
 export function LoginForm(props) {
 
-    // const [email, setEmail] = React.useState('');
-    // const [password, setPassword] = React.useState('');
-    // const [redirect, setRedirect] = React.useState('');
-
-    // const [login,setLogin] = usePersistentState('login',0)
-
-
-    // async function tryLogin(){
-    //   const requestOptions = {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({ 
-    //           'email': email,
-    //           'password': password})
-    //   };
-    //   const url = 'https://gperfar-utn.herokuapp.com/login';
-    //   console.log(requestOptions);
-    //   const response = await fetch(url, requestOptions);
-    //   const data = await response.json();
-    //   console.log(data);
-    //   return data;
-    // }
-
-    // const handleEmailChange = (event) => {
-    //   setEmail(event.target.value);
-    // }
-
-    // const handlePasswordChange = (event) => {
-    //   setPassword(event.target.value);
-    // }
-
-    // const handleLogIn = (event) => {
-    //   tryLogin().then((data) => {
-    //     if(data.success) setLogin(parseInt(data.message));
-    //   });
-    // }
-
-    // const handleRegister =(event) => {
-    //   setRedirect('connections');
-    // }
-
-
-//  AUTH0 SECTION OF CONSTS
     const LoginButton = () => {
       const { loginWithRedirect } = useAuth0();
     
       return <CoolButton onClick={() => loginWithRedirect()}>Log In / Register</CoolButton>;
     }
-    
-    const LogoutButton = () => {
-      const { logout } = useAuth0();
-    
-      return (
-        <CoolButton onClick={() => logout({ returnTo: window.location.origin })}>
-          Log Out
-        </CoolButton>
-      );
-    }
 
-    const Profile = () => {
-      const { user, isAuthenticated, isLoading } = useAuth0();
-    
-      // if (isLoading) {
-      //   return <div>Loading ...</div>;
-      // }
-    
+    const LoggedRedirect = () => {
+      const {isAuthenticated} = useAuth0();
+
       return (
         isAuthenticated && (
-          // <div>
-          //   <img src={user.picture} alt={user.name} />
-          //   <h2>{user.name}</h2>
-          //   <p>{user.email}</p>
-          // </div>
           <Redirect to='/panel' />
         )
       );
     }
 
-
-
-    // if (login != 0) {
-    //   return <Redirect to='/panel' />
-    // }
-
     return(
+      
         <MainWrapper>
-          {/* <Title>Log In</Title> */}
-          {/* <form> */}
-            <LoginMainContainer>
-              <Profile />
-                {/* <CoolTextField type="text" label='Email' onChange={handleEmailChange} />
-                <CoolTextField type="text" label='Password' type='password' onChange={handlePasswordChange} /> */}
-                <LoginSideContainer>
-                    <LoginButton />
-                    {/* <LogoutButton /> */}
-                    {/* <CoolButton onClick={handleLogIn}> Log In </CoolButton>
-                    <CoolButton onClick={handleRegister}> Register </CoolButton> */}
-                </LoginSideContainer>
-            </LoginMainContainer>
-          {/* </form> */}
+          <LoginMainContainer>
+            <LoggedRedirect />
+              <LoginSideContainer>
+                  <LoginButton />
+              </LoginSideContainer>
+          </LoginMainContainer>
         </MainWrapper>
       );
     }
