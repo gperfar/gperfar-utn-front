@@ -68,6 +68,22 @@ export function EditSentenceInput (props){
         return data;
     }
 
+    async function saveSentence(){
+        const url = 'https://gperfar-utn.herokuapp.com/sentences';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'connection_id': connectionID,
+                'sql_query': SQLQuery,
+                'comment': comment,
+                'name': name})
+        };
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
 
     const [queryResults, setQueryResults] = useState([]);
 
@@ -85,7 +101,7 @@ export function EditSentenceInput (props){
 
     const handleSave = (event) => {
         getQueryResults().then(data => setQueryResults(data.results))   
-        console.log("SAVE THIS");     
+        saveSentence().then(data=> console.log(data));     
     }
 
     const handleTest = (event) => {
@@ -104,12 +120,12 @@ export function EditSentenceInput (props){
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         <CoolTextField value={SQLQuery} multiline type="text" label='SQL Query' onChange={handleSQLQueryChange} />
                     </ContainerVertical>
+                </form>
+                <SDATable info={queryResults} />
                     <div>
                         <CoolButton onClick={handleTest}> Test </CoolButton>
                         <CoolButton onClick={handleSave}> Save </CoolButton>
                     </div>
-                </form>
-                <SDATable info={queryResults} />
             </div>
       );
     }

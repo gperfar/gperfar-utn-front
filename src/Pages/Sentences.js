@@ -8,6 +8,8 @@ import {NewSentenceInput} from '../Components/NewSentenceInput';
 import {EditSentenceInput} from '../Components/EditSentenceInput';
 import { Redirect, Link, useParams } from "react-router-dom";
 import usePersistentState from '../usePersistentState'
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 export function Sentences (props){
 
@@ -51,11 +53,16 @@ export function Sentences (props){
         
       }
 
+      const {isAuthenticated} = useAuth0();
 
+      if (!isAuthenticated) {
+        return <Redirect to={'/'} />
+      }
       if (redirect === 'edit') {
         return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
       }
     return (
+      isAuthenticated && (
         <MainContainer>
           <NavBar />
           <SideContainer>
@@ -91,6 +98,7 @@ export function Sentences (props){
               <SideBar />
           </SideContainer>
         </MainContainer>
+      )
       );
     }
   

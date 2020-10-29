@@ -78,12 +78,12 @@ export function NewSentenceInput (props){
                         <CoolTextField type="text" label='Comment' onChange={handleCommentChange} />
                         <CoolTextField multiline type="text" label='SQL Query' onChange={handleSQLQueryChange} />
                     </ContainerVertical>
+                </form>
+                <SDATable info={queryResults} />
                     <div>
                         <CoolButton onClick={handleTest}> Test </CoolButton>
                         <CoolButton onClick={handleCreate}> Create </CoolButton>
                     </div>
-                </form>
-                <SDATable info={queryResults} />
             </div>
       );
     }
