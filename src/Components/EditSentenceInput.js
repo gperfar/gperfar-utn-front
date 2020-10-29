@@ -101,7 +101,7 @@ export function EditSentenceInput (props){
       }
 
     const handleSave = (event) => {
-        getQueryResults().then(data => setQueryResults(data.results))   
+        // getQueryResults().then(data => setQueryResults(data.results))   
         saveEditedSentence().then(data=> console.log(data));     
     }
 
