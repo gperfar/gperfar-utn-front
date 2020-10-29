@@ -68,12 +68,13 @@ export function EditSentenceInput (props){
         return data;
     }
 
-    async function saveSentence(){
-        const url = 'https://gperfar-utn.herokuapp.com/sentences';
+    async function saveEditedSentence(){
+        const url = 'https://gperfar-utn.herokuapp.com/sentence/edit';
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
+                'sentence_id':sentenceID,
                 'connection_id': connectionID,
                 'sql_query': SQLQuery,
                 'comment': comment,
@@ -101,7 +102,7 @@ export function EditSentenceInput (props){
 
     const handleSave = (event) => {
         getQueryResults().then(data => setQueryResults(data.results))   
-        saveSentence().then(data=> console.log(data));     
+        saveEditedSentence().then(data=> console.log(data));     
     }
 
     const handleTest = (event) => {

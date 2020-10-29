@@ -35,6 +35,26 @@ export function NewSentenceInput (props){
         console.log(data.results);
         return data;
     }
+
+
+    async function saveSentence(){
+        const url = 'https://gperfar-utn.herokuapp.com/sentence/create';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'connection_id': connectionID,
+                'sql_query': SQLQuery,
+                'comment': comment,
+                'name': name})
+        };
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
+
+
     const [results, setResults] = useState([]);
       useEffect(() => {
         getResults().then(data => setResults(data.result.connections));
@@ -59,7 +79,8 @@ export function NewSentenceInput (props){
       }
 
     const handleCreate = (event) => {
-        getQueryResults().then(data => setQueryResults(data.results))        
+        getQueryResults().then(data => setQueryResults(data.results))   
+        saveSentence().then(data=> console.log(data));          
     }
 
     const handleTest = (event) => {
