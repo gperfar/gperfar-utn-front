@@ -12,27 +12,28 @@ export function RunQuery (){
     let { id } = useParams();
 
     
-    async function getResults() {
-      const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=".concat(id);
-      console.log("Fetching results from ".concat(url).concat("..."));
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
-    }
-// NO PODEMOS PASARLO A POST PORQUE TODAVÍA NO HAY UN RUNQUERY QUE FUNCIONE POR POST
-    // const { user } = useAuth0();
-    // async function getResults(){
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ 
-    //             'user_id': user.sub})
-    //     };
-    //     const response = await fetch('https://gperfar-utn.herokuapp.com/visualizations', requestOptions);
-    //     const data = await response.json();
-    //     console.log(data.results);
-    //     return data;
+    // async function getResults() {
+    //   const url = "https://gperfar-utn.herokuapp.com/runquery?sentence_id=".concat(id);
+    //   console.log("Fetching results from ".concat(url).concat("..."));
+    //   const response = await fetch(url);
+    //   const data = await response.json();
+    //   return data;
     // }
+
+    const { user } = useAuth0();
+    async function getResults(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub,
+                'sentence_id': id})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/runquery', requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
 
     const [results, setResults] = useState([]);
       useEffect(() => {
