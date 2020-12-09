@@ -5,6 +5,7 @@ import {ConnectionSelect} from '../Components/ConnectionSelect';
 import {CoolTextField} from './CoolTextField';
 import SDATable from './Table';
 import styled from "styled-components";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -21,14 +22,29 @@ export function EditSentenceInput (props){
     const [comment, setComment] = useState('');
     const [SQLQuery, setSQLQuery] = useState('');
 
+    const { logout, user } = useAuth0();
 
-    async function getSentenceData() {
-        const url = "https://gperfar-utn.herokuapp.com/sentences?id="+sentenceID.toString();
-        const response = await fetch(url);
+    async function getSentenceData(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'sentence_id': sentenceID,
+                'user_id': user.sub})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/sentences', requestOptions);
         const data = await response.json();
-        console.log(data);
+        console.log(data.results);
         return data;
     }
+
+    // async function getSentenceData() {
+    //     const url = "https://gperfar-utn.herokuapp.com/sentences?id="+sentenceID.toString();
+    //     const response = await fetch(url);
+    //     const data = await response.json();
+    //     console.log(data);
+    //     return data;
+    // }
 
     const [sentence, setSentence] = useState([]);
     useEffect(() => {
@@ -41,10 +57,23 @@ export function EditSentenceInput (props){
         } );
     }, []);
 
-    async function getConnections() {
-        const url = "https://gperfar-utn.herokuapp.com/connections";
-        const response = await fetch(url);
+    // async function getConnections() {
+    //     const url = "https://gperfar-utn.herokuapp.com/connections";
+    //     const response = await fetch(url);
+    //     const data = await response.json();
+    //     return data;
+    // }
+
+    async function getConnections(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/connections', requestOptions);
         const data = await response.json();
+        console.log(data.results);
         return data;
     }
 

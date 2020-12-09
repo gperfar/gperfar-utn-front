@@ -5,6 +5,7 @@ import {ConnectionSelect} from '../Components/ConnectionSelect';
 import {CoolTextField} from './CoolTextField';
 import SDATable from './Table';
 import styled from "styled-components";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -14,13 +15,31 @@ align-items: baseline;
 `
 
 export function NewSentenceInput (props){
-    const url = "https://gperfar-utn.herokuapp.com/connections";
     
-    async function getResults() {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+    // ----OLD GET RESULTS METHOD (USING GET INSTEAD OF POST, AND NOT SENDING USER ID)----
+    // async function getResults() {
+    //   const url = "https://gperfar-utn.herokuapp.com/connections";
+    //   const response = await fetch(url);
+    //   const data = await response.json();
+    //   return data;
+    // }
+    
+    const { logout, user } = useAuth0();
+
+    async function getResults(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub,
+                'sql_query': SQLQuery})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/connections', requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
     }
+
 
     async function getQueryResults(){
         const requestOptions = {

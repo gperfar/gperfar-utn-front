@@ -3,16 +3,32 @@ import '../App.css';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Visualizations (){
 
-    const url = "https://gperfar-utn.herokuapp.com/visualizations";
-    
-    async function getResults() {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+  
+  // async function getResults() {
+  //     const url = "https://gperfar-utn.herokuapp.com/visualizations";
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     return data;
+  //   }
+
+    const { user } = useAuth0();
+    async function getResults(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/visualizations', requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
     }
+    
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {

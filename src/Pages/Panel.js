@@ -81,13 +81,29 @@ const Profile = () => {
 
 export function Panel (){
 
-    const url = "https://gperfar-utn.herokuapp.com/dashboards";
-    
-    async function getResults() {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+  
+  // async function getResults() {
+  //     const url = "https://gperfar-utn.herokuapp.com/dashboards";
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     return data;
+  //   }
+
+    const { logout, user } = useAuth0();
+
+    async function getResults(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/dashboards', requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
     }
+
 
     const [login,setLogin] = usePersistentState('login')
 
