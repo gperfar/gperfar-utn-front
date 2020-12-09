@@ -79,7 +79,6 @@ export function NewSentenceInput (props){
       }
 
     const handleCreate = (event) => {
-        // getQueryResults().then(data => setQueryResults(data.results))   
         saveSentence().then(data=> console.log(data));          
     }
 

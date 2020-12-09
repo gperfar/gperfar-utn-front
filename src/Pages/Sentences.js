@@ -13,13 +13,28 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export function Sentences (props){
 
-    const url = "https://gperfar-utn.herokuapp.com/sentences";
-
-    async function getResults() {
+  
+  async function getResults() {
+      const url = "https://gperfar-utn.herokuapp.com/sentences";
       const response = await fetch(url);
       const data = await response.json();
       return data;
     }
+
+    async function DeleteSentence(sentence_id){
+      const url = 'https://gperfar-utn.herokuapp.com/sentence/delete';
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              'sentence_id': sentence_id})
+      };
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      console.log(data.results);
+      return data;
+  }
+
     const [results, setResults] = useState([]);
       console.log(results);
       useEffect(() => {
@@ -40,6 +55,8 @@ export function Sentences (props){
         if (confirm('Are you sure you want to delete this sentence?')) {
           // Delete it!
           console.log("Deleting sentence " + event.target.getAttribute("data-index"));
+          DeleteSentence(event.target.getAttribute("data-index")).then(data=> console.log(data));
+          return <Redirect to={'/panel/'} />
         } else {
           // Do nothing!
           console.log('You saved sentence ' + event.target.getAttribute("data-index") + '\'s ass');
