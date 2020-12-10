@@ -93,6 +93,7 @@ export function Connections (){
               <SideBar />
               <Content>
                 <h1>Connections</h1>
+                <h2><Link to='/connections/new'> Create New Connection... </Link></h2>
                 {results.map(result => (
                   <div>
                     <ContainerHorizontal classname="align-v-center">

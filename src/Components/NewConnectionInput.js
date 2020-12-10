@@ -14,15 +14,7 @@ justify-content: left;
 align-items: baseline;
 `
 
-export function NewSentenceInput (props){
-    
-    // ----OLD GET RESULTS METHOD (USING GET INSTEAD OF POST, AND NOT SENDING USER ID)----
-    // async function getResults() {
-    //   const url = "https://gperfar-utn.herokuapp.com/connections";
-    //   const response = await fetch(url);
-    //   const data = await response.json();
-    //   return data;
-    // }
+export function NewConnectionInput (props){
     
     const { logout, user } = useAuth0();
 
