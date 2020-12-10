@@ -34,7 +34,7 @@ export function EditSentenceInput (props){
         };
         const response = await fetch('https://gperfar-utn.herokuapp.com/sentences', requestOptions);
         const data = await response.json();
-        console.log(data.results);
+        // console.log(data.result);
         return data;
     }
 
@@ -73,13 +73,17 @@ export function EditSentenceInput (props){
         };
         const response = await fetch('https://gperfar-utn.herokuapp.com/connections', requestOptions);
         const data = await response.json();
-        console.log(data.results);
+        console.log(data.result);
         return data;
     }
 
     const [connections, setConnections] = useState([]);
       useEffect(() => {
-        getConnections().then(data => setConnections(data.result.connections));
+        getConnections().then(data => {
+            console.log(data.result.connections);
+            setConnections(data.result.connections);
+            
+        });
       }, []);
 
     async function getQueryResults(){

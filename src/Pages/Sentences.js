@@ -78,6 +78,7 @@ export function Sentences (props){
       }
 
       const handleCreateVisualization= (event)=>{
+        // TO DO
         console.log("Editing sentence " + event.target.getAttribute("data-index"));
         setSelectedSentence(event.target.getAttribute("data-index"));
         setRedirect('edit');

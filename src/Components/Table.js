@@ -150,7 +150,7 @@ import {CoolButton} from './CoolButton'
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const rows = props.info;
-    console.log(rows);
+    // console.log(rows);
     const row0=rows[0];
     const headCells=[]
     for(var key in row0){
