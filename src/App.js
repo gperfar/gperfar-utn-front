@@ -9,7 +9,10 @@ import {Dashboards} from './Pages/Dashboards'
 import {RunQuery} from './Pages/RunQuery'
 import {Panel} from './Pages/Panel'
 import ScrollToTop from './Components/ScrollToTop';
-export default function App()  {
+
+
+export default function App()  {    
+
     return (
       <Router>
         <ScrollToTop />
