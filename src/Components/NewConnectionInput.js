@@ -18,19 +18,6 @@ export function NewConnectionInput (props){
     
     const { logout, user, isAuthenticated } = useAuth0();
 
-    // async function getTypes(){
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ 
-    //             'user_id': user.sub})
-    //     };
-    //     const response = await fetch('https://gperfar-utn.herokuapp.com/connections/types', requestOptions);
-    //     const data = await response.json();
-    //     console.log(data.results);
-    //     return data;
-    // }
-
     async function getConnectionTypes() {
         const url = "https://gperfar-utn.herokuapp.com/connections/types";
         const response = await fetch(url);
@@ -65,6 +52,31 @@ export function NewConnectionInput (props){
         return data;
     }
 
+    async function testConnection(){
+        const url = 'https://gperfar-utn.herokuapp.com/connection/test';
+        let requestOptions={}
+        if (conntype == "postgres") {
+            requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    'name': name,
+                    'comment': comment,
+                    'user_id': user.sub,
+                    'type': "postgres",
+                    'host': hostname,
+                    'database': database,
+                    'username': username,
+                    'password': password
+                })
+            };
+        }
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }
+
 
     const [results, setResults] = useState([]);
       useEffect(() => {
@@ -94,12 +106,18 @@ export function NewConnectionInput (props){
     
 
     const handleCreate = (event) => {
-        console.log("Saving connection...")
+        console.log("Saving connection...");
         saveConnection().then(data=> console.log(data));          
     }
 
     const handleTest = (event) => {
-        // getQueryResults().then(data => setQueryResults(data.results))        
+        console.log("Testing connection...");
+        testConnection().then(data=> {
+                console.log(data);
+                alert(data.message);
+            });
+        
+
 
     }
     if (!isAuthenticated) {
@@ -107,9 +125,6 @@ export function NewConnectionInput (props){
             <Redirect to={'/'} />
             )
       }
-    //   if (redirect === 'edit') {
-    //     return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
-    //   }
 
     return (
             <div>
@@ -129,9 +144,10 @@ export function NewConnectionInput (props){
                                 password: [password, setPassword]
                                 }} 
                         />
-                        <ContainerHorizontal><CoolButton onClick={handleCreate}> Create </CoolButton></ContainerHorizontal>
-                        {/* <CoolTextField multiline type="text" label='SQL Query' onChange={handleSQLQueryChange} /> */}
-                        <p>{hostname} is the hostname, {password} is the password</p>
+                        <ContainerHorizontal>
+                            <CoolButton onClick={handleCreate}> Create </CoolButton>
+                            <CoolButton onClick={handleTest}> Test </CoolButton>
+                        </ContainerHorizontal>
                     </ContainerVertical>
                 </form>
             </div>
