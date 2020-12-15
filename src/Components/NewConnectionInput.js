@@ -83,7 +83,7 @@ export function NewConnectionInput (props){
         getConnectionTypes().then(data => setResults(data["connection types"]));
       }, []);
 
-    const [conntype, setConnType] = useState();
+    const [conntype, setConnType] = useState(0);
     const [name, setName] = useState();
     const [comment, setComment] = useState();
     const [queryResults, setQueryResults] = useState([]);
@@ -95,6 +95,12 @@ export function NewConnectionInput (props){
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
+
+    useEffect(() => {
+        getConnectionTypes().then((data) =>{
+            setConnType('postgres');
+          } );
+      }, []);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
