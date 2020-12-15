@@ -149,13 +149,19 @@ import {CoolButton} from './CoolButton'
     const [dense, setDense] = React.useState(true);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const rows = props.info;
-    // console.log(rows);
-    const row0=rows[0];
-    const headCells=[]
-    for(var key in row0){
-        headCells.push(key)
-      } 
+    var rows = [];
+    var row0 ={};
+    var headCells = [];
+    if (typeof props.info !== 'undefined') {
+      rows = props.info;
+      // console.log(rows);
+      row0=rows[0];
+      // const headCells=[]
+      for(var key in row0){
+          headCells.push(key)
+        } 
+    }
+    
 
     function downloadJSON(exportObj, filename){
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
@@ -219,7 +225,9 @@ import {CoolButton} from './CoolButton'
         downloadCSV(rows, 'SDA Download');
     }
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-  
+    if (typeof props.info == 'undefined') {
+      return <p>Error!</p>
+    }
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>

@@ -34,17 +34,8 @@ export function EditSentenceInput (props){
         };
         const response = await fetch('https://gperfar-utn.herokuapp.com/sentences', requestOptions);
         const data = await response.json();
-        // console.log(data.result);
         return data;
     }
-
-    // async function getSentenceData() {
-    //     const url = "https://gperfar-utn.herokuapp.com/sentences?id="+sentenceID.toString();
-    //     const response = await fetch(url);
-    //     const data = await response.json();
-    //     console.log(data);
-    //     return data;
-    // }
 
     const [sentence, setSentence] = useState([]);
     useEffect(() => {
@@ -56,13 +47,6 @@ export function EditSentenceInput (props){
           setConnectionID(data.result.sentence.connection_id);
         } );
     }, []);
-
-    // async function getConnections() {
-    //     const url = "https://gperfar-utn.herokuapp.com/connections";
-    //     const response = await fetch(url);
-    //     const data = await response.json();
-    //     return data;
-    // }
 
     async function getConnections(){
         const requestOptions = {
@@ -134,13 +118,12 @@ export function EditSentenceInput (props){
       }
 
     const handleSave = (event) => {
-        // getQueryResults().then(data => setQueryResults(data.results))   
-        saveEditedSentence().then(data=> console.log(data));     
+        saveEditedSentence().then(data=> console.log(data));
+        alert('Sentence saved successfully!')     
     }
 
     const handleTest = (event) => {
         getQueryResults().then(data => setQueryResults(data.results))        
-
     }
     
     return (
