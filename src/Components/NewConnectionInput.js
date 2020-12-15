@@ -30,7 +30,7 @@ export function NewConnectionInput (props){
     async function saveConnection(){
         const url = 'https://gperfar-utn.herokuapp.com/connection/create';
         let requestOptions={}
-        if (conntype == "postgres") {
+        if (connType == "postgres") {
             requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,7 @@ export function NewConnectionInput (props){
     async function testConnection(){
         const url = 'https://gperfar-utn.herokuapp.com/connection/test';
         let requestOptions={}
-        if (conntype == "postgres") {
+        if (connType == "postgres") {
             requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -83,10 +83,10 @@ export function NewConnectionInput (props){
         getConnectionTypes().then(data => setResults(data["connection types"]));
       }, []);
 
-    const [conntype, setConnType] = useState(0);
+    const [connType, setConnType] = useState(0);
     const [name, setName] = useState();
     const [comment, setComment] = useState();
-    const [queryResults, setQueryResults] = useState([]);
+    // const [queryResults, setQueryResults] = useState([]);
 
 
     // Postgres-specific fields
@@ -138,11 +138,11 @@ export function NewConnectionInput (props){
                     <ContainerVertical>
                         <ContainerHorizontal>
                             <CoolTextField style={{minWidth: 200}} type="text" label='Connection Name' onChange={handleNameChange} />
-                            <ConnectionTypeSelect types={results} state={{ conntype: [conntype, setConnType] }} />
+                            <ConnectionTypeSelect types={results} state={{ connType: [connType, setConnType] }} />
                         </ContainerHorizontal>
                         <CoolTextField type="text" label='Comment' onChange={handleCommentChange} />
                         <SpecificTypeFields 
-                            conntype={conntype} 
+                            connType={connType} 
                             state={{ 
                                 hostname: [hostname, setHostname],
                                 database: [database, setDatabase],
@@ -179,7 +179,7 @@ export function NewConnectionInput (props){
             setPassword(event.target.value);
         }
 
-        if (props.conntype == "postgres") {
+        if (props.connType == "postgres") {
             return (
                 <ContainerVertical>
                     <CoolTextField type="text" label='Hostname' onChange={handleHostnameChange} />

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 export function ConnectionTypeSelect(props) {
   const classes = useStyles();
 
-  const {conntype: [conntype, setConnType]} = {conntype: React.useState(0),...(props.state || {})};
+  const {connType: [connType, setConnType]} = {connType: React.useState(0),...(props.state || {})};
   
   const handleChange = (event) => {
     setConnType(event.target.value);
@@ -28,7 +28,7 @@ export function ConnectionTypeSelect(props) {
         <InputLabel>Connection Type</InputLabel>
         <Select
           native
-          value={conntype}
+          value={connType}
           onChange={handleChange}
         >
         <option aria-label="None" value="" />
