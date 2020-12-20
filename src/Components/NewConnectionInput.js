@@ -184,10 +184,8 @@ export function NewConnectionInput (props){
                 <ContainerVertical>
                     <CoolTextField type="text" label='Hostname' onChange={handleHostnameChange} />
                     <CoolTextField type="text" label='Database' onChange={handleDatabaseChange} />
-                    {/* <ContainerHorizontal> */}
-                        <CoolTextField type="text" label='Username' onChange={handleUsernameChange} />
-                        <CoolTextField type="password" label='Password' onChange={handlePasswordChange} />
-                    {/* </ContainerHorizontal> */}
+                    <CoolTextField type="text" label='Username' onChange={handleUsernameChange} />
+                    <CoolTextField type="password" label='Password' onChange={handlePasswordChange} />
                 </ContainerVertical>
                 )
           }

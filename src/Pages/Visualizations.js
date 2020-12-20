@@ -2,8 +2,13 @@ import React, { useState, useEffect }  from 'react';
 import '../App.css';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
-import {GlobalStyle, MainContainer, SideContainer, SideBar, Content} from '../GlobalStyles';
+import {CoolButton, CoolButton2} from '../Components/CoolButton';
+import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Redirect, Link, useParams } from "react-router-dom";
+// import { LineChart } from 'recharts';
+import {SDALineChart} from '../Components/Visualizations/LineChart';
+
 
 export function Visualizations (){
 
@@ -16,7 +21,8 @@ export function Visualizations (){
   //   }
 
     const { user } = useAuth0();
-    async function getResults(){
+    
+    async function getVisualizations(){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -29,12 +35,24 @@ export function Visualizations (){
         return data;
     }
     
-    const [results, setResults] = useState([]);
-      console.log(results);
-      useEffect(() => {
-        getResults().then(data => setResults(data.result.visualizations));
+    const [visualizations, setVisualizations] = useState([]);
+    const [redirect, setRedirect] = React.useState('');      
+    const [selectedVisualization, setSelectedVisualization] = React.useState();     
+    
+    useEffect(() => {
+      getVisualizations().then(data => setVisualizations(data.result.visualizations));
       }, []);
 
+      const handleVisualizationRender= (event)=>{
+        // TO DO
+        console.log("Rendering visualization " + event.target.getAttribute("data-index"));
+        setSelectedVisualization(event.target.getAttribute("data-index"));
+        setRedirect('edit');
+        
+      }
+    if (redirect === 'edit') {
+      return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
+    }
     return (
         <MainContainer>
           <NavBar />
@@ -43,9 +61,26 @@ export function Visualizations (){
               <SideBar />
               <Content>
                 <h1>Visualizations</h1>
-                {results.map(result => (
+                {visualizations.map(result => (
                   <div>
-                    <h2>{result.name}</h2>
+                    <ContainerHorizontal classname="align-v-center">
+                      <h2>{result.name}</h2>
+                      <CoolButton2 data-index={result._id} onClick={handleVisualizationRender}>
+                        <span data-index={result._id}>
+                          Render
+                        </span>
+                      </CoolButton2>
+                      {/* <CoolButton2 data-index={result._id} onClick={handleSentenceDelete}>
+                        <span data-index={result._id}>
+                          Delete
+                        </span>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
+                        <span data-index={result._id}>
+                          Create Visual
+                        </span>
+                      </CoolButton2> */}
+                    </ContainerHorizontal>
                     <ModelCard object={result}/>
                   </div>
                   ))}
@@ -56,3 +91,48 @@ export function Visualizations (){
       );
     }
   
+
+
+
+export function RenderVisualization (props){
+  let { id } = useParams();
+  const { user } = useAuth0();
+
+  async function VisualizationPreRender(){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            'user_id': user.sub,
+            'visualization_id': id})
+    };
+    const response = await fetch('https://gperfar-utn.herokuapp.com/visualization/pre_render', requestOptions);
+    const data = await response.json();
+    console.log(data);
+    return data.result;
+  }
+
+  const [preRenderData, setPreRenderData] = useState([]);
+
+
+  useEffect(() => {
+    VisualizationPreRender().then(data => setPreRenderData(data));
+
+    }, []);
+
+  return (
+      <MainContainer>
+        <NavBar />
+        <SideContainer>
+          <GlobalStyle />
+            <SideBar />
+            <Content>
+              <h1>Render Visualization {id}</h1>
+              {/* <EditSentenceInput sentenceID={id}/> */}
+              <SDALineChart results={preRenderData.results} />
+            </Content>
+            <SideBar />
+        </SideContainer>
+      </MainContainer>
+    );
+  }

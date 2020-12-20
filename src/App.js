@@ -4,7 +4,7 @@ import {Docs} from './Pages/Docs'
 import {Landing} from './Pages/Landing'
 import {Connections, NewConnection, EditConnection} from './Pages/Connections'
 import {Sentences, NewSentence, EditSentence} from './Pages/Sentences'
-import {Visualizations} from './Pages/Visualizations'
+import {Visualizations, RenderVisualization} from './Pages/Visualizations'
 import {Dashboards} from './Pages/Dashboards'
 import {RunQuery} from './Pages/RunQuery'
 import {Panel} from './Pages/Panel'
@@ -24,6 +24,7 @@ export default function App()  {
           <Route path="/sentences/edit/:id"><EditSentence /></Route>
           <Route path="/sentences/new"><NewSentence /></Route>
           <Route path="/sentences"><Sentences /></Route>
+          <Route path="/visualizations/render/:id"><RenderVisualization /></Route>
           <Route path="/visualizations"><Visualizations /></Route>
           <Route path="/dashboards"><Dashboards /></Route>
           <Route path="/runquery/:id"><RunQuery /></Route>
