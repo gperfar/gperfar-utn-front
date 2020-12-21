@@ -47,10 +47,10 @@ export function Visualizations (){
         // TO DO
         console.log("Rendering visualization " + event.target.getAttribute("data-index"));
         setSelectedVisualization(event.target.getAttribute("data-index"));
-        setRedirect('edit');
+        setRedirect('render');
         
       }
-    if (redirect === 'edit') {
+    if (redirect === 'render') {
       return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
     }
     return (
@@ -114,10 +114,8 @@ export function RenderVisualization (props){
 
   const [preRenderData, setPreRenderData] = useState([]);
 
-
   useEffect(() => {
     VisualizationPreRender().then(data => setPreRenderData(data));
-
     }, []);
 
   return (
@@ -128,11 +126,21 @@ export function RenderVisualization (props){
             <SideBar />
             <Content>
               <h1>Render Visualization {id}</h1>
-              {/* <EditSentenceInput sentenceID={id}/> */}
-              <SDALineChart results={preRenderData.results} />
+              <div style={{textAlign: 'center', justifyContent: 'center'}}>
+                {typeof(preRenderData.column_data)=='object'?
+                  <ChartController data={preRenderData}/>:
+                  <h2>Rendering...</h2>
+                }
+              </div>
             </Content>
             <SideBar />
         </SideContainer>
       </MainContainer>
     );
+  }
+
+  function ChartController (props){
+    if (props.data.type ==='linechart') {
+      return (<SDALineChart data={props.data}/>);
+    }
   }

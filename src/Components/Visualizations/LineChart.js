@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Label
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Label, ResponsiveContainer
 } from 'recharts';
 
 // const data = [
@@ -15,37 +15,34 @@ import {
 
 export function SDALineChart (props){
 
-  const data= props.results;
-  useEffect(() => {
-    // getConnectionTypes().then((data) =>{
-    //     setConnTypes(data["connection types"]);
-    //   } );
-    console.log(data);
-  }, []);
-
-    return (
-      <div>
-        {/* <p>{data}</p> */}
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5, right: 30, left: 20, bottom: 20,
-          }}
-          >
-          <CartesianGrid strokeDasharray="3 10" />
-          <XAxis dataKey="city">
-            <Label value="X Axis test" offset={5} position="bottom" />
-          </XAxis>
-          <YAxis>
-            <Label value="Y Axis test" angle={-90} position="left" />
-          </YAxis>
-          <Tooltip />
-          <Legend verticalAlign="top" align="right"/>
-          <Line type="monotone" dataKey="customers" stroke="#8884d8" activeDot={{ r: 5 }}/>
-          {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" activeDot={{ r: 5}}/> */}
-        </LineChart>
-      </div>
-    );
-  }
+  const data= props.data.results;
+  var xaxis_column = props.data.column_data[0];
+  var yaxis_columns = props.data.column_data.slice(1,);
+  const xaxis_label = props.data.xaxis_label;
+  const yaxis_label = props.data.yaxis_label;
+  return (
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart
+        // width={600}
+        // height={400}
+        data={data}
+        margin={{
+          top: 5, right: 30, left: 20, bottom: 20,
+        }}
+        >
+        <CartesianGrid strokeDasharray="3 10" />
+        <XAxis dataKey={xaxis_column.name}>
+          <Label value={xaxis_label} offset={5} position="bottom" />
+        </XAxis>
+        <YAxis>
+          <Label value={yaxis_label} angle={-90} position="left" />
+        </YAxis>
+        <Tooltip />
+        <Legend verticalAlign="top" align="right"/>
+        {yaxis_columns.map(i => (
+          <Line type="monotone" dataKey={i.name} stroke={i.color} activeDot={{ r: 5 }}/>
+          ))}
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
