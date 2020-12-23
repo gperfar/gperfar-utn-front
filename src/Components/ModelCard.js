@@ -38,9 +38,10 @@ export function ModelCard(props) {
         <List component="div" >   
             {/* {console.log(Object.keys(props.object))} */}
             {Object.entries(props.object).map(attr => (
-                <ListItem className={classes.nested}>
+                typeof(attr[1])!='object' && 
+                  <ListItem className={classes.nested}>
                     <ListItemText primary={attr[0].charAt(0).toUpperCase() + attr[0].substring(1)} secondary={attr[1]} />
-                </ListItem>
+                  </ListItem>
             ))}
         </List>
       </Collapse>

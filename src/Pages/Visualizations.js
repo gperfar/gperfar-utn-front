@@ -31,9 +31,23 @@ export function Visualizations (){
         };
         const response = await fetch('https://gperfar-utn.herokuapp.com/visualizations', requestOptions);
         const data = await response.json();
-        console.log(data.results);
+        console.log(data.result);
         return data;
     }
+
+    async function DeleteVisualization(visualization_id){
+      const url = 'https://gperfar-utn.herokuapp.com/visualization/delete';
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              'visualization_id': visualization_id})
+      };
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      console.log(data.results);
+      return data;
+  }
     
     const [visualizations, setVisualizations] = useState([]);
     const [redirect, setRedirect] = React.useState('');      
@@ -43,13 +57,26 @@ export function Visualizations (){
       getVisualizations().then(data => setVisualizations(data.result.visualizations));
       }, []);
 
-      const handleVisualizationRender= (event)=>{
-        // TO DO
-        console.log("Rendering visualization " + event.target.getAttribute("data-index"));
-        setSelectedVisualization(event.target.getAttribute("data-index"));
-        setRedirect('render');
-        
+    const handleVisualizationRender= (event)=>{
+      // TO DO
+      console.log("Rendering visualization " + event.target.getAttribute("data-index"));
+      setSelectedVisualization(event.target.getAttribute("data-index"));
+      setRedirect('render');
+    }
+
+    const handleVisualizationDelete= function(event){
+      if (confirm('Are you sure you want to delete this visualization?')) {
+        // Delete it!
+        console.log("Deleting visualization " + event.target.getAttribute("data-index"));
+        DeleteVisualization(event.target.getAttribute("data-index")).then(data=> console.log(data));
+        return <Redirect to={'/panel/'} />
+      } 
+      else {
+        // Do nothing!
+        console.log('You saved visualization ' + event.target.getAttribute("data-index") + '\'s ass');
       }
+    }
+
     if (redirect === 'render') {
       return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
     }
@@ -61,6 +88,7 @@ export function Visualizations (){
               <SideBar />
               <Content>
                 <h1>Visualizations</h1>
+                <h2><Link to='/visualizations/new'> Create new Visualization... </Link></h2>
                 {visualizations.map(result => (
                   <div>
                     <ContainerHorizontal classname="align-v-center">
@@ -70,12 +98,12 @@ export function Visualizations (){
                           Render
                         </span>
                       </CoolButton2>
-                      {/* <CoolButton2 data-index={result._id} onClick={handleSentenceDelete}>
+                      <CoolButton2 data-index={result._id} onClick={handleVisualizationDelete}>
                         <span data-index={result._id}>
                           Delete
                         </span>
                       </CoolButton2>
-                      <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
+                      {/* <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
                         <span data-index={result._id}>
                           Create Visual
                         </span>
@@ -144,3 +172,39 @@ export function RenderVisualization (props){
       return (<SDALineChart data={props.data}/>);
     }
   }
+
+
+  export function NewVisualization (props){
+    return (
+        <MainContainer>
+          <NavBar />
+          <SideContainer>
+            <GlobalStyle />
+              <SideBar />
+              <Content>
+                <h1>Add new Visualization</h1>
+                {/* <NewSentenceInput /> */}
+              </Content>
+              <SideBar />
+          </SideContainer>
+        </MainContainer>
+      );
+    }
+
+    export function EditVisualization (props){
+      let { id } = useParams();
+      return (
+          <MainContainer>
+            <NavBar />
+            <SideContainer>
+              <GlobalStyle />
+                <SideBar />
+                <Content>
+                  <h1>Edit Visualization {id}</h1>
+                  {/* <EditSentenceInput sentenceID={id}/> */}
+                </Content>
+                <SideBar />
+            </SideContainer>
+          </MainContainer>
+        );
+      }
