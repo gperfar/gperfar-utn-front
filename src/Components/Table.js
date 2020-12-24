@@ -152,11 +152,10 @@ import {CoolButton} from './CoolButton'
     var rows = [];
     var row0 ={};
     var headCells = [];
+    
     if (typeof props.info !== 'undefined') {
       rows = props.info;
-      // console.log(rows);
       row0=rows[0];
-      // const headCells=[]
       for(var key in row0){
           headCells.push(key)
         } 

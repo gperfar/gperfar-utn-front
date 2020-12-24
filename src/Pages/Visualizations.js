@@ -8,6 +8,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect, Link, useParams } from "react-router-dom";
 // import { LineChart } from 'recharts';
 import {SDALineChart} from '../Components/Visualizations/LineChart';
+import {NewVisualizationInput} from '../Components/NewVisualizationInput';
+import {EditVisualizationInput} from '../Components/EditVisualizationInput';
 
 
 export function Visualizations (){
@@ -183,7 +185,7 @@ export function RenderVisualization (props){
               <SideBar />
               <Content>
                 <h1>Add new Visualization</h1>
-                {/* <NewSentenceInput /> */}
+                <NewVisualizationInput />
               </Content>
               <SideBar />
           </SideContainer>
@@ -201,7 +203,7 @@ export function RenderVisualization (props){
                 <SideBar />
                 <Content>
                   <h1>Edit Visualization {id}</h1>
-                  {/* <EditSentenceInput sentenceID={id}/> */}
+                  {/* <EditVisualizationInput visualizationID={id}/> */}
                 </Content>
                 <SideBar />
             </SideContainer>

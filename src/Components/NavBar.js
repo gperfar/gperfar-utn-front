@@ -31,7 +31,7 @@ export function NavBar () {
         <Link to="/sentences"><h4>Sentences</h4></Link>
         <Link to="/visualizations"><h4>Visualizations</h4></Link>
         <Link to="/dashboards"><h4>Dashboards</h4></Link>
-        <Link to="/runquery/2"><h4>Sample Query Results</h4></Link>
+        {/* <Link to="/runquery/2"><h4>Sample Query Results</h4></Link> */}
         <Link to="/docs"><h4>Docs</h4></Link>
         <LogoutButton />
     </Container>
