@@ -40,7 +40,7 @@ export function SDALineChart (props){
         <Tooltip />
         <Legend verticalAlign="top" align="right"/>
         {yaxis_columns.map(i => (
-          <Line type="monotone" dataKey={i.name} stroke={i.color} activeDot={{ r: 5 }}/>
+          <Line name={i.legend} type="monotone" dataKey={i.name} stroke={i.color} activeDot={{ r: 5 }}/>
           ))}
       </LineChart>
     </ResponsiveContainer>
