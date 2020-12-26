@@ -30,19 +30,6 @@ export function NewVisualizationInput (props){
       return data;
     }
 
-    // async function getVisualizationTypes(){
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ 
-    //             'user_id': user.sub})
-    //     };
-    //     const response = await fetch('https://gperfar-utn.herokuapp.com/visualization/types', requestOptions);
-    //     const data = await response.json();
-    //     console.log(data.result);
-    //     return data;
-    // }
-
     async function getSentences(){
         const requestOptions = {
             method: 'POST',
@@ -56,22 +43,6 @@ export function NewVisualizationInput (props){
         return data;
     }
 
-
-    // async function getQueryResults(){
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ 
-    //             'connection_id': connectionID,
-    //             'sql_query': SQLQuery})
-    //     };
-    //     const response = await fetch('https://gperfar-utn.herokuapp.com/runtemporaryquery', requestOptions);
-    //     const data = await response.json();
-    //     console.log(data.results);
-    //     return data;
-    // }
-
-
     async function saveVisualization(){
         const url = 'https://gperfar-utn.herokuapp.com/visualization/create';
         const requestOptions = {
@@ -81,7 +52,9 @@ export function NewVisualizationInput (props){
                 'sentence_id': sentenceID,
                 'type': visualizationType,
                 'comment': comment,
-                'name': name})
+                'name': name,
+                'params': params
+            })
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
@@ -117,19 +90,10 @@ export function NewVisualizationInput (props){
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     }
-    
-    // const handleSQLQueryChange = (event) => {
-    //     setSQLQuery(event.target.value);
-    //   }
 
     const handleCreate = (event) => {
         saveVisualization().then(data=> console.log(data));          
     }
-
-    // const handleTest = (event) => {
-    //     getQueryResults().then(data => setQueryResults(data.results))        
-
-    // }
     
     return (
             <div>
@@ -145,9 +109,7 @@ export function NewVisualizationInput (props){
                         <SpecificTypeFields sentenceID={sentenceID} visualizationType={visualizationType} state={{ params: [params, setParams] }}  />
                     </ContainerVertical>
                 </form>
-                {/* <SDATable info={queryResults} /> */}
                     <div>
-                        {/* <CoolButton onClick={handleTest}> Test </CoolButton> */}
                         <CoolButton onClick={handleCreate}> Create </CoolButton>
                     </div>
             </div>
@@ -156,7 +118,7 @@ export function NewVisualizationInput (props){
 
 
 export function SpecificTypeFields (props){
-    const { logout, user } = useAuth0();
+    const { user } = useAuth0();
 
     
     const {params: [params, setParams]} = {type: React.useState(),...(props.state || {})};
@@ -165,22 +127,15 @@ export function SpecificTypeFields (props){
     const [xAxisLabel, setXAxisLabel] = useState('');
     const [xAxisColumn, setXAxisColumn] = useState('');
     const [yAxisLabel, setYAxisLabel] = useState('');
-    const [columns, setColumns] = useState([]);
     
-    const [yAxisColumns, setYAxisColumns] = useState(['']);
-
     const [yAxisColumnCount, setYAxisColumnCount] = useState(1);
-    // const [yNames, setYNames] = useState(['']);
-    // const [yColors, setYColors] = useState(['']);
-    // useEffect(() => {
+    
+    const [yAxisColumnNames, setYAxisColumnNames] = useState(['']);
+    const [yAxisColumnColors, setYAxisColumnColors] = useState(['']);
+    const [yAxisColumnLegends, setYAxisColumnLegends] = useState(['']);
+
         
     const [render, setRender] = useState(0);
-    // }, []);
-    // function setValueAtIndex(index, value) {
-    //     setColumns(columns => {
-    //         columns[index]= value;
-    //     })
-    // }
 
     async function getResults(){
         const requestOptions = {
@@ -196,8 +151,6 @@ export function SpecificTypeFields (props){
         return data;
     }
 
-
-
     const [headerRow, setHeaderRow] = useState([]);
     const [results, setResults] = useState([]);
     useEffect(() => {
@@ -210,22 +163,57 @@ export function SpecificTypeFields (props){
 
     const handleXAxisLabelChange = (event) => {
         setXAxisLabel(event.target.value);
+        buildParams();
     }
-
-    // const handleXAxisColumnChange = (event) => {
-    //     setXAxisColumn(event.target.value);
-    // }
 
     const handleYAxisLabelChange = (event) => {
         setYAxisLabel(event.target.value);
+        buildParams();
     }
+
+    const handleYAxisColumnLegendsChange = (event, index) => {
+        var temp = yAxisColumnLegends;
+        temp[index] = event.target.value;
+        setYAxisColumnLegends(temp);
+        setRender(render + 1);
+        buildParams();
+
+    }
+
+    const handleYAxisColumnColorsChange = (event, index) => {
+        var temp = yAxisColumnColors;
+        temp[index] = event.target.value;
+        setYAxisColumnColors(temp);
+        setRender(render + 1)
+        buildParams();
+    }
+
     const handleAddLine = (event) => {
         setYAxisColumnCount(yAxisColumnCount + 1);
-        var temp = yAxisColumns;
+        var temp = yAxisColumnNames;
         temp.push('');
-        setYAxisColumns(temp);
-        console.log(yAxisColumns);
+        setYAxisColumnNames(temp);
+        buildParams();
     }
+
+    function buildParams (){
+        var tempColumns = [];
+        tempColumns.push({name: xAxisColumn});
+        for (const [i, value] of yAxisColumnNames.entries()) {
+            tempColumns.push({
+                name: yAxisColumnNames[i],
+                color: yAxisColumnColors[i],
+                legend: yAxisColumnLegends[i]
+            })
+        }
+        var tempParams = {
+            columns: tempColumns,
+            xaxis_label: xAxisLabel,
+            yaxis_label: yAxisLabel
+        }
+        setParams(tempParams);
+        console.log("params set!");
+    } 
 
     if (props.sentenceID!='' && props.visualizationType == "linechart") {
         return (
@@ -234,19 +222,17 @@ export function SpecificTypeFields (props){
                 <ContainerHorizontal>
                     <CoolTextField style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
                     <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
-                    {/* <CoolTextField style={{width:"100%"}} type="text" label='X-Axis Column' onChange={handleXAxisColumnChange} /> */}
                 </ContainerHorizontal>
                 <h3>Y Axis</h3>
-                {/* <p>{yAxisColumns.toString()}</p> */}
                 <CoolTextField type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
                 {[...Array(yAxisColumnCount).keys()].map(i => (
                     <ContainerHorizontal>
-                        <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumns, setYAxisColumns], render: [render, setRender] }}/>
-                        {/* <CoolTextField style={{width:"25%"}} type="text" label='Line color' onChange={handleYAxisLabelChange} /> */}
+                        <CoolTextField style={{width:"100%"}} type="text" label={'Column '+(i+1)+' name'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
+                        <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                        <CoolTextField style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
                     </ContainerHorizontal>
                 ))}
-                <CoolButton style={{width:"15%"}} onClick={handleAddLine}> Add Line </CoolButton>
-                {/* <p>{yAxisColumnCount}</p> */}
+                <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton>
             </ContainerVertical>
             )
         }
