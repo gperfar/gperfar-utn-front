@@ -179,7 +179,7 @@ export function RenderVisualization (props){
     );
   }
 
-  function ChartController (props){
+  export function ChartController (props){
     if (props.data.type ==='linechart') {
       return (<SDALineChart data={props.data}/>);
     }

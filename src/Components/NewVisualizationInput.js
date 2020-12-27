@@ -11,6 +11,8 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMutableState from '../useMutableState'
 import { render } from 'react-dom';
+import {ChartController} from '../Pages/Visualizations'
+
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -22,6 +24,7 @@ align-items: baseline;
 export function NewVisualizationInput (props){
     
     const { logout, user } = useAuth0();
+    const [localRenderData, setLocalRenderData]= useState([]);
 
     async function getVisualizationTypes() {
       const url = "https://gperfar-utn.herokuapp.com/visualizations/types";
@@ -62,6 +65,19 @@ export function NewVisualizationInput (props){
         return data;
     }
 
+    async function getResults(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub,
+                'sentence_id': sentenceID})
+        };
+        const response = await fetch('https://gperfar-utn.herokuapp.com/runquery', requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
 
     const [sentences, setSentences] = useState([]);
       useEffect(() => {
@@ -94,6 +110,21 @@ export function NewVisualizationInput (props){
     const handleCreate = (event) => {
         saveVisualization().then(data=> console.log(data));          
     }
+
+    const handleRender = (event) => {
+        getResults().then(data => {
+            setLocalRenderData({
+                column_data: params.columns,
+                results: data.results,
+                type: visualizationType,
+                xaxis_label: params.xaxis_label,
+                yaxis_label: params.yaxis_label
+            });
+            console.log(localRenderData);
+            console.log(typeof(localRenderData.column_data));
+            console.log(params);
+        });         
+    }
     
     return (
             <div>
@@ -109,9 +140,16 @@ export function NewVisualizationInput (props){
                         <SpecificTypeFields sentenceID={sentenceID} visualizationType={visualizationType} state={{ params: [params, setParams] }}  />
                     </ContainerVertical>
                 </form>
-                    <div>
-                        <CoolButton onClick={handleCreate}> Create </CoolButton>
-                    </div>
+                <div>
+                    <CoolButton onClick={handleCreate}> Create </CoolButton>
+                    <CoolButton onClick={handleRender}> Render </CoolButton>
+                </div>
+                <h2>Render of the chart</h2>
+                {typeof(localRenderData.column_data)=='object'?
+                  <ChartController data={localRenderData} />
+                  :
+                  <h4>Hit Render to see the chart</h4>
+                }
             </div>
       );
     }
