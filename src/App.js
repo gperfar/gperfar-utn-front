@@ -24,6 +24,7 @@ export default function App()  {
           <Route path="/sentences/edit/:id"><EditSentence /></Route>
           <Route path="/sentences/new"><NewSentence /></Route>
           <Route path="/sentences"><Sentences /></Route>
+          <Route path="/visualizations/new/:sentenceid"><NewVisualization /></Route>
           <Route path="/visualizations/new"><NewVisualization /></Route>
           <Route path="/visualizations/edit/:id"><EditVisualization /></Route>
           <Route path="/visualizations/render/:id"><RenderVisualization /></Route>

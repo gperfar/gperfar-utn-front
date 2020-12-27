@@ -187,6 +187,7 @@ export function RenderVisualization (props){
 
 
   export function NewVisualization (props){
+    let { sentenceid } = useParams();
     return (
         <MainContainer>
           <NavBar />
@@ -194,8 +195,9 @@ export function RenderVisualization (props){
             <GlobalStyle />
               <SideBar />
               <Content>
+                {/* <h1>{sentenceid}</h1> */}
                 <h1>Add new Visualization</h1>
-                <NewVisualizationInput />
+                <NewVisualizationInput sentenceID={sentenceid} />
               </Content>
               <SideBar />
           </SideContainer>

@@ -93,7 +93,7 @@ export function NewVisualizationInput (props){
         );
       }, []);
 
-    const [sentenceID, setSentenceID] = useState('');
+    const [sentenceID, setSentenceID] = useState(props.sentenceID);
     const [name, setName] = useState();
     const [comment, setComment] = useState();
     const [visualizationType, setVisualizationType] = useState('');

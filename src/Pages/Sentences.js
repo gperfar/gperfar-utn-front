@@ -81,7 +81,7 @@ export function Sentences (props){
         // TO DO
         console.log("Editing sentence " + event.target.getAttribute("data-index"));
         setSelectedSentence(event.target.getAttribute("data-index"));
-        setRedirect('edit');
+        setRedirect('createVisualization');
         
       }
 
@@ -92,6 +92,9 @@ export function Sentences (props){
       }
       if (redirect === 'edit') {
         return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
+      }
+      if (redirect === 'createVisualization') {
+        return <Redirect to={'/visualizations/new/'+ selectedSentence.toString()} />
       }
     return (
       isAuthenticated && (
