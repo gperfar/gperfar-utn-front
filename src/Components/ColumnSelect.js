@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 export function ColumnSelect(props) {
   const classes = useStyles();
 
-  const {column: [column, setColumn]} = {column: React.useState(0),...(props.state || {})};
+  const {column: [column, setColumn]} = {column: React.useState('asd'),...(props.state || {})};
   
   const handleChange = (event) => {
     setColumn(event.target.value);

@@ -79,8 +79,18 @@ export function Visualizations (){
       }
     }
 
+    const handleVisualizationEdit= (event)=>{
+      console.log("Editing visualization " + event.target.getAttribute("data-index"));
+      setSelectedVisualization(event.target.getAttribute("data-index"));
+      setRedirect('edit');
+      
+    }
+
     if (redirect === 'render') {
       return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
+    }
+    if (redirect === 'edit') {
+      return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
     }
     return (
         <MainContainer>
@@ -105,11 +115,11 @@ export function Visualizations (){
                           Delete
                         </span>
                       </CoolButton2>
-                      {/* <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
+                      <CoolButton2 data-index={result._id} onClick={handleVisualizationEdit}>
                         <span data-index={result._id}>
-                          Create Visual
+                          Edit
                         </span>
-                      </CoolButton2> */}
+                      </CoolButton2>
                     </ContainerHorizontal>
                     <ModelCard object={result}/>
                   </div>
@@ -203,7 +213,7 @@ export function RenderVisualization (props){
                 <SideBar />
                 <Content>
                   <h1>Edit Visualization {id}</h1>
-                  {/* <EditVisualizationInput visualizationID={id}/> */}
+                  <EditVisualizationInput visualizationID={id}/>
                 </Content>
                 <SideBar />
             </SideContainer>
