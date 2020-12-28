@@ -2,7 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import '../App.css';
 import { useParams } from "react-router-dom";
 import SDATable from '../Components/Table';
-import SDALineChart from '../Components/Visualizations/LineChart';
+import SDALineChart from '../Components/Visualizations/Chart Types/LineChart';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";

@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMutableState from '../useMutableState'
 import { render } from 'react-dom';
-import {ChartController} from '../Pages/Visualizations'
+import {VisualizationController} from '../Pages/Visualizations'
 
 
 export const ContainerHorizontal = styled.div`
@@ -88,7 +88,7 @@ export function NewVisualizationInput (props){
       useEffect(() => {
         getVisualizationTypes().then(data => {
             setVisualizationTypes(data.result["visualization types"]);
-            setVisualizationType('linechart');
+            setVisualizationType('Line chart');
         }
         );
       }, []);
@@ -146,7 +146,7 @@ export function NewVisualizationInput (props){
                 </div>
                 <h2>Render of the chart</h2>
                 {typeof(localRenderData.column_data)=='object'?
-                  <ChartController data={localRenderData} />
+                  <VisualizationController data={localRenderData} />
                   :
                   <h4>Hit Render to see the chart</h4>
                 }
@@ -253,7 +253,7 @@ export function SpecificTypeFields (props){
         console.log("params set!");
     } 
 
-    if (props.sentenceID!='' && props.visualizationType == "linechart") {
+    if (props.sentenceID>0 && (props.visualizationType == "Line chart"|| props.visualizationType == "Bar chart" )) {
         return (
             <ContainerVertical>
                 <h3>X Axis</h3>

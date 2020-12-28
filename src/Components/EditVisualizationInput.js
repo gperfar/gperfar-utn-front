@@ -11,7 +11,9 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMutableState from '../useMutableState'
 import { render } from 'react-dom';
-import {ChartController} from '../Pages/Visualizations'
+import {VisualizationController} from './Visualizations/VisualizationController'
+
+
 export const ContainerHorizontal = styled.div`
 display:flex;
 flex-direction: row;
@@ -118,7 +120,7 @@ export function EditVisualizationInput (props){
     useEffect(() => {
         getVisualizationTypes().then(data => {
             setVisualizationTypes(data.result["visualization types"]);
-            setVisualizationType('linechart');
+            setVisualizationType('Line chart');
         });
         getVisualizationData().then((data) =>{
             setSentenceID(data.result.visualization.sentence_id);
@@ -164,7 +166,7 @@ export function EditVisualizationInput (props){
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                             <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                            <VisualizationTypeSelect value={visualizationType} style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         <SpecificTypeFields sentenceID={sentenceID} visualizationType={visualizationType} state={{ params: [params, setParams] }}  />
@@ -176,7 +178,7 @@ export function EditVisualizationInput (props){
                 </div>
                 <h2>Render of the chart</h2>
                 {typeof(localRenderData.column_data)=='object'?
-                  <ChartController data={localRenderData} />
+                  <VisualizationController data={localRenderData} />
                   :
                   <h4>Hit Render to see the chart</h4>
                 }
@@ -312,7 +314,7 @@ export function SpecificTypeFields (props){
         console.log("params set!");
     } 
 
-    if (props.sentenceID!='' && props.visualizationType == "linechart") {
+    if (props.sentenceID!='' && (props.visualizationType == "Line chart" || props.visualizationType == "Bar chart")) {
         return (
             <ContainerVertical>
                 <h3>X Axis</h3>

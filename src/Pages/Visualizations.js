@@ -7,10 +7,10 @@ import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHo
 import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect, Link, useParams } from "react-router-dom";
 // import { LineChart } from 'recharts';
-import {SDALineChart} from '../Components/Visualizations/LineChart';
+// import {SDALineChart} from '../Components/Visualizations/Chart Types/LineChart';
 import {NewVisualizationInput} from '../Components/NewVisualizationInput';
 import {EditVisualizationInput} from '../Components/EditVisualizationInput';
-
+import {VisualizationController} from '../Components/Visualizations/VisualizationController';
 
 export function Visualizations (){
 
@@ -168,7 +168,7 @@ export function RenderVisualization (props){
               <h1>Render Visualization {id}</h1>
               <div style={{textAlign: 'center', justifyContent: 'center'}}>
                 {typeof(preRenderData.column_data)=='object'?
-                  <ChartController data={preRenderData}/>:
+                  <VisualizationController data={preRenderData}/>:
                   <h2>Rendering...</h2>
                 }
               </div>
@@ -179,11 +179,7 @@ export function RenderVisualization (props){
     );
   }
 
-  export function ChartController (props){
-    if (props.data.type ==='linechart') {
-      return (<SDALineChart data={props.data}/>);
-    }
-  }
+
 
 
   export function NewVisualization (props){
@@ -195,7 +191,6 @@ export function RenderVisualization (props){
             <GlobalStyle />
               <SideBar />
               <Content>
-                {/* <h1>{sentenceid}</h1> */}
                 <h1>Add new Visualization</h1>
                 <NewVisualizationInput sentenceID={sentenceid} />
               </Content>
