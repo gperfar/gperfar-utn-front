@@ -25,55 +25,55 @@ margin: 20px;
 
 
 
-const Profile = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [userMetadata, setUserMetadata] = useState(null);
+// const Profile = () => {
+//   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+//   const [userMetadata, setUserMetadata] = useState(null);
 
-  useEffect(() => {
-    const getUserMetadata = async () => {
-      const domain = "simplifieddataanalysis.us.auth0.com";
+//   useEffect(() => {
+//     const getUserMetadata = async () => {
+//       const domain = "simplifieddataanalysis.us.auth0.com";
   
-      try {
-        const accessToken = await getAccessTokenSilently({
-          audience: `https://${domain}/api/v2/`,
-          scope: "read:current_user",
-        });
+//       try {
+//         const accessToken = await getAccessTokenSilently({
+//           audience: `https://${domain}/api/v2/`,
+//           scope: "read:current_user",
+//         });
   
-        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
+//         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
   
-        const metadataResponse = await fetch(userDetailsByIdUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+//         const metadataResponse = await fetch(userDetailsByIdUrl, {
+//           headers: {
+//             Authorization: `Bearer ${accessToken}`,
+//           },
+//         });
   
-        const { user_metadata } = await metadataResponse.json();
+//         const { user_metadata } = await metadataResponse.json();
   
-        setUserMetadata(user_metadata);
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
+//         setUserMetadata(user_metadata);
+//       } catch (e) {
+//         console.log(e.message);
+//       }
+//     };
   
-    getUserMetadata();
-  }, []);
+//     getUserMetadata();
+//   }, []);
 
-  return (
-    isAuthenticated && (
-      <div>
-        <img src={user.picture} alt={user.name} />
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <h3>User Metadata</h3>
-        {userMetadata ? (
-          <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
-        ) : (
-          "No user metadata defined"
-        )}
-      </div>
-    )
-  );
-};
+//   return (
+//     isAuthenticated && (
+//       <div>
+//         <img src={user.picture} alt={user.name} />
+//         <h2>{user.name}</h2>
+//         <p>{user.email}</p>
+//         <h3>User Metadata</h3>
+//         {userMetadata ? (
+//           <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
+//         ) : (
+//           "No user metadata defined"
+//         )}
+//       </div>
+//     )
+//   );
+// };
 
 
 
@@ -89,7 +89,7 @@ export function Panel (){
   //     return data;
   //   }
 
-    const { logout, user } = useAuth0();
+    const { user } = useAuth0();
 
     async function getResults(){
         const requestOptions = {
@@ -105,14 +105,14 @@ export function Panel (){
     }
 
 
-    const [login,setLogin] = usePersistentState('login')
+    // const [login,setLogin] = usePersistentState('login')
 
 
 
     const [results, setResults] = useState([]);
-      console.log(results);
-      useEffect(() => {
+    useEffect(() => {
         getResults().then(data => setResults(data.result.dashboards));
+        console.log(results);
       }, []);
     return (
         <MainContainer>

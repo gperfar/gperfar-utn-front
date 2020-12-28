@@ -21,7 +21,7 @@ export function Sentences (props){
   //     return data;
   //   }
 
-    const { logout, user } = useAuth0();
+    const { user } = useAuth0();
     async function getResults(){
         const requestOptions = {
             method: 'POST',
@@ -29,6 +29,7 @@ export function Sentences (props){
             body: JSON.stringify({ 
                 'user_id': user.sub})
         };
+        console.log(requestOptions);
         const response = await fetch('https://gperfar-utn.herokuapp.com/sentences', requestOptions);
         const data = await response.json();
         console.log(data.results);
@@ -50,9 +51,9 @@ export function Sentences (props){
   }
 
     const [results, setResults] = useState([]);
-      console.log(results);
-      useEffect(() => {
-        getResults().then(data => setResults(data.result.sentences));
+    useEffect(() => {
+      getResults().then(data => setResults(data.result.sentences));
+      // console.log(results);
       }, []);
 
       const [redirect, setRedirect] = React.useState('');      

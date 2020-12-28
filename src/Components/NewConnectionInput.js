@@ -42,7 +42,8 @@ export function NewConnectionInput (props){
                     'host': hostname,
                     'database': database,
                     'username': username,
-                    'password': password
+                    'password': password,
+                    'port': port
                 })
             };
         }
@@ -67,7 +68,8 @@ export function NewConnectionInput (props){
                     'host': hostname,
                     'database': database,
                     'username': username,
-                    'password': password
+                    'password': password,
+                    'port': port
                 })
             };
         }
@@ -94,6 +96,7 @@ export function NewConnectionInput (props){
     const [database, setDatabase] = useState();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
+    const [port, setPort] = useState();
 
 
     useEffect(() => {
@@ -147,7 +150,8 @@ export function NewConnectionInput (props){
                                 hostname: [hostname, setHostname],
                                 database: [database, setDatabase],
                                 username: [username, setUsername],
-                                password: [password, setPassword]
+                                password: [password, setPassword],
+                                port: [port, setPort]
                                 }} 
                         />
                         <ContainerHorizontal>
@@ -165,7 +169,8 @@ export function NewConnectionInput (props){
         const {database: [database, setDatabase]} = {type: React.useState(),...(props.state || {})};
         const {username: [username, setUsername]} = {type: React.useState(),...(props.state || {})};
         const {password: [password, setPassword]} = {type: React.useState(),...(props.state || {})};
-          
+        const {port: [port, setPort]} = {type: React.useState(),...(props.state || {})};
+
         const handleHostnameChange = (event) => {
             setHostname(event.target.value);
         }
@@ -178,12 +183,16 @@ export function NewConnectionInput (props){
         const handlePasswordChange = (event) => {
             setPassword(event.target.value);
         }
+        const handlePortChange = (event) => {
+            setPort(event.target.value);
+        }
 
         if (props.connType == "postgres") {
             return (
                 <ContainerVertical>
                     <CoolTextField type="text" label='Hostname' onChange={handleHostnameChange} />
                     <CoolTextField type="text" label='Database' onChange={handleDatabaseChange} />
+                    <CoolTextField type="text" label='Port' onChange={handlePortChange} />
                     <CoolTextField type="text" label='Username' onChange={handleUsernameChange} />
                     <CoolTextField type="password" label='Password' onChange={handlePasswordChange} />
                 </ContainerVertical>

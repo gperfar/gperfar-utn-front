@@ -194,7 +194,7 @@ export function SpecificTypeFields (props){
     const {params: [params, setParams]} = {type: React.useState([{}]),...(props.state || {})};
     
     
-    const [xAxisLabel, setXAxisLabel] = useState();
+    const [xAxisLabel, setXAxisLabel] = useState('');
     const [xAxisColumn, setXAxisColumn] = useState('');
     const [yAxisLabel, setYAxisLabel] = useState('');
     
@@ -260,9 +260,9 @@ export function SpecificTypeFields (props){
             console.log(params);
         }, [params]);
         
-        const handleXAxisLabelChange = (event) => {
-            setXAxisLabel(event.target.value);
-            buildParams();
+    const handleXAxisLabelChange = (event) => {
+        setXAxisLabel(event.target.value);
+        buildParams();
     }
 
     const handleYAxisLabelChange = (event) => {

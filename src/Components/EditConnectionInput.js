@@ -34,6 +34,7 @@ align-items: baseline;
         const [database, setDatabase] = useState('');
         const [username, setUsername] = useState('');
         const [password, setPassword] = useState('');
+        const [port, setPort] = useState();
     
         useEffect(() => {
             getConnectionTypes().then((data) =>{
@@ -48,6 +49,7 @@ align-items: baseline;
                     setDatabase(data["database"]);
                     setUsername(data["username"]);
                     setPassword(data["password"]);
+                    setPort(data["port"]);
                 }
             });
           }, []);
@@ -91,7 +93,8 @@ align-items: baseline;
                         'host': hostname,
                         'database': database,
                         'username': username,
-                        'password': password
+                        'password': password,
+                        'port': port
                     })
                 };
             }
@@ -116,7 +119,8 @@ align-items: baseline;
                         'host': hostname,
                         'database': database,
                         'username': username,
-                        'password': password
+                        'password': password,
+                        'port': port
                     })
                 };
             }
@@ -137,7 +141,10 @@ align-items: baseline;
     
         const handleSave = (event) => {
             console.log("Saving connection...");
-            saveConnection().then(data=> console.log(data));          
+            saveConnection().then(data=> {
+                console.log(data);
+                alert('Connection saved successfully!')
+            });          
         }
     
         const handleTest = (event) => {
@@ -166,7 +173,8 @@ align-items: baseline;
                                     hostname: [hostname, setHostname],
                                     database: [database, setDatabase],
                                     username: [username, setUsername],
-                                    password: [password, setPassword]
+                                    password: [password, setPassword],
+                                    port: [port, setPort]
                                     }} 
                             />
                             <ContainerHorizontal>
@@ -184,7 +192,8 @@ align-items: baseline;
             const {database: [database, setDatabase]} = {type: React.useState(),...(props.state || {})};
             const {username: [username, setUsername]} = {type: React.useState(),...(props.state || {})};
             const {password: [password, setPassword]} = {type: React.useState(),...(props.state || {})};
-              
+            const {port: [port, setPort]} = {type: React.useState(),...(props.state || {})};
+
             const handleHostnameChange = (event) => {
                 setHostname(event.target.value);
             }
@@ -197,12 +206,16 @@ align-items: baseline;
             const handlePasswordChange = (event) => {
                 setPassword(event.target.value);
             }
+            const handlePortChange = (event) => {
+                setPort(event.target.value);
+            }
     
             if (props.connType == "postgres") {
                 return (
                     <ContainerVertical>
                         <CoolTextField value={hostname} type="text" label='Hostname' onChange={handleHostnameChange} />
                         <CoolTextField value={database} type="text" label='Database' onChange={handleDatabaseChange} />
+                        <CoolTextField type="text" label='Port' onChange={handlePortChange} />
                         <CoolTextField value={username} type="text" label='Username' onChange={handleUsernameChange} />
                         <CoolTextField value={password} type="password" label='Password' onChange={handlePasswordChange} />
                     </ContainerVertical>
