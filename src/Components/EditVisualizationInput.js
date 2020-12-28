@@ -336,6 +336,6 @@ export function SpecificTypeFields (props){
             )
         }
         return(
-            <p></p>
+            <p>{props.visualizationType}</p>
         )
 }
