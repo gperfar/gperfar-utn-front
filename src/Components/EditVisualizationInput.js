@@ -314,7 +314,7 @@ export function SpecificTypeFields (props){
         console.log("params set!");
     } 
 
-    if (props.sentenceID!='' && (props.visualizationType == "Line chart" || props.visualizationType == "Bar chart")) {
+    if (props.sentenceID!='' && (props.visualizationType == "Line chart" || props.visualizationType == "Bar chart" || props.visualizationType == "Area chart")) {
         return (
             <ContainerVertical>
                 <h3>X Axis</h3>

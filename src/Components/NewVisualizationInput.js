@@ -108,7 +108,11 @@ export function NewVisualizationInput (props){
     }
 
     const handleCreate = (event) => {
-        saveVisualization().then(data=> console.log(data));          
+
+        saveVisualization().then(data=> {
+            console.log(data);
+            alert("Visualization saved successfully :)")
+        });          
     }
 
     const handleRender = (event) => {
@@ -253,7 +257,7 @@ export function SpecificTypeFields (props){
         console.log("params set!");
     } 
 
-    if (props.sentenceID>0 && (props.visualizationType == "Line chart"|| props.visualizationType == "Bar chart" )) {
+    if (props.sentenceID>0 && (props.visualizationType == "Line chart"|| props.visualizationType == "Bar chart" || props.visualizationType == "Area chart")) {
         return (
             <ContainerVertical>
                 <h3>X Axis</h3>
