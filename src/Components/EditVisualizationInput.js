@@ -6,11 +6,8 @@ import {VisualizationTypeSelect} from './VisualizationTypeSelect';
 import {ColumnSelect} from './ColumnSelect';
 import {ColumnSelectYAxis} from './ColumnSelectYAxis';
 import {CoolTextField} from './CoolTextField';
-import SDATable from './Table';
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
-import useMutableState from '../useMutableState'
-import { render } from 'react-dom';
 import {VisualizationController} from './Visualizations/VisualizationController'
 
 
@@ -24,9 +21,6 @@ align-items: baseline;
 export function EditVisualizationInput (props){
     
     const { user } = useAuth0();
-
-    const [localRenderData, setLocalRenderData]= useState([]);
-
     const visualizationID = props.visualizationID;
 
     async function getVisualizationData(){
@@ -84,10 +78,7 @@ export function EditVisualizationInput (props){
         return data;
     }
 
-
-
-
-    async function getResults(){
+    async function getQueryResults(){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -100,24 +91,32 @@ export function EditVisualizationInput (props){
             // console.log(data.results);
             return data;
         }
-        
-
-
 
     const [sentences, setSentences] = useState([]);
-      useEffect(() => {
-        getSentences().then(data => setSentences(data.result.sentences));
-      }, []);
-    
-      const [sentenceID, setSentenceID] = useState('');
-      const [name, setName] = useState('');
-      const [comment, setComment] = useState('');
-      const [visualizationType, setVisualizationType] = useState('');
-      const [params, setParams] = useState({});
-
+    const [sentenceID, setSentenceID] = useState(0);
+    const [name, setName] = useState('');
+    const [comment, setComment] = useState('');
+    const [visualizationType, setVisualizationType] = useState('');
+    const [params, setParams] = useState({});
     const [visualizationTypes, setVisualizationTypes] = useState([]);
-      
+    const [localRenderData, setLocalRenderData]= useState([]);
+    const [render, setRender] = useState(0); // This one allows us to refresh state when modifying an array (react wouldn't re-render then)
+    const [queryResults, setQueryResults] = useState([]);
+
+    //Type-specific fields
+    const [headerRow, setHeaderRow] = useState([]); //We use this to get column names
+    const [xAxisLabel, setXAxisLabel] = useState('');
+    const [xAxisColumn, setXAxisColumn] = useState('');
+    const [yAxisLabel, setYAxisLabel] = useState('');
+    const [yAxisColumnCount, setYAxisColumnCount] = useState(1);
+    const [yAxisColumnNames, setYAxisColumnNames] = useState(['']);
+    const [yAxisColumnColors, setYAxisColumnColors] = useState(['']);
+    const [yAxisColumnLegends, setYAxisColumnLegends] = useState(['']);
+
     useEffect(() => {
+        getSentences().then(data => 
+            setSentences(data.result.sentences)
+        );
         getVisualizationTypes().then(data => {
             setVisualizationTypes(data.result["visualization types"]);
             setVisualizationType('Line chart');
@@ -132,6 +131,42 @@ export function EditVisualizationInput (props){
             });
       }, []);
 
+    useEffect(() => {
+        setXAxisLabel(params.xaxis_label);
+        if (typeof(params.columns) !== 'undefined') {
+            // console.log(params);
+            setXAxisColumn(params.columns[0].name);
+            setYAxisColumnCount(params.columns.length-1);
+            var tempLegends = [];//yAxisColumnLegends;
+            var tempColors = [];//yAxisColumnColors;
+            var tempNames = [];//yAxisColumnNames;
+            [...Array(params.columns.length-1).keys()].map(i => {
+                // console.log('this is index ' + i + ', going to ' + (params.columns.length-1).toString()+' because there are ' + yAxisColumnCount.toString());
+                tempLegends.push(params.columns[i+1].legend);
+                tempColors.push(params.columns[i+1].color);
+                tempNames.push(params.columns[i+1].name);    
+            })
+            setYAxisColumnLegends(tempLegends);
+            setYAxisColumnColors(tempColors);
+            setYAxisColumnNames(tempNames);
+        }
+        setYAxisLabel(params.yaxis_label);
+        console.log(params);
+    },[headerRow]);
+
+    useEffect(() => {
+        getQueryResults().then(data => {
+            setQueryResults(data.results);
+            setHeaderRow(['a','b']);
+            if (typeof(data.results)!=='undefined') {
+                setHeaderRow(Object.keys(data.results[0]));
+            }
+        });
+    }, [sentenceID]);
+
+    useEffect(() => {
+        buildParams();
+    }, [render]);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -144,124 +179,10 @@ export function EditVisualizationInput (props){
     const handleSave = (event) => {
         saveVisualization().then(data=> console.log(data));          
     }
-    const handleRender = (event) => {
-        getResults().then(data => {
-            setLocalRenderData({
-                column_data: params.columns,
-                results: data.results,
-                type: visualizationType,
-                xaxis_label: params.xaxis_label,
-                yaxis_label: params.yaxis_label
-            });
-            console.log(localRenderData);
-            console.log(typeof(localRenderData.column_data));
-            console.log(params);
-        });
-    }
-    return (
-            <div>
-                <form >
-                    <ContainerVertical>
-                        <h3>General</h3>
-                        <ContainerHorizontal>
-                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
-                            <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
-                        </ContainerHorizontal>
-                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
-                        <SpecificTypeFields sentenceID={sentenceID} visualizationType={visualizationType} state={{ params: [params, setParams] }}  />
-                    </ContainerVertical>
-                </form>
-                <div>
-                    <CoolButton onClick={handleRender}> Render </CoolButton>
-                    <CoolButton onClick={handleSave}> Save </CoolButton>
-                </div>
-                <h2>Render of the chart</h2>
-                {typeof(localRenderData.column_data)=='object'?
-                  <VisualizationController data={localRenderData} />
-                  :
-                  <h4>Hit Render to see the chart</h4>
-                }
-            </div>
-      );
-    }
 
-
-export function SpecificTypeFields (props){
-    const { user } = useAuth0();
-
-    
-    const {params: [params, setParams]} = {type: React.useState([{}]),...(props.state || {})};
-    
-    
-    const [xAxisLabel, setXAxisLabel] = useState('');
-    const [xAxisColumn, setXAxisColumn] = useState('');
-    const [yAxisLabel, setYAxisLabel] = useState('');
-    
-    const [yAxisColumnCount, setYAxisColumnCount] = useState(1);
-    
-    const [yAxisColumnNames, setYAxisColumnNames] = useState(['']);
-    const [yAxisColumnColors, setYAxisColumnColors] = useState(['']);
-    const [yAxisColumnLegends, setYAxisColumnLegends] = useState(['']);
-
-        
-    const [render, setRender] = useState(0);
-
-    
-    
-    async function getResults(){
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                'user_id': user.sub,
-                'sentence_id': props.sentenceID})
-            };
-            const response = await fetch('https://gperfar-utn.herokuapp.com/runquery', requestOptions);
-            const data = await response.json();
-            // console.log(data.results);
-            return data;
-        }
-        
-        const [headerRow, setHeaderRow] = useState([]);
-        const [results, setResults] = useState([]);
-        
-        useEffect(() => {
-            getResults().then(data => {
-                setResults(data.results);
-                setHeaderRow(['a','b']);
-                if (typeof(data.results)!=='undefined') {
-                    setHeaderRow(Object.keys(data.results[0]));
-                }
-                // setXAxisColumn('a');
-            });
-        }, [props.sentenceID]);
-        
-        useEffect(() => {
-            setXAxisLabel(params.xaxis_label);
-            if (typeof(params.columns) !== 'undefined') {
-                console.log(params);
-                setXAxisColumn(params.columns[0].name);
-                setYAxisColumnCount(params.columns.length-1);
-                var tempLegends = [];//yAxisColumnLegends;
-                var tempColors = [];//yAxisColumnColors;
-                var tempNames = [];//yAxisColumnNames;
-                [...Array(params.columns.length-1).keys()].map(i => {
-                    console.log('this is index ' + i + ', going to ' + (params.columns.length-1).toString()+' because there are ' + yAxisColumnCount.toString());
-                    tempLegends.push(params.columns[i+1].legend);
-                    tempColors.push(params.columns[i+1].color);
-                    tempNames.push(params.columns[i+1].name);    
-                })
-                setYAxisColumnLegends(tempLegends);
-                setYAxisColumnColors(tempColors);
-                setYAxisColumnNames(tempNames);
-            }
-            setYAxisLabel(params.yaxis_label);
-            console.log(params);
-        }, [params]);
-        
     const handleXAxisLabelChange = (event) => {
         setXAxisLabel(event.target.value);
+        console.log(xAxisLabel);
         buildParams();
     }
 
@@ -276,7 +197,6 @@ export function SpecificTypeFields (props){
         setYAxisColumnLegends(temp);
         setRender(render + 1);
         buildParams();
-
     }
 
     const handleYAxisColumnColorsChange = (event, index) => {
@@ -295,6 +215,19 @@ export function SpecificTypeFields (props){
         buildParams();
     }
 
+    const handleRender = (event) => {
+        setLocalRenderData({
+            column_data: params.columns,
+            results: queryResults,
+            type: visualizationType,
+            xaxis_label: xAxisLabel,
+            yaxis_label: yAxisLabel
+        });
+        console.log(localRenderData);
+        console.log(typeof(localRenderData.column_data));
+        console.log(params);
+    }
+
     function buildParams (){
         var tempColumns = [];
         tempColumns.push({name: xAxisColumn});
@@ -311,31 +244,47 @@ export function SpecificTypeFields (props){
             yaxis_label: yAxisLabel
         }
         setParams(tempParams);
-        console.log("params set!");
     } 
 
-    if (props.sentenceID!='' && (props.visualizationType == "Line chart" || props.visualizationType == "Bar chart" || props.visualizationType == "Area chart")) {
-        return (
-            <ContainerVertical>
-                <h3>X Axis</h3>
-                <ContainerHorizontal>
-                    <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
-                    <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
-                </ContainerHorizontal>
-                <h3>Y Axis</h3>
-                <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
-                {[...Array(yAxisColumnCount).keys()].map(i => (
-                    <ContainerHorizontal>
-                        <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' legend text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
-                        <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
-                        <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
-                    </ContainerHorizontal>
-                ))}
-                <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton>
-            </ContainerVertical>
-            )
-        }
-        return(
-            <p>{props.visualizationType}</p>
-        )
-}
+    return (
+            <div>
+                <form >
+                    <ContainerVertical>
+                        <h3>General</h3>
+                        <ContainerHorizontal>
+                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
+                            <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
+                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                        </ContainerHorizontal>
+                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+
+                        <h3>X Axis</h3>
+                        <ContainerHorizontal>
+                            <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
+                            <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
+                        </ContainerHorizontal>
+                        <h3>Y Axis</h3>
+                        <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
+                        {[...Array(yAxisColumnCount).keys()].map(i => (
+                            <ContainerHorizontal>
+                                <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' legend text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
+                                <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                                <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
+                            </ContainerHorizontal>
+                        ))}
+                        <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton>
+                        <ContainerHorizontal>
+                            <CoolButton onClick={handleRender}> Render </CoolButton>
+                            <CoolButton onClick={handleSave}> Save </CoolButton>
+                        </ContainerHorizontal>
+                    </ContainerVertical>
+                </form>
+                <h2>Render of the chart</h2>
+                {typeof(localRenderData.column_data)=='object'?
+                  <VisualizationController data={localRenderData} />
+                  :
+                  <h4>Hit Render to see the chart</h4>
+                }
+            </div>
+      );
+    }

@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import useMutableState from '../useMutableState'
 import { render } from 'react-dom';
-import {VisualizationController} from '../Pages/Visualizations'
+import {VisualizationController} from './Visualizations/VisualizationController'
 
 
 export const ContainerHorizontal = styled.div`

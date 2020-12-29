@@ -96,7 +96,7 @@ export function NewConnectionInput (props){
     const [database, setDatabase] = useState();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-    const [port, setPort] = useState();
+    const [port, setPort] = useState(5432);
 
 
     useEffect(() => {
@@ -169,7 +169,7 @@ export function NewConnectionInput (props){
         const {database: [database, setDatabase]} = {type: React.useState(),...(props.state || {})};
         const {username: [username, setUsername]} = {type: React.useState(),...(props.state || {})};
         const {password: [password, setPassword]} = {type: React.useState(),...(props.state || {})};
-        const {port: [port, setPort]} = {type: React.useState(),...(props.state || {})};
+        const {port: [port, setPort]} = {type: React.useState(5432),...(props.state || {})};
 
         const handleHostnameChange = (event) => {
             setHostname(event.target.value);
@@ -192,7 +192,7 @@ export function NewConnectionInput (props){
                 <ContainerVertical>
                     <CoolTextField type="text" label='Hostname' onChange={handleHostnameChange} />
                     <CoolTextField type="text" label='Database' onChange={handleDatabaseChange} />
-                    <CoolTextField type="text" label='Port' onChange={handlePortChange} />
+                    <CoolTextField value={port} type="text" label='Port' onChange={handlePortChange} />
                     <CoolTextField type="text" label='Username' onChange={handleUsernameChange} />
                     <CoolTextField type="password" label='Password' onChange={handlePasswordChange} />
                 </ContainerVertical>

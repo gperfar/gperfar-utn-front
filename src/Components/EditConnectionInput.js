@@ -152,10 +152,7 @@ align-items: baseline;
             testConnection().then(data=> {
                     console.log(data);
                     alert(data.message);
-                });
-            
-    
-    
+                });    
         }
     
         return (
@@ -215,7 +212,7 @@ align-items: baseline;
                     <ContainerVertical>
                         <CoolTextField value={hostname} type="text" label='Hostname' onChange={handleHostnameChange} />
                         <CoolTextField value={database} type="text" label='Database' onChange={handleDatabaseChange} />
-                        <CoolTextField type="text" label='Port' onChange={handlePortChange} />
+                        <CoolTextField value={port} type="text" label='Port' onChange={handlePortChange} />
                         <CoolTextField value={username} type="text" label='Username' onChange={handleUsernameChange} />
                         <CoolTextField value={password} type="password" label='Password' onChange={handlePasswordChange} />
                     </ContainerVertical>
