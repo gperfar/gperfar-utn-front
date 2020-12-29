@@ -119,7 +119,7 @@ export function EditVisualizationInput (props){
         );
         getVisualizationTypes().then(data => {
             setVisualizationTypes(data.result["visualization types"]);
-            setVisualizationType('Line chart');
+            // setVisualizationType('Line chart');
         });
         getVisualizationData().then((data) =>{
             setSentenceID(data.result.visualization.sentence_id);
@@ -127,9 +127,19 @@ export function EditVisualizationInput (props){
             setName(data.result.visualization.name);
             setParams(data.result.visualization.params);
             setVisualizationType(data.result.visualization.type);
-            console.log(data);
+            // console.log(data);
             });
       }, []);
+
+    useEffect(() => {
+        getQueryResults().then(data => {
+            setQueryResults(data.results);
+            setHeaderRow(['a','b']);
+            if (typeof(data.results)!=='undefined') {
+                setHeaderRow(Object.keys(data.results[0]));
+            }
+        });
+    }, [sentenceID]);
 
     useEffect(() => {
         setXAxisLabel(params.xaxis_label);
@@ -155,18 +165,17 @@ export function EditVisualizationInput (props){
     },[headerRow]);
 
     useEffect(() => {
-        getQueryResults().then(data => {
-            setQueryResults(data.results);
-            setHeaderRow(['a','b']);
-            if (typeof(data.results)!=='undefined') {
-                setHeaderRow(Object.keys(data.results[0]));
-            }
-        });
-    }, [sentenceID]);
-
-    useEffect(() => {
         buildParams();
     }, [render]);
+    
+    useEffect(() => {
+        if (visualizationType == "Radar chart"){
+            // alert("radar chart");
+            setYAxisColumnCount(1);
+            setRender(render + 1);
+        }
+
+    }, [visualizationType]);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -177,18 +186,19 @@ export function EditVisualizationInput (props){
     }
 
     const handleSave = (event) => {
-        saveVisualization().then(data=> console.log(data));          
+        saveVisualization().then(data=> console.log(data));
+        alert("Visualization saved successfully!");          
     }
 
     const handleXAxisLabelChange = (event) => {
         setXAxisLabel(event.target.value);
         console.log(xAxisLabel);
-        buildParams();
+        setRender(render + 1);
     }
 
     const handleYAxisLabelChange = (event) => {
         setYAxisLabel(event.target.value);
-        buildParams();
+        setRender(render + 1);
     }
 
     const handleYAxisColumnLegendsChange = (event, index) => {
@@ -196,7 +206,7 @@ export function EditVisualizationInput (props){
         temp[index] = event.target.value;
         setYAxisColumnLegends(temp);
         setRender(render + 1);
-        buildParams();
+        // buildParams();
     }
 
     const handleYAxisColumnColorsChange = (event, index) => {
@@ -204,7 +214,7 @@ export function EditVisualizationInput (props){
         temp[index] = event.target.value;
         setYAxisColumnColors(temp);
         setRender(render + 1)
-        buildParams();
+        // buildParams();
     }
 
     const handleAddLine = (event) => {
@@ -212,10 +222,30 @@ export function EditVisualizationInput (props){
         var temp = yAxisColumnNames;
         temp.push('');
         setYAxisColumnNames(temp);
-        buildParams();
+        setRender(render + 1);
     }
 
+    
+    function buildParams (){
+        var tempColumns = [];
+        tempColumns.push({name: xAxisColumn});
+        [...Array(yAxisColumnCount).keys()].map(i => {
+            tempColumns.push({
+                name: yAxisColumnNames[i],
+                color: yAxisColumnColors[i],
+                legend: yAxisColumnLegends[i]
+            })
+        });
+        var tempParams = {
+            columns: tempColumns,
+            xaxis_label: xAxisLabel,
+            yaxis_label: yAxisLabel
+        }
+        setParams(tempParams);
+    } 
+    
     const handleRender = (event) => {
+        // buildParams();
         setLocalRenderData({
             column_data: params.columns,
             results: queryResults,
@@ -224,27 +254,9 @@ export function EditVisualizationInput (props){
             yaxis_label: yAxisLabel
         });
         console.log(localRenderData);
-        console.log(typeof(localRenderData.column_data));
+        // console.log(typeof(localRenderData.column_data));
         console.log(params);
     }
-
-    function buildParams (){
-        var tempColumns = [];
-        tempColumns.push({name: xAxisColumn});
-        for (const [i, value] of yAxisColumnNames.entries()) {
-            tempColumns.push({
-                name: yAxisColumnNames[i],
-                color: yAxisColumnColors[i],
-                legend: yAxisColumnLegends[i]
-            })
-        }
-        var tempParams = {
-            columns: tempColumns,
-            xaxis_label: xAxisLabel,
-            yaxis_label: yAxisLabel
-        }
-        setParams(tempParams);
-    } 
 
     return (
             <div>
@@ -258,12 +270,16 @@ export function EditVisualizationInput (props){
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
 
-                        <h3>X Axis</h3>
+                        {visualizationType=="Radar chart"?<h3>Category</h3>
+                        :<h3>X Axis</h3>
+                        }
                         <ContainerHorizontal>
                             <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
                             <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
                         </ContainerHorizontal>
-                        <h3>Y Axis</h3>
+                        {visualizationType=="Radar chart"?<h3>Value</h3>
+                        :<h3>Y Axis</h3>
+                        }
                         <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
                         {[...Array(yAxisColumnCount).keys()].map(i => (
                             <ContainerHorizontal>
