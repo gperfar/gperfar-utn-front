@@ -79,6 +79,27 @@ export function EditVisualizationInput (props){
         return data;
     }
 
+    async function createVisualization(){
+        const url = 'https://gperfar-utn.herokuapp.com/visualization/create';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'user_id': user.sub,
+                // 'visualization_id': visualizationID,
+                'sentence_id': sentenceID,
+                'type': visualizationType,
+                'comment': comment,
+                'name': name,
+                'params': params
+            })
+        };
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
+
     async function getQueryResults(){
         const requestOptions = {
             method: 'POST',
@@ -94,7 +115,7 @@ export function EditVisualizationInput (props){
         }
 
     const [sentences, setSentences] = useState([]);
-    const [sentenceID, setSentenceID] = useState(0);
+    const [sentenceID, setSentenceID] = useState(props.sentenceID);
     const [name, setName] = useState('');
     const [comment, setComment] = useState('');
     const [visualizationType, setVisualizationType] = useState('');
@@ -264,12 +285,19 @@ export function EditVisualizationInput (props){
         });
     }
 
+    const handleCreate = (event) => {
+        createVisualization().then(data=> {
+            console.log(data)
+            alert("Visualization created successfully!");          
+        });
+    }
+
     if (visualizationType === 'Radar chart' || visualizationType === 'Pie chart') {
         return (
             <div>
                 <form >
                     <ContainerVertical>
-                        <h3>General</h3>
+                        <h3>General vis {visualizationID} sentence {sentenceID}</h3>
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                             <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
@@ -293,7 +321,9 @@ export function EditVisualizationInput (props){
                         {/* <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton> */}
                         <ContainerHorizontal>
                             <CoolButton onClick={handleRender}> Render </CoolButton>
-                            <CoolButton onClick={handleSave}> Save </CoolButton>
+                            {visualizationID > 0? 
+                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                            }
                         </ContainerHorizontal>
                     </ContainerVertical>
                 </form>
@@ -310,7 +340,7 @@ export function EditVisualizationInput (props){
         <div>
             <form >
                 <ContainerVertical>
-                    <h3>General</h3>
+                    <h3>General vis {visualizationID} sentence {sentenceID}</h3>
                     <ContainerHorizontal>
                         <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                         <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
@@ -334,7 +364,9 @@ export function EditVisualizationInput (props){
                     <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton>
                     <ContainerHorizontal>
                         <CoolButton onClick={handleRender}> Render </CoolButton>
-                        <CoolButton onClick={handleSave}> Save </CoolButton>
+                        {visualizationID > 0? 
+                            <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                        }
                     </ContainerHorizontal>
                 </ContainerVertical>
             </form>

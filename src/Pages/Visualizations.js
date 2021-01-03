@@ -192,7 +192,7 @@ export function RenderVisualization (props){
               <SideBar />
               <Content>
                 <h1>Add new Visualization</h1>
-                <NewVisualizationInput sentenceID={sentenceid} />
+                 <EditVisualizationInput sentenceID={sentenceid} />
               </Content>
               <SideBar />
           </SideContainer>
