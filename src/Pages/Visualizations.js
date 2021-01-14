@@ -2,7 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import '../App.css';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
-import {CoolButton, CoolButton2} from '../Components/CoolButton';
+import {CoolButton2} from '../Components/CoolButton';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect, Link, useParams } from "react-router-dom";

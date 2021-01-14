@@ -3,7 +3,6 @@ import '../App.css';
 import styled from "styled-components";
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
-import usePersistentState from '../usePersistentState'
 import { useAuth0 } from "@auth0/auth0-react";
 
 

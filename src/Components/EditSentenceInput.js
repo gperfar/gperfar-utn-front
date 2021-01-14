@@ -103,6 +103,23 @@ export function EditSentenceInput (props){
         return data;
     }
 
+    async function createSentence(){
+        const url = 'https://gperfar-utn.herokuapp.com/sentence/create';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'connection_id': connectionID,
+                'sql_query': SQLQuery,
+                'comment': comment,
+                'name': name})
+        };
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        console.log(data.results);
+        return data;
+    }
+
     const [queryResults, setQueryResults] = useState([]);
 
     const handleNameChange = (event) => {
@@ -118,9 +135,19 @@ export function EditSentenceInput (props){
       }
 
     const handleSave = (event) => {
-        saveEditedSentence().then(data=> console.log(data));
-        alert('Sentence saved successfully!')     
+        saveEditedSentence().then(data=> {
+            console.log(data)
+            alert('Sentence saved successfully!');
+        });
     }
+
+    const handleCreate = (event) => {
+        createSentence().then(data=> {
+            console.log(data);
+            alert("Visualization created successfully!");          
+        });
+    }
+
 
     const handleTest = (event) => {
         getQueryResults().then(data => setQueryResults(data.results))        
@@ -141,7 +168,10 @@ export function EditSentenceInput (props){
                 <SDATable info={queryResults} />
                     <div>
                         <CoolButton onClick={handleTest}> Test </CoolButton>
-                        <CoolButton onClick={handleSave}> Save </CoolButton>
+                        {/* <CoolButton onClick={handleSave}> Save </CoolButton> */}
+                        {sentenceID > 0? 
+                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Sentence </CoolButton>
+                        }
                     </div>
             </div>
       );

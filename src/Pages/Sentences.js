@@ -1,13 +1,12 @@
 import React, { useState, useEffect }  from 'react';
 import '../App.css';
-import {CoolButton, CoolButton2} from '../Components/CoolButton';
+import {CoolButton2} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
-import {NewSentenceInput} from '../Components/NewSentenceInput';
+// import {NewSentenceInput} from '../Components/NewSentenceInput';
 import {EditSentenceInput} from '../Components/EditSentenceInput';
 import { Redirect, Link, useParams } from "react-router-dom";
-import usePersistentState from '../usePersistentState'
 import { useAuth0 } from "@auth0/auth0-react";
 
 
@@ -91,10 +90,10 @@ export function Sentences (props){
       if (!isAuthenticated) {
         return <Redirect to={'/'} />
       }
-      if (redirect === 'edit') {
+      if (redirect === 'edit' && selectedSentence > 0) {
         return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
       }
-      if (redirect === 'createVisualization') {
+      if (redirect === 'createVisualization' && selectedSentence > 0) {
         return <Redirect to={'/visualizations/new/'+ selectedSentence.toString()} />
       }
     return (
@@ -147,7 +146,7 @@ export function Sentences (props){
               <SideBar />
               <Content>
                 <h1>Add new Sentence</h1>
-                <NewSentenceInput />
+                <EditSentenceInput />
               </Content>
               <SideBar />
           </SideContainer>
