@@ -86,10 +86,10 @@ export function Visualizations (){
       
     }
 
-    if (redirect === 'render') {
+    if (redirect === 'render' && selectedVisualization > 0) {
       return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
     }
-    if (redirect === 'edit') {
+    if (redirect === 'edit' && selectedVisualization > 0) {
       return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
     }
     return (

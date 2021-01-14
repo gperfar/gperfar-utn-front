@@ -186,6 +186,7 @@ export function EditVisualizationInput (props){
         }
         setYAxisLabel(params.yaxis_label);
         console.log(params);
+        // setRender(render + 1);
     },[headerRow]);
 
     useEffect(() => {
@@ -193,12 +194,14 @@ export function EditVisualizationInput (props){
     }, [render]);
     
     useEffect(() => {
-        if (visualizationType == "Radar chart" && render > 0){
+        // if ((visualizationType === 'Radar chart' ||  visualizationType === 'Pie chart' ) && render > 0){
+        if ((visualizationType === 'Radar chart' ||  visualizationType === 'Pie chart' )){
+            console.log('Render ' + render);
             // alert("radar chart");
             setYAxisColumnCount(1);
-            setRender(render + 1);
+            console.log(yAxisColumnCount);
+            if (render > 0) setRender(render + 1);
         }
-
     }, [visualizationType]);
 
     const handleNameChange = (event) => {
@@ -208,7 +211,6 @@ export function EditVisualizationInput (props){
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     }
-
     
     const handleXAxisLabelChange = (event) => {
         setXAxisLabel(event.target.value);
@@ -301,7 +303,7 @@ export function EditVisualizationInput (props){
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                             <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType], render: [render, setRender] }} />
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         <h3>Category Field</h3>

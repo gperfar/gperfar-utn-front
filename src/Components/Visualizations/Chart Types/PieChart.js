@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend,Label, ResponsiveContainer
-} from 'recharts';
-
-// import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell } from 'recharts';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
 // const data = [
 //   { name: 'Group A', value: 400 },
@@ -12,8 +7,6 @@ import { PieChart, Pie, Sector, Cell } from 'recharts';
 //   { name: 'Group C', value: 300 },
 //   { name: 'Group D', value: 200 },
 // ];
-
-
 
 export function SDAPieChart(props) {
   

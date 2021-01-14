@@ -19,8 +19,10 @@ export function VisualizationTypeSelect(props) {
   const classes = useStyles();
 
   const {visualizationType: [visualizationType, setVisualizationType]} = {visualizationType: React.useState(0),...(props.state || {})};
-  
+  const {render: [render, setRender]} = {render: React.useState(1),...(props.state || {})};
+
   const handleChange = (event) => {
+    setRender(render + 1);
     setVisualizationType(event.target.value);
   };
 
