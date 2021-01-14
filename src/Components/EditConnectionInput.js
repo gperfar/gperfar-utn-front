@@ -86,6 +86,7 @@ align-items: baseline;
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
+                        'connection_id': connectionID,
                         'name': name,
                         'comment': comment,
                         'user_id': user.sub,
@@ -103,6 +104,33 @@ align-items: baseline;
             console.log(data.results);
             return data;
         }
+
+        async function createConnection(){
+            const url = 'https://gperfar-utn.herokuapp.com/connection/create';
+            let requestOptions={}
+            if (connType == "postgres") {
+                requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        'name': name,
+                        'comment': comment,
+                        'user_id': user.sub,
+                        'type': "postgres",
+                        'host': hostname,
+                        'database': database,
+                        'username': username,
+                        'password': password,
+                        'port': port
+                    })
+                };
+            }
+            const response = await fetch(url, requestOptions);
+            const data = await response.json();
+            console.log(data.results);
+            return data;
+        }
+
     
         async function testConnection(){
             const url = 'https://gperfar-utn.herokuapp.com/connection/test';
@@ -146,6 +174,14 @@ align-items: baseline;
                 alert('Connection saved successfully!')
             });          
         }
+
+        const handleCreate = (event) => {
+            console.log("Saving connection...");
+            createConnection().then(data=> {
+                console.log(data);
+                if (data.success) alert('Connection created successfully!')
+            });          
+        }
     
         const handleTest = (event) => {
             console.log("Testing connection...");
@@ -175,7 +211,10 @@ align-items: baseline;
                                     }} 
                             />
                             <ContainerHorizontal>
-                                <CoolButton onClick={handleSave}> Save </CoolButton>
+                                {connectionID > 0? 
+                                    <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Connection </CoolButton>
+                                }
+                                {/* <CoolButton onClick={handleSave}> Save </CoolButton> */}
                                 <CoolButton onClick={handleTest}> Test </CoolButton>
                             </ContainerHorizontal>
                         </ContainerVertical>

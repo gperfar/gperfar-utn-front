@@ -4,9 +4,9 @@ import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";
-import {CoolButton, CoolButton2} from '../Components/CoolButton';
+import {CoolButton2} from '../Components/CoolButton';
 import { Redirect, Link, useParams } from "react-router-dom";
-import {NewConnectionInput} from '../Components/NewConnectionInput';
+// import {NewConnectionInput} from '../Components/NewConnectionInput';
 import {EditConnectionInput} from '../Components/EditConnectionInput';
 
 export function Connections (){
@@ -128,7 +128,7 @@ export function Connections (){
                 <SideBar />
                 <Content>
                   <h1>Add New Connection</h1>
-                  <NewConnectionInput />
+                  <EditConnectionInput />
                 </Content>
                 <SideBar />
             </SideContainer>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend,Label, ResponsiveContainer
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
 // const data = [

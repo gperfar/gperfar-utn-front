@@ -6,9 +6,6 @@ import {CoolButton, CoolButton2} from '../Components/CoolButton';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect, Link, useParams } from "react-router-dom";
-// import { LineChart } from 'recharts';
-// import {SDALineChart} from '../Components/Visualizations/Chart Types/LineChart';
-import {NewVisualizationInput} from '../Components/NewVisualizationInput';
 import {EditVisualizationInput} from '../Components/EditVisualizationInput';
 import {VisualizationController} from '../Components/Visualizations/VisualizationController';
 
