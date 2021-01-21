@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import usePersistentState from '../usePersistentState'
 import { useAuth0 } from "@auth0/auth0-react";
 import {CoolButton} from './CoolButton'
@@ -14,7 +14,7 @@ justify-content:left;
 
 export function NavBar () {
 
-    const { logout, user } = useAuth0();
+    const { logout, user, isAuthenticated } = useAuth0();
     const LogoutButton = () => {
 
         return (
@@ -24,6 +24,12 @@ export function NavBar () {
           </CoolButton>
         );
       }
+
+    if (!isAuthenticated) {
+      console.log('Redirecting to panel because you are not logged in')
+        return <Redirect to={'/'} />
+    }
+
     return(
     <Container>
         <Link to="/panel"><h4>Panel</h4></Link>

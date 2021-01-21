@@ -31,7 +31,7 @@ export function ModelCard(props) {
       className={classes.root}
     >
       <ListItem button onClick={handleClick}>
-        <ListItemText primary="See details..." />
+        <ListItemText primary= {props.nameInHeader?props.object.name:"See details..."} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

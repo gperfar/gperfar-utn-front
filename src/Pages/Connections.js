@@ -17,7 +17,7 @@ export function Connections (){
   //     const response = await fetch(url);
   //     const data = await response.json();
   //     return data;
-  //   }
+  //   adasd}
 
     const { logout, user, isAuthenticated } = useAuth0();
 
@@ -77,12 +77,8 @@ export function Connections (){
     }
 
     // const {isAuthenticated} = useAuth0();
-
-    if (!isAuthenticated) {
-      return <Redirect to={'/'} />
-    }
-    if (redirect === 'edit') {
-      console.log('Redirecting to edit page so you can edit connection ' + selectedConnection.toString() + '...')
+    if (redirect === 'edit' && selectedConnection > 0) {
+      console.log('Editing connection ' + selectedConnection.toString() + '...')
       return <Redirect to={'/connections/edit/'+ selectedConnection.toString()} />
     }
     return (
