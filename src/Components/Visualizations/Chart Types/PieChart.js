@@ -105,36 +105,3 @@ export function SDAPieChart(props) {
     </ResponsiveContainer>
   );
 }
-
-
-// export function SDARadarChart (props){
-
-//   const data= props.data.results;
-//   var xaxis_column = props.data.column_data[0];
-//   var yaxis_columns = props.data.column_data.slice(1,);
-//   const xaxis_label = props.data.xaxis_label;
-//   const yaxis_label = props.data.yaxis_label;
-//   return (
-//     <ResponsiveContainer width="100%" height={400}>
-//       <RadarChart 
-//         // outerRadius={90} 
-//         // width={730} 
-//         // height={250} 
-//         data={data}
-//         >
-//           <PolarGrid />
-//           <PolarAngleAxis dataKey={xaxis_column.name} />
-//           <PolarRadiusAxis 
-//             angle={45} 
-//             // domain={[0, max_ycolumn_value]} 
-//           />
-//           {yaxis_columns.map(i => (
-//           <Radar name={i.legend} dataKey={i.name} stroke={i.color} fill={i.color} fillOpacity={0.6} />
-//           ))}
-//           <Legend />
-//           <Tooltip />
-//       </RadarChart>
-
-//     </ResponsiveContainer>
-//   );
-// }

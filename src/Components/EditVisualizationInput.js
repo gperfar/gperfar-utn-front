@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import {CoolButton} from './CoolButton';
+import {CoolButton, CoolButton2} from './CoolButton';
 import {ContainerVertical} from '../GlobalStyles';
 import {SentenceSelect} from './SentenceSelect';
 import {VisualizationTypeSelect} from './VisualizationTypeSelect';
@@ -134,6 +134,9 @@ export function EditVisualizationInput (props){
     const [yAxisColumnNames, setYAxisColumnNames] = useState(['']);
     const [yAxisColumnColors, setYAxisColumnColors] = useState(['']);
     const [yAxisColumnLegends, setYAxisColumnLegends] = useState(['']);
+    const [scatterShape, setScatterShape] = useState('circle');
+    
+    const allScatterShapes = ['circle', 'cross', 'diamond', 'square', 'star', 'triangle', 'wye' ]
 
     useEffect(() => {
         getSentences().then(data => 
@@ -211,6 +214,10 @@ export function EditVisualizationInput (props){
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     }
+
+    const handleScatterShapeChange = (event) => {
+        setScatterShape(event.target.value);
+    }
     
     const handleXAxisLabelChange = (event) => {
         setXAxisLabel(event.target.value);
@@ -252,7 +259,8 @@ export function EditVisualizationInput (props){
         var tempParams = {
             columns: tempColumns,
             xaxis_label: xAxisLabel,
-            yaxis_label: yAxisLabel
+            yaxis_label: yAxisLabel,
+            scatter_shape: scatterShape
         }
         setParams(tempParams);
     } 
@@ -265,6 +273,19 @@ export function EditVisualizationInput (props){
         setRender(render + 1);
     }
     
+    const handleToggleZAxis = (event) => {
+        if (yAxisColumnCount > 1){
+            setYAxisColumnCount(1);
+            setRender(render + 1);
+        }
+        if (yAxisColumnCount == 1){
+            setYAxisColumnCount(2);
+            var temp = yAxisColumnNames;
+            temp.push('');
+            setYAxisColumnNames(temp);
+            setRender(render + 1);
+        }
+    }
     
     const handleRender = (event) => {
         // buildParams();
@@ -272,6 +293,7 @@ export function EditVisualizationInput (props){
             column_data: params.columns,
             results: queryResults,
             type: visualizationType,
+            scatter_shape: scatterShape,
             xaxis_label: xAxisLabel !==''? xAxisLabel:'',
             yaxis_label: yAxisLabel !==''? yAxisLabel:''
         });
@@ -299,7 +321,7 @@ export function EditVisualizationInput (props){
             <div>
                 <form >
                     <ContainerVertical>
-                        <h3>General vis {visualizationID} sentence {sentenceID}</h3>
+                        <h3>General</h3>
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                             <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
@@ -338,11 +360,66 @@ export function EditVisualizationInput (props){
             </div>
         );
     }
+    if (visualizationType === 'Scatter chart') {
+        return (
+            <div>
+            <form >
+                <ContainerVertical>
+                    <h3>General</h3>
+                    <ContainerHorizontal>
+                        <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
+                        <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
+                        <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                    </ContainerHorizontal>
+                    <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                    <ContainerHorizontal>
+                        <ShapeSelect style={{width:"100%"}} list={allScatterShapes} state={{ selectedShape: [scatterShape, setScatterShape] }}/>
+                        <CoolTextField value={yAxisColumnColors[0]} style={{width:"90%"}} type="text" label={'Color'} onChange={(event) => handleYAxisColumnColorsChange(event, 0)} />
+                    </ContainerHorizontal>
+                    <h3>X Axis</h3>
+                    <ContainerHorizontal>
+                        <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
+                        <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
+                    </ContainerHorizontal>
+                    <h3>Y Axis</h3>
+                    <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
+                    <ContainerHorizontal>
+                        <CoolTextField value={yAxisColumnLegends[0]} style={{width:"100%"}} type="text" label={'Column '+(0+1)+' legend text'} onChange={(event) => handleYAxisColumnLegendsChange(event, 0)} />
+                        <ColumnSelectYAxis columns={headerRow} colIndex={0} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                    </ContainerHorizontal>
+                    <ContainerHorizontal>
+                        <h3>Z Axis </h3>
+                        <CoolButton2 /*style={{width:"10%"}}*/ onClick={handleToggleZAxis}>{yAxisColumnCount == 1? 'Add': 'Remove'}</CoolButton2>
+                    </ContainerHorizontal>
+                    {
+                        yAxisColumnCount > 1 &&
+                        <ContainerHorizontal>
+                            <CoolTextField value={yAxisColumnLegends[1]} style={{width:"100%"}} type="text" label={'Z-Axis Label'} onChange={(event) => handleYAxisColumnLegendsChange(event, 1)} />
+                            <ColumnSelectYAxis columns={headerRow} colIndex={1} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                        </ContainerHorizontal>
+                    }
+                    <ContainerHorizontal>
+                        <CoolButton onClick={handleRender}> Render </CoolButton>
+                        {visualizationID > 0? 
+                            <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                        }
+                    </ContainerHorizontal>
+                </ContainerVertical>
+            </form>
+            <h2>Render of the chart</h2>
+            {typeof(localRenderData.column_data)=='object'?
+                <VisualizationController data={localRenderData} />
+                :
+                <h4>Hit Render to see the chart</h4>
+            }
+        </div>
+        );
+    }
     return (
         <div>
             <form >
                 <ContainerVertical>
-                    <h3>General vis {visualizationID} sentence {sentenceID}</h3>
+                    <h3>General</h3>
                     <ContainerHorizontal>
                         <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
                         <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
@@ -382,3 +459,47 @@ export function EditVisualizationInput (props){
     );
 
 }
+
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+      margin: theme.spacing(0),
+      marginLeft: 15,
+      minWidth: 180,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(0),
+    },
+  }));
+  
+  export function ShapeSelect(props) {
+    const classes = useStyles();
+  
+    const {selectedShape: [selectedShape, setSelectedShape]} = {selectedShape: React.useState(''),...(props.state || {})};
+    
+    const handleChange = (event) => {
+      setSelectedShape(event.target.value);
+    };
+  
+    return (
+        <FormControl className={classes.formControl}>
+          <InputLabel>{props.title? props.title: "Data point shape"}</InputLabel>
+          <Select
+            native
+            value={selectedShape}
+            onChange={handleChange}
+          >
+          <option aria-label="None" value="" />
+          {Object.entries(props.list).map(shape => (
+              <option value={shape[1]}> {shape[1].charAt(0).toUpperCase() + shape[1].substring(1)} </option>
+              ))}
+          </Select>
+        </FormControl>
+    );
+  }
+  
