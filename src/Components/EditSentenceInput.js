@@ -1,11 +1,13 @@
 import React, { useState, useEffect }  from 'react';
 import {CoolButton} from '../Components/CoolButton';
 import {ContainerVertical} from '../GlobalStyles';
-import {ConnectionSelect} from '../Components/ConnectionSelect';
+// import {ConnectionSelect} from '../Components/ConnectionSelect';
 import {CoolTextField} from './CoolTextField';
+import {VisualQueryBuilder} from './VisualQueryBuilder';
 import SDATable from './Table';
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
+import {ModelSelect} from './ModelSelect'
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -16,14 +18,44 @@ align-items: baseline;
 
 export function EditSentenceInput (props){
     const sentenceID = props.sentenceID;
-
+    const { logout, user } = useAuth0();
+    
     const [connectionID, setConnectionID] = useState(0);
     const [name, setName] = useState('');
     const [comment, setComment] = useState('');
     const [SQLQuery, setSQLQuery] = useState('');
+    const [connections, setConnections] = useState([]);
+    // const [sentence, setSentence] = useState([]);
+    const [queryResults, setQueryResults] = useState([]);
+    const [connectionStructure, setConnectionStructure] = useState([]);
 
-    const { logout, user } = useAuth0();
-
+    
+    useEffect(() => {
+        getSentenceData().then((data) =>{
+            //   setSentence(data.result.sentence);
+            setSQLQuery(data.result.sentence.sql_query);
+            setComment(data.result.sentence.comment);
+            setName(data.result.sentence.name);
+            setConnectionID(data.result.sentence.connection_id);
+        } );
+    }, []);
+    
+    useEffect(() => {
+        getConnections().then(data => {
+            console.log(data.result.connections);
+            setConnections(data.result.connections);
+            
+        });
+    }, []);
+    
+    useEffect(() => {
+        getQueryResults( 
+            "SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND table_name != 'pg_stat_statements'"
+            ).then(data => {
+                setConnectionStructure(data.results);            
+        });
+    }, [connectionID]);
+    
     async function getSentenceData(){
         const requestOptions = {
             method: 'POST',
@@ -36,17 +68,6 @@ export function EditSentenceInput (props){
         const data = await response.json();
         return data;
     }
-
-    const [sentence, setSentence] = useState([]);
-    useEffect(() => {
-      getSentenceData().then((data) =>{
-          setSentence(data.result.sentence);
-          setSQLQuery(data.result.sentence.sql_query);
-          setComment(data.result.sentence.comment);
-          setName(data.result.sentence.name);
-          setConnectionID(data.result.sentence.connection_id);
-        } );
-    }, []);
 
     async function getConnections(){
         const requestOptions = {
@@ -61,23 +82,15 @@ export function EditSentenceInput (props){
         return data;
     }
 
-    const [connections, setConnections] = useState([]);
-      useEffect(() => {
-        getConnections().then(data => {
-            console.log(data.result.connections);
-            setConnections(data.result.connections);
-            
-        });
-      }, []);
 
-    async function getQueryResults(){
+    async function getQueryResults(sql_query = SQLQuery){
         const url = 'https://gperfar-utn.herokuapp.com/runtemporaryquery';
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 'connection_id': connectionID,
-                'sql_query': SQLQuery})
+                'sql_query': sql_query})
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
@@ -120,7 +133,6 @@ export function EditSentenceInput (props){
         return data;
     }
 
-    const [queryResults, setQueryResults] = useState([]);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -144,7 +156,7 @@ export function EditSentenceInput (props){
     const handleCreate = (event) => {
         createSentence().then(data=> {
             console.log(data);
-            alert("Visualization created successfully!");          
+            alert("Sentence created successfully!");          
         });
     }
 
@@ -155,16 +167,20 @@ export function EditSentenceInput (props){
     
     return (
             <div>
-                <form >
+                {/* <form > */}
                     <ContainerVertical>
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Sentence Name' onChange={handleNameChange} />
-                            <ConnectionSelect connections={connections} state={{ connectionID: [connectionID, setConnectionID] }} />
+                            <ModelSelect title='Connection' list={connections} state={{ selectedID: [connectionID, setConnectionID] }} />
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
-                        <CoolTextField value={SQLQuery} multiline type="text" label='SQL Query' onChange={handleSQLQueryChange} />
+                        {typeof(connectionStructure) !== 'undefined'?
+                            <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] }} />:
+                            <p>{typeof(connectionStructure)}</p>
+                        }
+                        {/* <CoolTextField value={SQLQuery} multiline type="text" placeholder='SELECT * FROM movies WHERE stars = 5' label='SQL Query' onChange={handleSQLQueryChange} /> */}
                     </ContainerVertical>
-                </form>
+                {/* </form> */}
                 <SDATable info={queryResults} />
                     <div>
                         <CoolButton onClick={handleTest}> Test </CoolButton>

@@ -4,12 +4,13 @@ import {ContainerVertical} from '../GlobalStyles';
 import {SentenceSelect} from './SentenceSelect';
 import {VisualizationTypeSelect} from './VisualizationTypeSelect';
 import {ColumnSelect} from './ColumnSelect';
-import {ColumnSelectYAxis} from './ColumnSelectYAxis';
+import {InsideMapSelect} from './InsideMapSelect';
 import {CoolTextField} from './CoolTextField';
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 import {VisualizationController} from './Visualizations/VisualizationController'
-
+import {SimpleSelect} from './SimpleSelect'
+import {ModelSelect} from './ModelSelect'
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -323,22 +324,22 @@ export function EditVisualizationInput (props){
                     <ContainerVertical>
                         <h3>General</h3>
                         <ContainerHorizontal>
-                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
-                            <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                            <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType], render: [render, setRender] }} />
+                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
+                            <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                            <SimpleSelect title='Visualization type' /*style={{width:"100%"}}*/ list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         <h3>Category Field</h3>
                         <ContainerHorizontal>
                             {/* <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} /> */}
-                            <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
+                            <SimpleSelect title='Column' list={headerRow} state={{ selectedItem: [xAxisColumn, setXAxisColumn] }} />
                         </ContainerHorizontal>
                         <h3>Value Field</h3>
                         {/* <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} /> */}
                         {[...Array(yAxisColumnCount).keys()].map(i => (
                             <ContainerHorizontal>
                                 <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Value text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
-                                <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                                <InsideMapSelect title='Column' list={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
                                 <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
                             </ContainerHorizontal>
                         ))}
@@ -367,25 +368,25 @@ export function EditVisualizationInput (props){
                 <ContainerVertical>
                     <h3>General</h3>
                     <ContainerHorizontal>
-                        <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
-                        <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                        <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                        <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
+                        <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                        <SimpleSelect title='Visualization type' /*style={{width:"100%"}}*/ list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
                     </ContainerHorizontal>
                     <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                     <ContainerHorizontal>
-                        <ShapeSelect style={{width:"100%"}} list={allScatterShapes} state={{ selectedShape: [scatterShape, setScatterShape] }}/>
-                        <CoolTextField value={yAxisColumnColors[0]} style={{width:"90%"}} type="text" label={'Color'} onChange={(event) => handleYAxisColumnColorsChange(event, 0)} />
+                        <CoolTextField value={yAxisColumnColors[0]} style={{width:"100%"}} type="text" label={'Color'} onChange={(event) => handleYAxisColumnColorsChange(event, 0)} />
+                        <SimpleSelect title='Shape' style={{width:"100%"}} list={allScatterShapes} state={{ selectedItem: [scatterShape, setScatterShape] }}/>
                     </ContainerHorizontal>
                     <h3>X Axis</h3>
                     <ContainerHorizontal>
-                        <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
-                        <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
+                        <CoolTextField value={xAxisLabel||''} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
+                        <SimpleSelect title='Column' list={headerRow} state={{ selectedItem: [xAxisColumn, setXAxisColumn] }} />
                     </ContainerHorizontal>
                     <h3>Y Axis</h3>
-                    <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
+                    <CoolTextField value={yAxisLabel||''} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
                     <ContainerHorizontal>
                         <CoolTextField value={yAxisColumnLegends[0]} style={{width:"100%"}} type="text" label={'Column '+(0+1)+' legend text'} onChange={(event) => handleYAxisColumnLegendsChange(event, 0)} />
-                        <ColumnSelectYAxis columns={headerRow} colIndex={0} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                        <InsideMapSelect title='Column' list={headerRow} colIndex={0} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
                     </ContainerHorizontal>
                     <ContainerHorizontal>
                         <h3>Z Axis </h3>
@@ -394,8 +395,8 @@ export function EditVisualizationInput (props){
                     {
                         yAxisColumnCount > 1 &&
                         <ContainerHorizontal>
-                            <CoolTextField value={yAxisColumnLegends[1]} style={{width:"100%"}} type="text" label={'Z-Axis Label'} onChange={(event) => handleYAxisColumnLegendsChange(event, 1)} />
-                            <ColumnSelectYAxis columns={headerRow} colIndex={1} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                            <CoolTextField value={yAxisColumnLegends[1]||''} style={{width:"100%"}} type="text" label={'Z-Axis Label'} onChange={(event) => handleYAxisColumnLegendsChange(event, 1)} />
+                            <InsideMapSelect title='Column' list={headerRow} colIndex={1} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
                         </ContainerHorizontal>
                     }
                     <ContainerHorizontal>
@@ -421,22 +422,22 @@ export function EditVisualizationInput (props){
                 <ContainerVertical>
                     <h3>General</h3>
                     <ContainerHorizontal>
-                        <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "50%"}}/>
-                        <SentenceSelect style={{width:"100%"}} sentences={sentences} state={{ sentenceID: [sentenceID, setSentenceID] }} />
-                        <VisualizationTypeSelect style={{width:"100%"}} visualizationTypes={visualizationTypes} state={{ visualizationType: [visualizationType, setVisualizationType] }} />
+                        <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
+                        <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                        <SimpleSelect title='Visualization type' /*style={{width:"100%"}}*/ list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
                     </ContainerHorizontal>
                     <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                     <h3>X Axis</h3>
                     <ContainerHorizontal>
                         <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} />
-                        <ColumnSelect style={{width:"100%"}} columns={headerRow} state={{ column: [xAxisColumn, setXAxisColumn] }} />
+                        <SimpleSelect title='Column' list={headerRow} state={{ selectedItem: [xAxisColumn, setXAxisColumn] }} />
                     </ContainerHorizontal>
                     <h3>Y Axis</h3>
                     <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} />
                     {[...Array(yAxisColumnCount).keys()].map(i => (
                         <ContainerHorizontal>
                             <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' legend text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
-                            <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                            <InsideMapSelect title='Column' list={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
                             <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
                         </ContainerHorizontal>
                     ))}
@@ -459,47 +460,3 @@ export function EditVisualizationInput (props){
     );
 
 }
-
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-      margin: theme.spacing(0),
-      marginLeft: 15,
-      minWidth: 180,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(0),
-    },
-  }));
-  
-  export function ShapeSelect(props) {
-    const classes = useStyles();
-  
-    const {selectedShape: [selectedShape, setSelectedShape]} = {selectedShape: React.useState(''),...(props.state || {})};
-    
-    const handleChange = (event) => {
-      setSelectedShape(event.target.value);
-    };
-  
-    return (
-        <FormControl className={classes.formControl}>
-          <InputLabel>{props.title? props.title: "Data point shape"}</InputLabel>
-          <Select
-            native
-            value={selectedShape}
-            onChange={handleChange}
-          >
-          <option aria-label="None" value="" />
-          {Object.entries(props.list).map(shape => (
-              <option value={shape[1]}> {shape[1].charAt(0).toUpperCase() + shape[1].substring(1)} </option>
-              ))}
-          </Select>
-        </FormControl>
-    );
-  }
-  

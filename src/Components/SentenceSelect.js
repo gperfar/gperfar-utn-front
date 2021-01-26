@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 120,
+    width:'100%'
   },
   selectEmpty: {
     marginTop: theme.spacing(0),
@@ -28,7 +29,7 @@ export function SentenceSelect(props) {
         <InputLabel>Sentence</InputLabel>
         <Select
           native
-          value={sentenceID}
+          value={sentenceID||''}
           onChange={handleChange}
         >
         <option aria-label="None" value="" />

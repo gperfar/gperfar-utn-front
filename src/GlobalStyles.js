@@ -93,7 +93,7 @@ overflow-y: auto;
 @media (max-width: 600px) {
   flex-direction: column;
   height: auto;
-}
+} 
 `;
 
 export const SideBar = styled.div`
@@ -106,7 +106,7 @@ background-color: #E5E7E9;
 `;
 
 export const Content = styled.div`
-flex:3;
+flex:5;
 justify-content:center;
 padding: 1em;
 background: whitesmoke;

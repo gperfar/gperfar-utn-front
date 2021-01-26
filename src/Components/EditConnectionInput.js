@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import {CoolButton} from '../Components/CoolButton';
 import {ContainerVertical} from '../GlobalStyles';
-import {ConnectionSelect} from '../Components/ConnectionSelect';
+// import {ConnectionSelect} from '../Components/ConnectionSelect';
 import {CoolTextField} from './CoolTextField';
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";

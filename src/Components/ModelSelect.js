@@ -7,7 +7,9 @@ import Select from '@material-ui/core/Select';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
+    marginRight:12,
     minWidth: 120,
+    width:'100%'
   },
   selectEmpty: {
     marginTop: theme.spacing(0),
@@ -28,7 +30,7 @@ export function ModelSelect(props) {
         <InputLabel>{props.title? props.title: "Model"}</InputLabel>
         <Select
           native
-          value={selectedID}
+          value={selectedID||0}
           onChange={handleChange}
         >
         <option aria-label="None" value="" />

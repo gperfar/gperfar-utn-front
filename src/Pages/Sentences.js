@@ -4,7 +4,6 @@ import {CoolButton2} from '../Components/CoolButton';
 import {ModelCard} from '../Components/ModelCard';
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHorizontal} from '../GlobalStyles';
-// import {NewSentenceInput} from '../Components/NewSentenceInput';
 import {EditSentenceInput} from '../Components/EditSentenceInput';
 import { Redirect, Link, useParams } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
