@@ -42,8 +42,7 @@ export function InsideMapSelect(props) {
   return (
       <FormControl style={{width:"100%"}} className={classes.formControl}>
         <InputLabel>{title || 'Select...'}</InputLabel>
-
-        <Select native value={propertyInRow? columnArray[indexInColumn][propertyInRow] : columnArray[indexInColumn]} onChange={handleChange}>
+        <Select native value={propertyInRow ? columnArray[indexInColumn][propertyInRow] : columnArray[indexInColumn]} onChange={handleChange}>
           <option aria-label="None" value="" />
           {Object.entries(listOfOptions).map(opt => (
               <option value={opt[1]}> {opt[1]} </option>
