@@ -28,7 +28,7 @@ export function EditSentenceInput (props){
     // const [sentence, setSentence] = useState([]);
     const [queryResults, setQueryResults] = useState([]);
     const [connectionStructure, setConnectionStructure] = useState([]);
-
+    const [visualQueryParams, setVisualQueryParams] = useState({});
     
     useEffect(() => {
         getSentenceData().then((data) =>{
@@ -37,6 +37,7 @@ export function EditSentenceInput (props){
             setComment(data.result.sentence.comment);
             setName(data.result.sentence.name);
             setConnectionID(data.result.sentence.connection_id);
+            setVisualQueryParams(data.result.sentence.visual_query_params);
         } );
     }, []);
     
@@ -108,7 +109,8 @@ export function EditSentenceInput (props){
                 'connection_id': connectionID,
                 'sql_query': SQLQuery,
                 'comment': comment,
-                'name': name})
+                'name': name,
+                'visual_query_params': visualQueryParams})
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
@@ -125,7 +127,8 @@ export function EditSentenceInput (props){
                 'connection_id': connectionID,
                 'sql_query': SQLQuery,
                 'comment': comment,
-                'name': name})
+                'name': name,
+                'visual_query_params': visualQueryParams})
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
@@ -175,7 +178,7 @@ export function EditSentenceInput (props){
                         </ContainerHorizontal>
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         {typeof(connectionStructure) !== 'undefined'?
-                            <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] }} />:
+                            <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] , params: [visualQueryParams, setVisualQueryParams]}} />:
                             <p>{typeof(connectionStructure)}</p>
                         }
                         {/* <CoolTextField value={SQLQuery} multiline type="text" placeholder='SELECT * FROM movies WHERE stars = 5' label='SQL Query' onChange={handleSQLQueryChange} /> */}

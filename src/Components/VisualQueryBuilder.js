@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     width:'100%',
     height: '100%',
+    // minHeight: 400
     // maxHeight: 600,
     // marginTop: '15px'
   },
@@ -68,23 +69,26 @@ const useStyles = makeStyles((theme) => ({
 export function VisualQueryBuilder(props) {
   const classes = useStyles();
 
-  const {query: [query, setQuery]} = {render: React.useState(''),...(props.state || {})};
+  const {query: [query, setQuery]} = {query: React.useState(''),...(props.state || {})};
+  const {params: [params, setParams]} = {params: React.useState({}),...(props.state || {})};
+  
   const structure = props.connectionStructure;
 
   const [tables, setTables] = React.useState([]);
   const [selectedTable, setSelectedTable] = React.useState('');
   const [allSelectedTableColumns, setAllSelectedTableColumns] = React.useState([]);
-  const [selectedColumns, setSelectedColumns] = React.useState([]);
-  const [selectedFilters, setSelectedFilters] = React.useState([]);
 
-  const [selectedTables, setSelectedTables] = React.useState([]);
-  const [tableJoins, setTableJoins] = React.useState([]);
-  const [joinKeys, setJoinKeys] = React.useState([]);
-
+  // These below are the ones saved in VisualQueryParams
+  const [selectedColumns, setSelectedColumns] = React.useState(params["selected_columns"]|| []);
+  const [selectedFilters, setSelectedFilters] = React.useState(params["selected_filters"]|| []);
+  const [selectedTables, setSelectedTables] = React.useState(params["selected_tables"] || [] );
+  const [tableJoins, setTableJoins] = React.useState(params["table_joins"] || []);
+  const [joinKeys, setJoinKeys] = React.useState(params["join_keys"] || []);
+  // This are just things we need to render stuff properly
   const [render, setRender] = React.useState(1);
   const [render2, setRender2] = React.useState(1);
   const [updateInTables, setUpdateInTables] = React.useState(1);
-
+  // Consts...
   const grouping_options = ['Distinct', 'Max', 'Min', 'Count', 'Sum', 'Avg'];
   const filtering_options = ['Null', 'Not null', 'Less than', 'Greater than', 'Equals', 'Does not Equal'];
   const join_options = ['Full Outer Join', 'Left Join', 'Inner Join'];
@@ -245,6 +249,13 @@ const handleMoveTableUp = (event, index) => {
         temp_query = temp_query.slice(0,-4);
     }
     setQuery(temp_query);
+    setParams({
+        'selected_tables': selectedTables,
+        'selected_columns': selectedColumns,
+        'selected_filters': selectedFilters,
+        'table_joins': tableJoins,
+        'join_keys': joinKeys
+    })
     // setQuery('SELECT * \nFROM Customers \nWHERE country = \'Argentina\' ');
   }
 
@@ -281,65 +292,73 @@ const handleMoveTableUp = (event, index) => {
             </div>
             <Divider orientation="vertical" flexItem variant="middle"/>
             <div className={classes.listcontainer}>
-                <h3 style={{margin:0, paddingTop:10}}>Selected Columns</h3>
-                <Divider />
-                <List className={classes.list} >
-                    {selectedColumns.map((row, index) => (
-                        <div>
-                            <ListItem>
-                                <ListItemAvatar style={{maxWidth:'40%', width: '30%'}}>
-                                    <InsideMapSelect title='Grouping' list={grouping_options} colIndex={index} rowProperty='grouping' state={{columnArray: [selectedColumns,setSelectedColumns], render: [render, setRender] }}/>
-                                    
-                                </ListItemAvatar>
-                                <ListItemText style={{marginRight:20, textAlign:'right'}}
-                                    primary={row["column_name"]}
-                                    secondary={row["table_name"]}
-                                />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromQuery(event, index)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider light />
-                        </div>
-                    ))}
-                </List>
+                {/* {selectedTable.length > 0 && */}
+                    <div>
+                        <h3 style={{margin:0, paddingTop:10}}>Selected Columns</h3>
+                        <Divider />
+                        <List className={classes.list} >
+                            {selectedColumns.map((row, index) => (
+                                <div>
+                                    <ListItem>
+                                        <ListItemAvatar style={{maxWidth:'40%', width: '30%'}}>
+                                            <InsideMapSelect title='Grouping' list={grouping_options} colIndex={index} rowProperty='grouping' state={{columnArray: [selectedColumns,setSelectedColumns], render: [render, setRender] }}/>
+                                        </ListItemAvatar>
+                                        <ListItemText style={{marginRight:20, textAlign:'right'}}
+                                            primary={row["column_name"]}
+                                            secondary={row["table_name"]}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromQuery(event, index)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <Divider light />
+                                </div>
+                            ))}
+                        </List>
+                    </div>
+                {/* } */}
             </div>
             <Divider orientation="vertical" flexItem variant="middle"/>
-            <div className={classes.listcontainer}>
-                <h3 style={{margin:0, paddingTop:10}}>
-                    Filters
-                </h3>
-                <Divider style={{marginRight:15}}/>
-                <List className={classes.list} style={{paddingRight:15}}>
-                    {selectedFilters.map((row, index) => (
-                        <div>
-                            <ListItem>
-                                <ListItemAvatar style={{width:'50%', display:'flex', alignItems:'baseline'}}>
-                                    <InsideMapSelect title='Filter type' list={filtering_options} colIndex={index} rowProperty='filtering' state={{columnArray: [selectedFilters,setSelectedFilters], render: [render, setRender] }}/>
-                                    {['Less than', 'Greater than', 'Equals', 'Does not equal'].includes(row['filtering'])? 
-                                        <CoolTextField style={{width:'40%', marginTop:0, marginRight:0}} placeholder='0' type='text' label='Value' value={row['filtering_param']} onChange={(event)=>handleFilteringParamChange(event,index)}/> : 
-                                        <p></p>
-                                    }
-                                </ListItemAvatar>
-                                <ListItemText style={{marginRight:20, textAlign:'right'}}
-                                    primary={row["column_name"]}
-                                    secondary={row["table_name"]}
-                                />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromFilter(event, index)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider light />
-                        </div>
-                    ))}
-                </List>
-            </div>
+                <div className={classes.listcontainer}>
+                    {/* {selectedTables.length > 0 && */}
+                    <div>
+                        <h3 style={{margin:0, paddingTop:10}}>
+                            Filters
+                        </h3>
+                        <Divider style={{marginRight:15}}/>
+                        <List className={classes.list} style={{paddingRight:15}}>
+                            {selectedFilters.map((row, index) => (
+                                <div>
+                                    <ListItem>
+                                        <ListItemAvatar style={{width:'50%', display:'flex', alignItems:'baseline'}}>
+                                            <InsideMapSelect title='Filter type' list={filtering_options} colIndex={index} rowProperty='filtering' state={{columnArray: [selectedFilters,setSelectedFilters], render: [render, setRender] }}/>
+                                            {['Less than', 'Greater than', 'Equals', 'Does not equal'].includes(row['filtering'])? 
+                                                <CoolTextField style={{width:'40%', marginTop:0, marginRight:0}} placeholder='0' type='text' label='Value' value={row['filtering_param']} onChange={(event)=>handleFilteringParamChange(event,index)}/> : 
+                                                <p></p>
+                                            }
+                                        </ListItemAvatar>
+                                        <ListItemText style={{marginRight:20, textAlign:'right'}}
+                                            primary={row["column_name"]}
+                                            secondary={row["table_name"]}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromFilter(event, index)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <Divider light />
+                                </div>
+                            ))}
+                        </List>
+                    </div>
+                    {/* } */}
+                </div>
         </ContainerHorizontal2>
         <Divider />
+        {selectedTables.length > 0 &&
             <div className={classes.listcontainer}>
                 <h3 style={{margin:'0px 15px', paddingTop:10}}>
                     Table Joins
@@ -360,23 +379,15 @@ const handleMoveTableUp = (event, index) => {
                                             <InsideMapSelect title='Join type' list={join_options} colIndex={index-1} state={{columnArray: [tableJoins,setTableJoins], render: [render, setRender] }}/>
                                             <h3 style={{margin:'0px 15px', minWidth:250}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h3>
                                             <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> ON </p>
-                                            <InsideMapSelect title={selectedTables[index -1] + ' key'} list={[...new Set(structure.filter(item => selectedTables.slice(0,index).includes(item.table_name)))].map(item => item.table_name.concat('.',item.column_name))} rowProperty='left' colIndex={index-1} state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
+                                            <InsideMapSelect title={'Previous tables\'s key'} list={[...new Set(structure.filter(item => selectedTables.slice(0,index).includes(item.table_name)))].map(item => item.table_name.concat('.',item.column_name))} rowProperty='left' colIndex={index-1} state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
                                             <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> = </p>
                                             <InsideMapSelect title={row + ' key'} list={[...new Set(structure.filter(item => item.table_name === row))].map(item => item.table_name.concat('.',item.column_name))} colIndex={index-1} rowProperty='right' state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
                                         </div>
                                     }
                                 </div>
                                 <ButtonGroup style={{marginLeft: 15, marginRight: 15}} color="primary" aria-label="outlined primary button group">
-                                    {index > 0 ? 
-                                        <Button onClick={(event) => handleMoveTableUp(event,index)}>▲</Button>
-                                    :  
-                                        <Button disabled onClick={(event) => handleMoveTableUp(event,index)}>▲</Button>
-                                    }
-                                    {index < selectedTables.length - 1 ? 
-                                        <Button onClick={(event) => handleMoveTableDown(event,index)}>▼</Button>
-                                    :
-                                        <Button disabled onClick={(event) => handleMoveTableDown(event,index)}>▼</Button>
-                                    }
+                                    {index > 0 ? <Button onClick={(event) => handleMoveTableUp(event,index)}>▲</Button> : <Button disabled onClick={(event) => handleMoveTableUp(event,index)}>▲</Button>}
+                                    {index < selectedTables.length - 1 ? <Button onClick={(event) => handleMoveTableDown(event,index)}>▼</Button> : <Button disabled onClick={(event) => handleMoveTableDown(event,index)}>▼</Button>}
                                 </ButtonGroup>
                             </ListItem>
                             <Divider light />
@@ -384,7 +395,26 @@ const handleMoveTableUp = (event, index) => {
                     ))}
                 </List>
             </div>
-        <CoolTextField value={query} style={{paddingRight: 25, height:'100%'}} maxRows={8} multiline disabled label='SQL Query' />
+        }
+        <Divider />
+        {/* {selectedTables.length > 0 && */}
+            <div className={classes.listcontainer}>
+                <h3 style={{margin:'0px 15px', paddingTop:10}}>
+                    Sorting & Row limiting options
+                </h3>
+                <Divider style={{marginLeft:15, marginRight:15}}/>
+                <p>I have to do this :) </p>
+            </div>
+        {/* } */}
+        <Divider />
+        {/* {selectedTables.length > 0 && */}
+            <div>
+                <h3 style={{margin:'0px 15px', paddingTop:10}}>
+                    Resulting SQL
+                </h3>
+                <CoolTextField value={query} style={{paddingRight: 25, height:'100%'}} maxRows={8} multiline disabled label='SQL Query' />
+            </div>
+        {/* } */}
     </div>
   );
 }
