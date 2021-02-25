@@ -15,16 +15,20 @@ body {
     
   }
 
-h1, h2, h3 {
+h1, h2, h3, h5, .coolcolors{
   background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 	-webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.coolcolors{
+  padding: 12px;
+}
 h1 {
   font-size: 52pt;  
 }
-h2,h3 {
+
+h2,h3, h5 {
   padding: 12px;
 }
 h4{

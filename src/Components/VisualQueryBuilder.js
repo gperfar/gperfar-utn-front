@@ -17,6 +17,7 @@ import Divider from '@material-ui/core/Divider';
 import { InsideMapSelect } from './InsideMapSelect';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import {CoolButton} from '../Components/CoolButton';
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -75,22 +76,26 @@ export function VisualQueryBuilder(props) {
   const structure = props.connectionStructure;
 
   const [tables, setTables] = React.useState([]);
-  const [selectedTable, setSelectedTable] = React.useState('');
   const [allSelectedTableColumns, setAllSelectedTableColumns] = React.useState([]);
-
+  
   // These below are the ones saved in VisualQueryParams
+  const [selectedTable, setSelectedTable] = React.useState(params["selected_table"] || '' );
   const [selectedColumns, setSelectedColumns] = React.useState(params["selected_columns"]|| []);
   const [selectedFilters, setSelectedFilters] = React.useState(params["selected_filters"]|| []);
   const [selectedTables, setSelectedTables] = React.useState(params["selected_tables"] || [] );
   const [tableJoins, setTableJoins] = React.useState(params["table_joins"] || []);
   const [joinKeys, setJoinKeys] = React.useState(params["join_keys"] || []);
+  const [sortByColumns, setSortByColumns] = React.useState(params["sort_by_columns"] || [{'column': '', 'mode': 'ASC'}]);
+  const [rowLimit, setRowLimit] = React.useState(params["row_limit"] || 100);
+  const [rowLimitOffset, setRowLimitOffset] = React.useState(params["row_limit_offset"] || 0);
+
   // This are just things we need to render stuff properly
   const [render, setRender] = React.useState(1);
   const [render2, setRender2] = React.useState(1);
   const [updateInTables, setUpdateInTables] = React.useState(1);
   // Consts...
   const grouping_options = ['Distinct', 'Max', 'Min', 'Count', 'Sum', 'Avg'];
-  const filtering_options = ['Null', 'Not null', 'Less than', 'Greater than', 'Equals', 'Does not Equal'];
+  const filtering_options = ['Null', 'Not null', 'Less than', 'Greater than', 'Equals', 'Does not equal'];
   const join_options = ['Full Outer Join', 'Left Join', 'Inner Join'];
   
   const grouping_options_convert = {
@@ -107,7 +112,7 @@ export function VisualQueryBuilder(props) {
       'Less than': ' < ',
       'Greater than': ' > ',
       'Equals': ' = ',
-      'Does not Equal': ' != '
+      'Does not equal': ' != '
   }
 
   useEffect(() => {
@@ -158,6 +163,13 @@ export function VisualQueryBuilder(props) {
     setRender(render + 1);
   }
 
+  const handleSelectedColumnLabelChange = (event, index) => {
+    var temp_selectedColumns = selectedColumns;
+    temp_selectedColumns[index]['label']= event.target.value;
+    setSelectedColumns(temp_selectedColumns);
+    setRender2(render2 + 1);
+  }
+
   const handleRemoveColumnFromQuery = (event, index) => {
     var temp_selectedColumns = selectedColumns;
     temp_selectedColumns.splice(index,1);
@@ -185,7 +197,7 @@ export function VisualQueryBuilder(props) {
     var temp_selectedFilters = selectedFilters;
     temp_selectedFilters[index]['filtering_param']= event.target.value;
     setSelectedFilters(temp_selectedFilters);
-    setRender(render + 1);
+    setRender2(render2 + 1);
   }
 
   function array_move(arr, old_index, new_index) {
@@ -210,27 +222,56 @@ const handleMoveTableUp = (event, index) => {
     temp_selectedTables = array_move(temp_selectedTables,index,index -1);
     setSelectedTables(temp_selectedTables);
     console.log(temp_selectedTables);
-    setRender2(render2 + 1);
+    setRender(render + 1);
   }
 
   const handleMoveTableDown = (event, index) => {
     var temp_selectedTables = selectedTables;
     temp_selectedTables = array_move(temp_selectedTables,index,index +1);
     setSelectedTables(temp_selectedTables);
-    setRender2(render2 + 1);
+    setRender(render + 1);
     console.log(temp_selectedTables);
+  }
+
+  const handleRowLimitChange = (event) => {
+    setRowLimit(event.target.value);
+    setRender2(render2 + 1);
+  }
+
+  const handleRowLimitOffsetChange = (event) => {
+    setRowLimitOffset(event.target.value);
+    setRender2(render2 + 1);
+  }
+
+  const handleAddSortByColumn = (event) => {
+      var temp_sortByColumns = sortByColumns;
+      temp_sortByColumns.push({'label':'','mode':'ASC'});
+      setSortByColumns(temp_sortByColumns);
+      setRender2(render2 + 1);
+  }
+
+  const handleRemoveSortByColumn = (event, index) => {
+    var temp_sortByColumns = sortByColumns;
+    temp_sortByColumns.splice(index,1);
+    setSortByColumns(temp_sortByColumns);
+    setRender2(render2 + 1);
   }
 
   const buildQuery = (event) => {
     var temp_query = 'SELECT \n \t'
     // All columns selected
     selectedColumns.map(column => (
-      temp_query = temp_query.concat(column.grouping != 'Distinct'?grouping_options_convert[column.grouping]:'','"', column.table_name, '"."', column.column_name, column.grouping!= 'Distinct'? '"),\n\t':'",\n\t')
+      temp_query = temp_query.concat(
+          column.grouping != 'Distinct'?grouping_options_convert[column.grouping]:'',
+          '"', column.table_name, '"."', column.column_name, 
+          column.grouping!= 'Distinct'? '")':'"',
+          column.label?' AS "'.concat(column.label, '"'):'', 
+          ',\n\t')
     ));
     temp_query = temp_query.slice(0,-3).concat('\nFROM \n \t');
     // All involved tables
     selectedTables.map((table, index) => {
-      if (index > 0) temp_query = temp_query.concat(' ', tableJoins[index-1], ' ');
+      if (index > 0) temp_query = temp_query.concat('\n\t', tableJoins[index-1].toUpperCase(), ' ');
       temp_query = temp_query.concat(table);
       if (index > 0) temp_query = temp_query.concat(' ON ', joinKeys[index-1]["left"], ' = ', joinKeys[index-1]["right"],' \n\t');
     });
@@ -240,21 +281,32 @@ const handleMoveTableUp = (event, index) => {
       selectedFilters.map(column => (
         temp_query = temp_query.concat('"', column.table_name, '"."', column.column_name,'"', filtering_options_convert[column.filtering], column.filtering_param? column.filtering_param: '', '\n\t')
       ));
+      temp_query = temp_query.slice(0,-2);
     }
     if (selectedColumns.filter(item => item.grouping == 'Distinct').length > 0) {
-        temp_query = temp_query.concat('\n GROUP BY \n \t');
+        temp_query = temp_query.concat('\nGROUP BY \n \t');
         selectedColumns.filter(item => item.grouping =='Distinct').map(column => (
             temp_query = temp_query.concat('"', column.table_name, '"."', column.column_name, '", \n\t')
         ))
         temp_query = temp_query.slice(0,-4);
     }
+    temp_query = temp_query.concat('\nORDER BY \n\t')
+    sortByColumns.map(column => (
+        temp_query = temp_query.concat('"', column.label,'" ', column.mode, ',\n\t')
+    ));
+    temp_query = temp_query.slice(0,-3);
+    temp_query = temp_query.concat('\nLIMIT ',rowLimit, ' OFFSET ', rowLimitOffset);
     setQuery(temp_query);
     setParams({
         'selected_tables': selectedTables,
         'selected_columns': selectedColumns,
         'selected_filters': selectedFilters,
         'table_joins': tableJoins,
-        'join_keys': joinKeys
+        'join_keys': joinKeys,
+        'sort_by_columns': sortByColumns,
+        'selected_table': selectedTable,
+        'row_limit': rowLimit,
+        'row_limit_offset': rowLimitOffset
     })
     // setQuery('SELECT * \nFROM Customers \nWHERE country = \'Argentina\' ');
   }
@@ -269,7 +321,7 @@ const handleMoveTableUp = (event, index) => {
                 <h3 style={{margin:0, paddingTop:10, marginLeft:15}}>Available Columns</h3>
                 <Divider style={{marginLeft:15}}/>
                 <List className={classes.list} style={{paddingLeft:15}}>
-                    {allSelectedTableColumns.map((row) => (
+                    {allSelectedTableColumns.map((row, index) => (
                         <div>
                             <ListItem>
                                 <ListItemText
@@ -285,7 +337,7 @@ const handleMoveTableUp = (event, index) => {
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
-                            <Divider light />
+                            {index < allSelectedTableColumns.length -1 && <Divider light style={{marginLeft:15, marginRight:15}}/>}
                         </div>
                     ))}
                 </List>
@@ -300,8 +352,9 @@ const handleMoveTableUp = (event, index) => {
                             {selectedColumns.map((row, index) => (
                                 <div>
                                     <ListItem>
-                                        <ListItemAvatar style={{maxWidth:'40%', width: '30%'}}>
-                                            <InsideMapSelect title='Grouping' list={grouping_options} colIndex={index} rowProperty='grouping' state={{columnArray: [selectedColumns,setSelectedColumns], render: [render, setRender] }}/>
+                                        <ListItemAvatar style={{maxWidth:600, width: '60%', display:'flex', flexDirection:'row', alignItems:'baseline'}}>
+                                            <InsideMapSelect style={{maxWidth:100}} title='Grouping' list={grouping_options} colIndex={index} rowProperty='grouping' state={{columnArray: [selectedColumns,setSelectedColumns], render: [render, setRender] }}/>
+                                            <CoolTextField placeholder={row.column} type='text' label='Label' value={row['label']} onChange={(event)=>handleSelectedColumnLabelChange(event,index)}/>
                                         </ListItemAvatar>
                                         <ListItemText style={{marginRight:20, textAlign:'right'}}
                                             primary={row["column_name"]}
@@ -313,7 +366,7 @@ const handleMoveTableUp = (event, index) => {
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
-                                    <Divider light />
+                                    {index < selectedColumns.length -1 && <Divider light style={{marginLeft:15, marginRight:15}}/>}
                                 </div>
                             ))}
                         </List>
@@ -324,9 +377,7 @@ const handleMoveTableUp = (event, index) => {
                 <div className={classes.listcontainer}>
                     {/* {selectedTables.length > 0 && */}
                     <div>
-                        <h3 style={{margin:0, paddingTop:10}}>
-                            Filters
-                        </h3>
+                        <h3 style={{margin:0, paddingTop:10}}> Filters </h3>
                         <Divider style={{marginRight:15}}/>
                         <List className={classes.list} style={{paddingRight:15}}>
                             {selectedFilters.map((row, index) => (
@@ -344,12 +395,10 @@ const handleMoveTableUp = (event, index) => {
                                             secondary={row["table_name"]}
                                         />
                                         <ListItemSecondaryAction>
-                                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromFilter(event, index)}>
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromFilter(event, index)}><DeleteIcon /></IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
-                                    <Divider light />
+                                    {index < selectedFilters.length -1 && <Divider light style={{marginLeft:15, marginRight:15}}/>}
                                 </div>
                             ))}
                         </List>
@@ -370,14 +419,14 @@ const handleMoveTableUp = (event, index) => {
                             <ListItem style={{alignItems: 'baseline'}}>
                                 <div style={{width: '25%', marginRight: 15}}>
                                     {index == 0 &&
-                                        <h3 style={{margin:'0px 15px'}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h3>
+                                        <h4 className='coolcolors' style={{margin:'0px 15px'}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h4>
                                     } 
                                 </div>
                                 <div style={{width:'100%'}}>
                                     {index > 0 && 
                                         <div style={{width:'100%', display:'flex',flexDirection:'row', alignItems:'baseline'}}>
                                             <InsideMapSelect title='Join type' list={join_options} colIndex={index-1} state={{columnArray: [tableJoins,setTableJoins], render: [render, setRender] }}/>
-                                            <h3 style={{margin:'0px 15px', minWidth:250}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h3>
+                                            <h4 className='coolcolors' style={{margin:'0px 15px', minWidth:250}}> {typeof row !='undefined' && row.charAt(0).toUpperCase() + row.substring(1)} </h4>
                                             <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> ON </p>
                                             <InsideMapSelect title={'Previous tables\'s key'} list={[...new Set(structure.filter(item => selectedTables.slice(0,index).includes(item.table_name)))].map(item => item.table_name.concat('.',item.column_name))} rowProperty='left' colIndex={index-1} state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
                                             <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> = </p>
@@ -390,7 +439,7 @@ const handleMoveTableUp = (event, index) => {
                                     {index < selectedTables.length - 1 ? <Button onClick={(event) => handleMoveTableDown(event,index)}>▼</Button> : <Button disabled onClick={(event) => handleMoveTableDown(event,index)}>▼</Button>}
                                 </ButtonGroup>
                             </ListItem>
-                            <Divider light />
+                            {index < selectedTables.length -1 && <Divider light style={{marginLeft:25, marginRight:25}}/>}
                         </div>
                     ))}
                 </List>
@@ -398,21 +447,51 @@ const handleMoveTableUp = (event, index) => {
         }
         <Divider />
         {/* {selectedTables.length > 0 && */}
-            <div className={classes.listcontainer}>
-                <h3 style={{margin:'0px 15px', paddingTop:10}}>
-                    Sorting & Row limiting options
-                </h3>
-                <Divider style={{marginLeft:15, marginRight:15}}/>
-                <p>I have to do this :) </p>
+            <div className={classes.listcontainer} style={{margin:'0px 15px', overflowX:'scroll'}}>
+                <h3 style={{paddingTop:10}}> Sorting & Row limiting options </h3>
+                <Divider style={{marginLeft:25, marginRight:25}}/>
+                <h4 className='coolcolors' style={{margin:0}}>Sort results</h4>
+                <ContainerHorizontal style={{alignItems:'flex-end'}} >
+                    {sortByColumns.map((row, index) => (
+                        <ContainerHorizontal style={{alignItems:'flex-end'}}>
+                            <div style={{width: 150, marginLeft: 15, marginRight: 15}}>
+                                <InsideMapSelect 
+                                    title={'Priority '.concat(index + 1, ' column')} 
+                                    list={[... new Set(selectedColumns.map(column => column.label))]} 
+                                    colIndex={index} 
+                                    rowProperty='label' 
+                                    state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
+                            </div>
+                            <div style={{width: 75}}>
+                                <InsideMapSelect 
+                                    title='Mode' 
+                                    list={['ASC', 'DESC']} 
+                                    colIndex={index} 
+                                    rowProperty='mode' 
+                                    state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
+                            </div>
+                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveSortByColumn(event, index)}><DeleteIcon /></IconButton>
+                            <Divider orientation="vertical" light flexItem/>
+                        </ContainerHorizontal>
+                    ))}
+                    <CoolButton style={{paddingLeft:5, paddingRight:5}} onClick={handleAddSortByColumn}> + </CoolButton>
+                </ContainerHorizontal>
+                {/* <Divider light style={{marginLeft:25, marginRight:25}}/> */}
+                <h4 className='coolcolors' style={{margin:0}} >Row limits</h4>
+                <ContainerHorizontal>
+                    <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='100' type='number' label='Limit' value={rowLimit} onChange={handleRowLimitChange}/>
+                    <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='0' type='number' label='Offset' value={rowLimitOffset} onChange={handleRowLimitOffsetChange}/>
+                </ContainerHorizontal>
+                {/* <Divider light style={{marginLeft:25, marginRight:25}}/> */}
+                {/* <Divider style={{marginLeft:25, marginRight:25}}/>
+                <p>I have to do this :) </p> */}
             </div>
         {/* } */}
         <Divider />
         {/* {selectedTables.length > 0 && */}
             <div>
-                <h3 style={{margin:'0px 15px', paddingTop:10}}>
-                    Resulting SQL
-                </h3>
-                <CoolTextField value={query} style={{paddingRight: 25, height:'100%'}} maxRows={8} multiline disabled label='SQL Query' />
+                <h3 style={{margin:'0px 15px', paddingTop:10}}>Resulting SQL</h3>
+                <CoolTextField value={query} style={{paddingRight: 25, height:'100%'}} maxRows={8} multiline disabled />
             </div>
         {/* } */}
     </div>
