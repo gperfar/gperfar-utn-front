@@ -110,7 +110,7 @@ background-color: #E5E7E9;
 `;
 
 export const Content = styled.div`
-flex:6;
+flex:8;
 justify-content:center;
 padding: 1em;
 background: whitesmoke;

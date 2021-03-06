@@ -17,7 +17,7 @@ import Divider from '@material-ui/core/Divider';
 import { InsideMapSelect } from './InsideMapSelect';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import {CoolButton} from '../Components/CoolButton';
+import {CoolButton2} from '../Components/CoolButton';
 
 export const ContainerHorizontal = styled.div`
 display:flex;
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     // maxWidth: '30%',
     overflow: 'auto',
-    maxHeight: 600,
+    maxHeight: 500,
     height: '100%'
     // marginTop: '15px'
   }
@@ -77,7 +77,8 @@ export function VisualQueryBuilder(props) {
 
   const [tables, setTables] = React.useState([]);
   const [allSelectedTableColumns, setAllSelectedTableColumns] = React.useState([]);
-  
+  const [showSQL, setShowSQL] = React.useState(false);
+
   // These below are the ones saved in VisualQueryParams
   const [selectedTable, setSelectedTable] = React.useState(params["selected_table"] || '' );
   const [selectedColumns, setSelectedColumns] = React.useState(params["selected_columns"]|| []);
@@ -96,7 +97,7 @@ export function VisualQueryBuilder(props) {
   // Consts...
   const grouping_options = ['Distinct', 'Max', 'Min', 'Count', 'Sum', 'Avg'];
   const filtering_options = ['Null', 'Not null', 'Less than', 'Greater than', 'Equals', 'Does not equal'];
-  const join_options = ['Full Outer Join', 'Left Join', 'Inner Join'];
+  const join_options = ['Outer', 'Left', 'Inner'];
   
   const grouping_options_convert = {
       'Max': 'MAX(',
@@ -113,6 +114,12 @@ export function VisualQueryBuilder(props) {
       'Greater than': ' > ',
       'Equals': ' = ',
       'Does not equal': ' != '
+  }
+
+  const join_options_convert = {
+      'Outer': 'FULL OUTER JOIN',
+      'Left' : 'LEFT JOIN',
+      'Inner': 'INNER JOIN'
   }
 
   useEffect(() => {
@@ -222,14 +229,14 @@ const handleMoveTableUp = (event, index) => {
     temp_selectedTables = array_move(temp_selectedTables,index,index -1);
     setSelectedTables(temp_selectedTables);
     console.log(temp_selectedTables);
-    setRender(render + 1);
+    setUpdateInTables(updateInTables + 1);
   }
 
   const handleMoveTableDown = (event, index) => {
     var temp_selectedTables = selectedTables;
     temp_selectedTables = array_move(temp_selectedTables,index,index +1);
     setSelectedTables(temp_selectedTables);
-    setRender(render + 1);
+    setUpdateInTables(updateInTables + 1);
     console.log(temp_selectedTables);
   }
 
@@ -257,6 +264,10 @@ const handleMoveTableUp = (event, index) => {
     setRender2(render2 + 1);
   }
 
+  const handleToggleShowSQL = (event) => {
+      setShowSQL(!showSQL);
+  }
+
   const buildQuery = (event) => {
     var temp_query = 'SELECT \n \t'
     // All columns selected
@@ -271,7 +282,7 @@ const handleMoveTableUp = (event, index) => {
     temp_query = temp_query.slice(0,-3).concat('\nFROM \n \t');
     // All involved tables
     selectedTables.map((table, index) => {
-      if (index > 0) temp_query = temp_query.concat('\n\t', tableJoins[index-1].toUpperCase(), ' ');
+      if (index > 0) temp_query = temp_query.concat('\n\t', join_options_convert[tableJoins[index-1]], ' ');
       temp_query = temp_query.concat(table);
       if (index > 0) temp_query = temp_query.concat(' ON ', joinKeys[index-1]["left"], ' = ', joinKeys[index-1]["right"],' \n\t');
     });
@@ -366,7 +377,7 @@ const handleMoveTableUp = (event, index) => {
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
-                                    {index < selectedColumns.length -1 && <Divider light style={{marginLeft:15, marginRight:15}}/>}
+                                    {/*index < selectedColumns.length -1  && */ <Divider light style={{marginLeft:15, marginRight:15}}/>}
                                 </div>
                             ))}
                         </List>
@@ -398,7 +409,7 @@ const handleMoveTableUp = (event, index) => {
                                             <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveColumnFromFilter(event, index)}><DeleteIcon /></IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
-                                    {index < selectedFilters.length -1 && <Divider light style={{marginLeft:15, marginRight:15}}/>}
+                                    {/*index < selectedFilters.length -1 && */ <Divider light style={{marginLeft:15, marginRight:15}}/>}
                                 </div>
                             ))}
                         </List>
@@ -406,94 +417,94 @@ const handleMoveTableUp = (event, index) => {
                     {/* } */}
                 </div>
         </ContainerHorizontal2>
-        <Divider />
-        {selectedTables.length > 0 &&
-            <div className={classes.listcontainer}>
-                <h3 style={{margin:'0px 15px', paddingTop:10}}>
-                    Table Joins
-                </h3>
-                <Divider style={{marginLeft:15, marginRight:15}}/>
-                <List className={classes.list} style={{paddingRight:15}}>
+        <Divider style={{marginBottom:15}}/>
+        <ContainerHorizontal2>
+            <div className={classes.listcontainer} style={{flex: 2}}>
+                <h3 style={{margin:0, paddingTop:10, marginLeft:15}}>Tables used</h3>
+                <Divider style={{marginLeft:15, marginRight: -35}}/>
+                <List className={classes.list} style={{paddingRight:15, marginRight: -35}}>
                     {selectedTables.map((row, index) => (
                         <div>
                             <ListItem style={{alignItems: 'baseline'}}>
-                                <div style={{width: '25%', marginRight: 15}}>
+                                <div style={{/*width: '25%', marginRight: 15*/}}>
                                     {index == 0 &&
-                                        <h4 className='coolcolors' style={{margin:'0px 15px'}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h4>
+                                        <h4 className='coolcolors' style={{margin:0}}> {row.charAt(0).toUpperCase() + row.substring(1)} </h4>
                                     } 
                                 </div>
                                 <div style={{width:'100%'}}>
                                     {index > 0 && 
+                                    <div>
                                         <div style={{width:'100%', display:'flex',flexDirection:'row', alignItems:'baseline'}}>
-                                            <InsideMapSelect title='Join type' list={join_options} colIndex={index-1} state={{columnArray: [tableJoins,setTableJoins], render: [render, setRender] }}/>
-                                            <h4 className='coolcolors' style={{margin:'0px 15px', minWidth:250}}> {typeof row !='undefined' && row.charAt(0).toUpperCase() + row.substring(1)} </h4>
-                                            <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> ON </p>
-                                            <InsideMapSelect title={'Previous tables\'s key'} list={[...new Set(structure.filter(item => selectedTables.slice(0,index).includes(item.table_name)))].map(item => item.table_name.concat('.',item.column_name))} rowProperty='left' colIndex={index-1} state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
-                                            <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> = </p>
-                                            <InsideMapSelect title={row + ' key'} list={[...new Set(structure.filter(item => item.table_name === row))].map(item => item.table_name.concat('.',item.column_name))} colIndex={index-1} rowProperty='right' state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
+                                            <h4 className='coolcolors' style={{margin:0, flex:3}}> {typeof row !='undefined' && row.charAt(0).toUpperCase() + row.substring(1)} </h4>
                                         </div>
+                                        <div style={{width:'100%', marginLeft:15, paddingRight: 15, display:'flex',flexDirection:'row', alignItems:'baseline'}}>
+                                            <InsideMapSelect style={{}} title='Join type' list={join_options} colIndex={index-1} state={{columnArray: [tableJoins,setTableJoins], render: [render, setRender] }}/>
+                                            <p style={{marginLeft: 25, marginRight: 15, textIndent: 0}}> ON </p>
+                                            <InsideMapSelect title={'Query\'s key'} list={[...new Set(structure.filter(item => selectedTables.slice(0,index).includes(item.table_name)))].map(item => item.table_name.concat('.',item.column_name))} rowProperty='left' colIndex={index-1} state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
+                                            <p style={{marginLeft: 15, marginRight: 15, textIndent: 0}}> = </p>
+                                            <InsideMapSelect title={row + '\'s key'} list={[...new Set(structure.filter(item => item.table_name === row))].map(item => item.table_name.concat('.',item.column_name))} colIndex={index-1} rowProperty='right' state={{columnArray: [joinKeys,setJoinKeys], render: [render, setRender] }}/>
+                                        </div>
+                                    </div>
                                     }
                                 </div>
-                                <ButtonGroup style={{marginLeft: 15, marginRight: 15}} color="primary" aria-label="outlined primary button group">
+                                <Divider orientation="vertical" flexItem variant="middle" style={{marginLeft:15}}/>
+                                <ButtonGroup style={{marginLeft: 0, marginRight: -15}} color="primary" aria-label="outlined primary button group">
                                     {index > 0 ? <Button onClick={(event) => handleMoveTableUp(event,index)}>▲</Button> : <Button disabled onClick={(event) => handleMoveTableUp(event,index)}>▲</Button>}
                                     {index < selectedTables.length - 1 ? <Button onClick={(event) => handleMoveTableDown(event,index)}>▼</Button> : <Button disabled onClick={(event) => handleMoveTableDown(event,index)}>▼</Button>}
                                 </ButtonGroup>
                             </ListItem>
-                            {index < selectedTables.length -1 && <Divider light style={{marginLeft:25, marginRight:25}}/>}
+                            {/*index < selectedTables.length -1*/ true && <Divider light style={{marginLeft:25, marginRight:0}}/>}
                         </div>
                     ))}
                 </List>
             </div>
-        }
-        <Divider />
-        {/* {selectedTables.length > 0 && */}
-            <div className={classes.listcontainer} style={{margin:'0px 15px', overflowX:'scroll'}}>
-                <h3 style={{paddingTop:10}}> Sorting & Row limiting options </h3>
-                <Divider style={{marginLeft:25, marginRight:25}}/>
-                <h4 className='coolcolors' style={{margin:0}}>Sort results</h4>
-                <ContainerHorizontal style={{alignItems:'flex-end'}} >
-                    {sortByColumns.map((row, index) => (
-                        <ContainerHorizontal style={{alignItems:'flex-end'}}>
-                            <div style={{width: 150, marginLeft: 15, marginRight: 15}}>
-                                <InsideMapSelect 
-                                    title={'Priority '.concat(index + 1, ' column')} 
-                                    list={[... new Set(selectedColumns.map(column => column.label))]} 
-                                    colIndex={index} 
-                                    rowProperty='label' 
-                                    state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
-                            </div>
-                            <div style={{width: 75}}>
-                                <InsideMapSelect 
-                                    title='Mode' 
-                                    list={['ASC', 'DESC']} 
-                                    colIndex={index} 
-                                    rowProperty='mode' 
-                                    state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
-                            </div>
-                            <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveSortByColumn(event, index)}><DeleteIcon /></IconButton>
-                            <Divider orientation="vertical" light flexItem/>
+            <Divider orientation="vertical" flexItem variant="middle" style={{marginLeft:50}}/>
+                <div className={classes.listcontainer} style={{flex: 1}}>
+                    <div>
+                        <h3 style={{margin:0, paddingTop:10}}> Order & Row Limit </h3>
+                        <Divider style={{marginRight:15}}/>
+                        <h4 className='coolcolors' style={{margin:0}}>Sort results</h4>
+                        <List className={classes.list} style={{paddingRight:15}} >
+                            {sortByColumns.map((row, index) => (
+                                <div>
+                                    <ListItem style={{alignItems:'flex-end'}}>
+                                        <div style={{width: 250, marginRight: 15}}>
+                                            <InsideMapSelect 
+                                                title={'Priority '.concat(index + 1, ' column')} 
+                                                list={[... new Set(selectedColumns.map(column => column.label))]} 
+                                                colIndex={index} 
+                                                rowProperty='label' 
+                                                state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
+                                        </div>
+                                        <div style={{width: 75}}>
+                                            <InsideMapSelect 
+                                                title='Mode' 
+                                                list={['ASC', 'DESC']} 
+                                                colIndex={index} 
+                                                rowProperty='mode' 
+                                                state={{columnArray: [sortByColumns,setSortByColumns], render: [render, setRender] }}/>
+                                        </div>
+                                        <IconButton edge="end" aria-label="add" onClick={(event) => handleRemoveSortByColumn(event, index)}><DeleteIcon /></IconButton>
+                                    </ListItem>
+                                    <Divider light flexItem/>
+                                </div>
+                            ))}
+                            <CoolButton2 style={{paddingLeft:0, paddingRight:0, marginLeft:15}} onClick={handleAddSortByColumn}> + </CoolButton2>
+                        </List>
+                        <h4 className='coolcolors' style={{margin:0}} >Row limits</h4>
+                        <ContainerHorizontal>
+                            <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='100' type='number' label='Limit' value={rowLimit} onChange={handleRowLimitChange}/>
+                            <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='0' type='number' label='Offset' value={rowLimitOffset} onChange={handleRowLimitOffsetChange}/>
                         </ContainerHorizontal>
-                    ))}
-                    <CoolButton style={{paddingLeft:5, paddingRight:5}} onClick={handleAddSortByColumn}> + </CoolButton>
-                </ContainerHorizontal>
-                {/* <Divider light style={{marginLeft:25, marginRight:25}}/> */}
-                <h4 className='coolcolors' style={{margin:0}} >Row limits</h4>
-                <ContainerHorizontal>
-                    <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='100' type='number' label='Limit' value={rowLimit} onChange={handleRowLimitChange}/>
-                    <CoolTextField style={{width:60, marginTop:0, marginRight:0}} placeholder='0' type='number' label='Offset' value={rowLimitOffset} onChange={handleRowLimitOffsetChange}/>
-                </ContainerHorizontal>
-                {/* <Divider light style={{marginLeft:25, marginRight:25}}/> */}
-                {/* <Divider style={{marginLeft:25, marginRight:25}}/>
-                <p>I have to do this :) </p> */}
-            </div>
-        {/* } */}
+                    </div>
+                </div>
+        </ContainerHorizontal2>
         <Divider />
-        {/* {selectedTables.length > 0 && */}
-            <div>
-                <h3 style={{margin:'0px 15px', paddingTop:10}}>Resulting SQL</h3>
-                <CoolTextField value={query} style={{paddingRight: 25, height:'100%'}} maxRows={8} multiline disabled />
-            </div>
-        {/* } */}
+        <CoolButton2 onClick={handleToggleShowSQL}> {showSQL? 'Hide resulting SQL' : 'Show resulting SQL'} </CoolButton2>
+        { showSQL && <div style={{width:'100%', margin:0}}>
+            <h3 style={{margin:'0px 0px', paddingTop:10}}>Resulting SQL</h3>
+            <CoolTextField value={query} style={{margin:'0px 0px', height:'100%', padding:'0px 15px'}} maxRows={8} multiline disabled />
+        </div> }
     </div>
   );
 }

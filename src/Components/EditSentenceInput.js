@@ -176,7 +176,9 @@ export function EditSentenceInput (props){
                             <CoolTextField value={name} type="text" label='Sentence Name' onChange={handleNameChange} />
                             <ModelSelect title='Connection' list={connections} state={{ selectedID: [connectionID, setConnectionID] }} />
                         </ContainerHorizontal>
-                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                        <ContainerHorizontal>
+                            <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                        </ContainerHorizontal>
                         {typeof(connectionStructure) !== 'undefined'?
                             <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] , params: [visualQueryParams, setVisualQueryParams]}} />:
                             <p>{typeof(connectionStructure)}</p>
@@ -184,14 +186,14 @@ export function EditSentenceInput (props){
                         {/* <CoolTextField value={SQLQuery} multiline type="text" placeholder='SELECT * FROM movies WHERE stars = 5' label='SQL Query' onChange={handleSQLQueryChange} /> */}
                     </ContainerVertical>
                 {/* </form> */}
+                <div>
+                    <CoolButton onClick={handleTest}> Test </CoolButton>
+                    {/* <CoolButton onClick={handleSave}> Save </CoolButton> */}
+                    {sentenceID > 0? 
+                            <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Sentence </CoolButton>
+                    }
+                </div>
                 <SDATable info={queryResults} />
-                    <div>
-                        <CoolButton onClick={handleTest}> Test </CoolButton>
-                        {/* <CoolButton onClick={handleSave}> Save </CoolButton> */}
-                        {sentenceID > 0? 
-                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Sentence </CoolButton>
-                        }
-                    </div>
             </div>
       );
     }
