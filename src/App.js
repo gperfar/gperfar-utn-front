@@ -5,7 +5,7 @@ import {Landing} from './Pages/Landing'
 import {Connections, NewConnection, EditConnection} from './Pages/Connections'
 import {Sentences, NewSentence, EditSentence} from './Pages/Sentences'
 import {Visualizations, RenderVisualization, NewVisualization, EditVisualization} from './Pages/Visualizations'
-import {Dashboards, EditDashboard, NewDashboard} from './Pages/Dashboards'
+import {Dashboards, EditDashboard, NewDashboard, RenderDashboard} from './Pages/Dashboards'
 import {RunQuery} from './Pages/RunQuery'
 import {Panel} from './Pages/Panel'
 import ScrollToTop from './Components/ScrollToTop';
@@ -29,6 +29,7 @@ export default function App()  {
           <Route path="/visualizations/edit/:id"><EditVisualization /></Route>
           <Route path="/visualizations/render/:id"><RenderVisualization /></Route>
           <Route path="/visualizations"><Visualizations /></Route>
+          <Route path="/dashboards/render/:id"><RenderDashboard /></Route>
           <Route path="/dashboards/edit/:id"><EditDashboard /></Route>
           <Route path="/dashboards/new"><NewDashboard /></Route>
           <Route path="/dashboards"><Dashboards /></Route>

@@ -190,8 +190,8 @@ align-items: baseline;
                             {dashboardVisualizations.map((vis,index) => (
                                 <div>
                                     <ContainerHorizontal>
-                                        <h3 >{vis.name} </h3>
-                                        <CoolTextField value={vis.order} InputLabelProps={{shrink: true}} type="number" label={'Order'} onChange={(event) => handleVisualizationOrderChange(event, index, vis.order)} />
+                                        <h3 style={{flex:3}}>{vis.name} </h3>
+                                        <CoolTextField style={{flex:1}} value={vis.order} InputLabelProps={{shrink: true}} type="number" label={'Order'} onChange={(event) => handleVisualizationOrderChange(event, index, vis.order)} />
                                         <CoolButton2 onClick={(event) => handleRemoveVisualization(event, index)}> Remove </CoolButton2>
                                         {/* <ColumnSelectYAxis columns={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/> */}
                                         {/* <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} /> */}

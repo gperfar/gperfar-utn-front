@@ -152,7 +152,10 @@ export function RenderVisualization (props){
   const [preRenderData, setPreRenderData] = useState([]);
 
   useEffect(() => {
-    VisualizationPreRender().then(data => setPreRenderData(data));
+    VisualizationPreRender().then(data => {
+      setPreRenderData(data);
+      console.log(data);
+    });
     }, []);
 
   return (

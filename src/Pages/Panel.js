@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {NavBar} from '../Components/NavBar';
 import {GlobalStyle, MainContainer, Content} from '../GlobalStyles';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Redirect, Link, useParams } from "react-router-dom";
 
 
 const GridContainer = styled.div`
@@ -107,12 +108,26 @@ export function Panel (){
     // const [login,setLogin] = usePersistentState('login')
 
 
-
+    const [redirect, setRedirect] = useState('');
     const [results, setResults] = useState([]);
+    const [selectedDashboard, setSelectedDashboard] = useState('');
+    
+    
     useEffect(() => {
         getResults().then(data => setResults(data.result.dashboards));
         console.log(results);
       }, []);
+
+    const handleClickOnTitle = (event) => {
+      setSelectedDashboard(event.target.getAttribute("data-index"));
+      setRedirect('render');
+    }
+
+    if (redirect === 'render' && selectedDashboard > 0) {
+      console.log('Rendering dashboard ' + selectedDashboard.toString() + '...')
+      return <Redirect to={'/dashboards/render/'+ selectedDashboard.toString()} />
+    }
+    
     return (
         <MainContainer>
           <GlobalStyle />
@@ -122,7 +137,7 @@ export function Panel (){
               <GridContainer>
                 {results.map(result => (
                   <GridItem>
-                    <h2>{result.name}</h2>
+                    <h2 style={{cursor:'pointer'}} data-index={result._id} onClick={handleClickOnTitle}>{result.name}</h2>
                     <p className="panel-card-p"> {result.comment} </p>
                   </GridItem>
                     ))}
