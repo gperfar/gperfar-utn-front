@@ -7,19 +7,18 @@ import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHo
 import {EditSentenceInput} from '../Components/EditSentenceInput';
 import { Redirect, Link, useParams } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import Modal from '@material-ui/core/Modal';
+import { makeStyles } from '@material-ui/core/styles';
+import { SimpleSelect } from '../Components/SimpleSelect';
+import { CoolTextField } from '../Components/CoolTextField';
+import { ShareModal } from '../Components/ShareModal';
 
 
 export function Sentences (props){
 
-  
-  // async function getResults() {
-  //     const url = "https://gperfar-utn.herokuapp.com/sentences";
-  //     const response = await fetch(url);
-  //     const data = await response.json();
-  //     return data;
-  //   }
 
     const { user } = useAuth0();
+
     async function getResults(){
         const requestOptions = {
             method: 'POST',
@@ -27,7 +26,6 @@ export function Sentences (props){
             body: JSON.stringify({ 
                 'user_id': user.sub})
         };
-        console.log(requestOptions);
         const response = await fetch('https://gperfar-utn.herokuapp.com/sentences', requestOptions);
         const data = await response.json();
         console.log(data.results);
@@ -48,62 +46,66 @@ export function Sentences (props){
       return data;
   }
 
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState([]);  
+    const [redirect, setRedirect] = React.useState('');      
+    const [selectedSentence, setSelectedSentence] = React.useState();
+    const [selectedSentenceObject, setSelectedSentenceObject] = React.useState({});      
+    const [modalOpen, setModalOpen] = React.useState(false);
+    
     useEffect(() => {
       getResults().then(data => setResults(data.result.sentences));
-      // console.log(results);
       }, []);
 
-      const [redirect, setRedirect] = React.useState('');      
-      const [selectedSentence, setSelectedSentence] = React.useState();      
+    const handleSentenceEdit= (event)=>{
+      console.log("Editing sentence " + event.target.getAttribute("data-index"));
+      setSelectedSentence(event.target.getAttribute("data-index"));
+      setRedirect('edit');
       
-      const handleSentenceEdit= (event)=>{
-        console.log("Editing sentence " + event.target.getAttribute("data-index"));
-        setSelectedSentence(event.target.getAttribute("data-index"));
-        setRedirect('edit');
-        
-      }
+    }
       
-      const handleSentenceDelete= function(event){
-        if (confirm('Are you sure you want to delete this sentence?')) {
-          // Delete it!
-          console.log("Deleting sentence " + event.target.getAttribute("data-index"));
-          DeleteSentence(event.target.getAttribute("data-index")).then(data=> console.log(data));
-          return <Redirect to={'/panel/'} />
-        } else {
-          // Do nothing!
-          console.log('You saved sentence ' + event.target.getAttribute("data-index") + '\'s ass');
-        }
+    const handleSentenceDelete= function(event){
+      if (confirm('Are you sure you want to delete this sentence?')) {
+        // Delete it!
+        console.log("Deleting sentence " + event.target.getAttribute("data-index"));
+        DeleteSentence(event.target.getAttribute("data-index")).then(data=> console.log(data));
+        return <Redirect to={'/panel/'} />
+      } else {
+        // Do nothing!
+        console.log('You saved sentence ' + event.target.getAttribute("data-index") + '\'s ass');
       }
+    }
 
-      const handleCreateVisualization= (event)=>{
-        // TO DO
-        console.log("Editing sentence " + event.target.getAttribute("data-index"));
-        setSelectedSentence(event.target.getAttribute("data-index"));
-        setRedirect('createVisualization');
-        
-      }
+    const handleCreateVisualization= (event)=>{
+      console.log("Editing sentence " + event.target.getAttribute("data-index"));
+      setSelectedSentence(event.target.getAttribute("data-index"));
+      setRedirect('createVisualization');
+      
+    }
 
-      const {isAuthenticated} = useAuth0();
+    const handleShare= (event)=>{
+      console.log("Sharing sentence " + event.target.getAttribute("data-index"));
+      setSelectedSentence(event.target.getAttribute("data-index"));
+      setSelectedSentenceObject(results[event.target.getAttribute("data-index") - 1])
+      setModalOpen(true);
+      
+    }
 
-      if (!isAuthenticated) {
-        return <Redirect to={'/'} />
-      }
-      if (redirect === 'edit' && selectedSentence > 0) {
-        return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
-      }
-      if (redirect === 'createVisualization' && selectedSentence > 0) {
-        return <Redirect to={'/visualizations/new/'+ selectedSentence.toString()} />
-      }
+    if (redirect === 'edit' && selectedSentence > 0) {
+      return <Redirect to={'/sentences/edit/'+ selectedSentence.toString()} />
+    }
+    if (redirect === 'createVisualization' && selectedSentence > 0) {
+      return <Redirect to={'/visualizations/new/'+ selectedSentence.toString()} />
+    }
     return (
-      isAuthenticated && (
+      true && (//isAuthenticated && (    TAL VEZ ITEM DEBERIA SER PARTE DE STATE PARA QUE SE ACTUALICE. PROBAR.
         <MainContainer>
+          <ShareModal model='sentence' state={{ open: [modalOpen, setModalOpen], object: [selectedSentenceObject, setSelectedSentenceObject]}} /> 
           <NavBar />
           <SideContainer>
             <GlobalStyle />
               <SideBar />
               <Content>
-                <h1>Sentences</h1>
+                <h1>Sentences {selectedSentence}</h1>
                 <h2><Link to='/sentences/new'> Create new Sentence... </Link></h2>
                  {results.map(result => (
                   <div>
@@ -122,6 +124,11 @@ export function Sentences (props){
                       <CoolButton2 data-index={result._id} onClick={handleCreateVisualization}>
                         <span data-index={result._id}>
                           Create Visual
+                        </span>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleShare}>
+                        <span data-index={result._id}>
+                          Share
                         </span>
                       </CoolButton2>
                     </ContainerHorizontal>

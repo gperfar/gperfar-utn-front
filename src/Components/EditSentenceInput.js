@@ -105,6 +105,7 @@ export function EditSentenceInput (props){
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
+                'user_id':user.sub,
                 'sentence_id':sentenceID,
                 'connection_id': connectionID,
                 'sql_query': SQLQuery,
@@ -124,6 +125,7 @@ export function EditSentenceInput (props){
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
+                'user_id':user.sub,
                 'connection_id': connectionID,
                 'sql_query': SQLQuery,
                 'comment': comment,
