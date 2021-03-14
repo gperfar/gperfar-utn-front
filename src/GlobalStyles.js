@@ -33,7 +33,7 @@ h2,h3, h5 {
 }
 h4{
   padding-right: 1em;
-  margin-bottom:10px;
+  // margin-bottom:10px;
   margin-left:10px;
   color: #E5E7E9;
 }

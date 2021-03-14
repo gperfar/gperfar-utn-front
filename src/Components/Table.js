@@ -50,7 +50,12 @@ import {CoolButton} from './CoolButton'
 
     const fullHeadCells = []
     Object.entries(headCells).map(headCell => (
-        fullHeadCells.push({ id: headCell[0], numeric: false, disablePadding: false, label: headCell[1] })
+        fullHeadCells.push({
+          id: headCell[0], 
+          numeric: false, 
+          disablePadding: false, 
+          label: headCell[1] 
+        })
     ))
 
 
@@ -154,10 +159,12 @@ import {CoolButton} from './CoolButton'
     var headCells = [];
     
     if (typeof props.info !== 'undefined') {
-      rows = props.info;
+      rows = props.visualrender ? props.info.results : props.info;
+      console.log(rows);
+      console.log(props.info);
       row0=rows[0];
       for(var key in row0){
-          headCells.push(key)
+          props.visualrender? props.info.column_data.map(column => column["name"]).includes(key) && headCells.push(key) : headCells.push(key)
         } 
     }
     

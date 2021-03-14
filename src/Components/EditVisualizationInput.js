@@ -236,7 +236,6 @@ export function EditVisualizationInput (props){
         temp[index] = event.target.value;
         setYAxisColumnLegends(temp);
         setRender(render + 1);
-        // buildParams();
     }
     
     const handleYAxisColumnColorsChange = (event, index) => {
@@ -244,7 +243,6 @@ export function EditVisualizationInput (props){
         temp[index] = event.target.value;
         setYAxisColumnColors(temp);
         setRender(render + 1)
-        // buildParams();
     }
     
     function buildParams (){
@@ -264,6 +262,7 @@ export function EditVisualizationInput (props){
             scatter_shape: scatterShape
         }
         setParams(tempParams);
+        console.log(tempParams);
     } 
     
     const handleAddLine = (event) => {
@@ -289,7 +288,6 @@ export function EditVisualizationInput (props){
     }
     
     const handleRender = (event) => {
-        // buildParams();
         setLocalRenderData({
             column_data: params.columns,
             results: queryResults,
@@ -298,8 +296,7 @@ export function EditVisualizationInput (props){
             xaxis_label: xAxisLabel !==''? xAxisLabel:'',
             yaxis_label: yAxisLabel !==''? yAxisLabel:''
         });
-        console.log(localRenderData);
-        // console.log(typeof(localRenderData.column_data));
+        console.log([... new Set(params.columns.map(column => column["name"]))]);
         console.log(params);
     }
     
@@ -331,11 +328,9 @@ export function EditVisualizationInput (props){
                         <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
                         <h3>Category Field</h3>
                         <ContainerHorizontal>
-                            {/* <CoolTextField value={xAxisLabel} style={{width:"100%"}} type="text" label='X-Axis Label' onChange={handleXAxisLabelChange} /> */}
                             <SimpleSelect title='Column' list={headerRow} state={{ selectedItem: [xAxisColumn, setXAxisColumn] }} />
                         </ContainerHorizontal>
                         <h3>Value Field</h3>
-                        {/* <CoolTextField value={yAxisLabel} type="text" label='Y-Axis Label' onChange={handleYAxisLabelChange} /> */}
                         {[...Array(yAxisColumnCount).keys()].map(i => (
                             <ContainerHorizontal>
                                 <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Value text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} />
@@ -343,7 +338,6 @@ export function EditVisualizationInput (props){
                                 <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} />
                             </ContainerHorizontal>
                         ))}
-                        {/* <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Line </CoolButton> */}
                         <ContainerHorizontal>
                             <CoolButton onClick={handleRender}> Render </CoolButton>
                             {visualizationID > 0? 
@@ -414,6 +408,42 @@ export function EditVisualizationInput (props){
                 <h4>Hit Render to see the chart</h4>
             }
         </div>
+        );
+    }
+    if (visualizationType === 'Table') {
+        return (
+            <div>
+                <form >
+                    <ContainerVertical>
+                        <h3>General</h3>
+                        <ContainerHorizontal>
+                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
+                            <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                            <SimpleSelect title='Visualization type' list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
+                        </ContainerHorizontal>
+                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                        <h3>Columns</h3>
+                        {[...Array(yAxisColumnCount).keys()].map(i => (
+                        <ContainerHorizontal>
+                            <InsideMapSelect title='Column' list={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                        </ContainerHorizontal>
+                        ))}
+                        <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Column </CoolButton>
+                        <ContainerHorizontal>
+                            <CoolButton onClick={handleRender}> Render </CoolButton>
+                            {visualizationID > 0? 
+                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                            }
+                        </ContainerHorizontal>
+                    </ContainerVertical>
+                </form>
+                <h2>Render of the chart</h2>
+                {typeof(localRenderData.column_data)=='object'?
+                    <VisualizationController data={localRenderData} />
+                    :
+                    <h4>Hit Render to see the chart</h4>
+                }
+            </div>
         );
     }
     return (

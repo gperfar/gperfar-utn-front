@@ -31,7 +31,7 @@ export function NavBar () {
     }
 
     return(
-    <Container>
+    <Container style={{alignItems:'baseline'}}>
         <Link to="/panel"><h4>Panel</h4></Link>
         <Link to="/connections"><h4>Connections</h4></Link>
         <Link to="/sentences"><h4>Sentences</h4></Link>

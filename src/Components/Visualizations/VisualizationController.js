@@ -5,7 +5,11 @@ import {SDAAreaChart} from './Chart Types/AreaChart';
 import {SDARadarChart} from './Chart Types/RadarChart';
 import {SDAPieChart} from './Chart Types/PieChart';
 import {SDAScatterChart} from './Chart Types/ScatterChart';
+import {SDAText} from './Chart Types/Text';
+import {SDASingleValueIndicator} from './Chart Types/SingleValueIndicator';
+
 import { makeStyles } from '@material-ui/core/styles';
+import SDATable from '../Table';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +62,27 @@ export function VisualizationController (props){
       return (
         <div className={classes.root}>
           <SDAScatterChart data={props.data}/>
+        </div>
+      );
+    }
+    if (props.data.type ==='Text') {
+      return (
+        <div className={classes.root}>
+          <SDAText data={props.data}/>
+        </div>
+      );
+    }
+    if (props.data.type ==='Table') {
+      return (
+        <div className={classes.root}>
+          <SDATable info={props.data} visualrender='true'/>
+        </div>
+      );
+    }
+    if (props.data.type ==='Single Value Indicator') {
+      return (
+        <div className={classes.root}>
+          <SDASingleValueIndicator data={props.data}/>
         </div>
       );
     }
