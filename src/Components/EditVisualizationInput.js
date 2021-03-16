@@ -256,6 +256,8 @@ export function EditVisualizationInput (props){
             })
         });
         var tempParams = {
+            name: name,
+            comment: comment,
             columns: tempColumns,
             xaxis_label: xAxisLabel,
             yaxis_label: yAxisLabel,
@@ -289,6 +291,8 @@ export function EditVisualizationInput (props){
     
     const handleRender = (event) => {
         setLocalRenderData({
+            name: name,
+            comment: comment,
             column_data: params.columns,
             results: queryResults,
             type: visualizationType,
@@ -410,7 +414,7 @@ export function EditVisualizationInput (props){
         </div>
         );
     }
-    if (visualizationType === 'Table') {
+    if (visualizationType === 'Table' || visualizationType==='Single value indicator') {
         return (
             <div>
                 <form >
@@ -428,7 +432,42 @@ export function EditVisualizationInput (props){
                             <InsideMapSelect title='Column' list={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
                         </ContainerHorizontal>
                         ))}
-                        <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Column </CoolButton>
+                        { visualizationType==='Table' &&
+                            <CoolButton style={{width:"10%"}} onClick={handleAddLine}> Add Column </CoolButton>}
+                        <ContainerHorizontal>
+                            <CoolButton onClick={handleRender}> Render </CoolButton>
+                            {visualizationID > 0? 
+                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                            }
+                        </ContainerHorizontal>
+                    </ContainerVertical>
+                </form>
+                <h2>Render of the chart</h2>
+                {typeof(localRenderData.column_data)=='object'?
+                    <VisualizationController name={name} comment={comment} data={localRenderData} />
+                    :
+                    <h4>Hit Render to see the chart</h4>
+                }
+            </div>
+        );
+    }
+    if (visualizationType === 'Text') {
+        return (
+            <div>
+                <form >
+                    <ContainerVertical>
+                        <h3>General</h3>
+                        <ContainerHorizontal>
+                            <CoolTextField value={name} type="text" label='Name / Title' onChange={handleNameChange} style={{width: "100%"}}/>
+                            <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                            <SimpleSelect title='Visualization type' list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
+                        </ContainerHorizontal>
+                        <CoolTextField value={comment} type="text" label='Comment / Subtitle' onChange={handleCommentChange} />
+                        <h3>Text</h3>
+                        <ContainerVertical>
+                            {/* <CoolTextField value={yAxisLabel} type="text" label='Title' onChange={handleYAxisLabelChange} /> */}
+                            <CoolTextField value={yAxisColumnLegends[0]} style={{height:'100%'}} maxRows={8} multiline type="text" label={'Text'} onChange={(event) => handleYAxisColumnLegendsChange(event, 0)} />
+                        </ContainerVertical>
                         <ContainerHorizontal>
                             <CoolButton onClick={handleRender}> Render </CoolButton>
                             {visualizationID > 0? 
@@ -482,7 +521,7 @@ export function EditVisualizationInput (props){
             </form>
             <h2>Render of the chart</h2>
             {typeof(localRenderData.column_data)=='object'?
-                <VisualizationController data={localRenderData} />
+                <VisualizationController name={name} comment={comment} data={localRenderData} />
                 :
                 <h4>Hit Render to see the chart</h4>
             }

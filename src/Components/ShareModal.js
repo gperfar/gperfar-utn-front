@@ -91,7 +91,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
   const shareModal = (
     <div style={{top:`50%`, left: `50%`, transform: `translate(-50%, -50%)`}} className={classes.paper}>
-      <h2 id="simple-modal-title">Share sentence {typeof(object)!=='undefined' && object._id }</h2>
+      <h2 id="simple-modal-title">Share {props.model} {typeof(object)!=='undefined' && object._id }</h2>
       {accessLines.map((line, index) => (
         <ContainerHorizontal style={{display:'flex', alignItems: 'baseline'}}>
           <CoolTextField value={line.user_id||''} type="text" label={'User'} onChange={(event) => handleAccessLineUserChange(event, index)}/>

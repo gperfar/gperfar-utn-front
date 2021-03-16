@@ -49,20 +49,18 @@ export function Sentences (props){
     const [results, setResults] = useState([]);  
     const [redirect, setRedirect] = React.useState('');      
     const [selectedSentence, setSelectedSentence] = React.useState();
-    const [selectedSentenceObject, setSelectedSentenceObject] = React.useState({});      
-    const [modalOpen, setModalOpen] = React.useState(false);
     
     useEffect(() => {
       getResults().then(data => setResults(data.result.sentences));
-      }, []);
-
+    }, []);
+    
     const handleSentenceEdit= (event)=>{
       console.log("Editing sentence " + event.target.getAttribute("data-index"));
       setSelectedSentence(event.target.getAttribute("data-index"));
       setRedirect('edit');
       
     }
-      
+    
     const handleSentenceDelete= function(event){
       if (confirm('Are you sure you want to delete this sentence?')) {
         // Delete it!
@@ -74,14 +72,16 @@ export function Sentences (props){
         console.log('You saved sentence ' + event.target.getAttribute("data-index") + '\'s ass');
       }
     }
-
+    
     const handleCreateVisualization= (event)=>{
       console.log("Editing sentence " + event.target.getAttribute("data-index"));
       setSelectedSentence(event.target.getAttribute("data-index"));
       setRedirect('createVisualization');
       
     }
-
+    
+    const [selectedSentenceObject, setSelectedSentenceObject] = React.useState({});      
+    const [modalOpen, setModalOpen] = React.useState(false);
     const handleShare= (event)=>{
       console.log("Sharing sentence " + event.target.getAttribute("data-index"));
       setSelectedSentence(event.target.getAttribute("data-index"));

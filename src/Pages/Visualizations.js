@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect, Link, useParams } from "react-router-dom";
 import {EditVisualizationInput} from '../Components/EditVisualizationInput';
 import {VisualizationController} from '../Components/Visualizations/VisualizationController';
+import { ShareModal } from '../Components/ShareModal';
 
 export function Visualizations (){
 
@@ -83,6 +84,16 @@ export function Visualizations (){
       
     }
 
+    const [selectedVisualizationObject, setSelectedVisualizationObject] = React.useState({});      
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleShare= (event)=>{
+    console.log("Sharing dashboard " + event.target.getAttribute("data-index"));
+    setSelectedVisualization(event.target.getAttribute("data-index"));
+    setSelectedVisualizationObject(visualizations[event.target.getAttribute("data-index") - 1])
+    setModalOpen(true);
+
+  }
+
     if (redirect === 'render' && selectedVisualization > 0) {
       return <Redirect to={'/visualizations/render/'+ selectedVisualization.toString()} />
     }
@@ -91,6 +102,7 @@ export function Visualizations (){
     }
     return (
         <MainContainer>
+          <ShareModal model='visualization' state={{ open: [modalOpen, setModalOpen], object: [selectedVisualizationObject, setSelectedVisualizationObject]}} /> 
           <NavBar />
           <SideContainer>
             <GlobalStyle />
@@ -116,6 +128,9 @@ export function Visualizations (){
                         <span data-index={result._id}>
                           Edit
                         </span>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleShare}>
+                        <span data-index={result._id}> Share </span>
                       </CoolButton2>
                     </ContainerHorizontal>
                     <ModelCard object={result}/>

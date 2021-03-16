@@ -6,8 +6,8 @@ import {GlobalStyle, MainContainer, SideContainer, SideBar, Content, ContainerHo
 import { useAuth0 } from "@auth0/auth0-react";
 import {CoolButton2} from '../Components/CoolButton';
 import { Redirect, Link, useParams } from "react-router-dom";
-// import {NewConnectionInput} from '../Components/NewConnectionInput';
 import {EditConnectionInput} from '../Components/EditConnectionInput';
+import { ShareModal } from '../Components/ShareModal';
 
 export function Connections (){
 
@@ -76,6 +76,16 @@ export function Connections (){
       }
     }
 
+    const [selectedConnectionObject, setSelectedConnectionObject] = React.useState({});      
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleShare= (event)=>{
+    console.log("Sharing dashboard " + event.target.getAttribute("data-index"));
+    setSelectedConnection(event.target.getAttribute("data-index"));
+    setSelectedConnectionObject(results[event.target.getAttribute("data-index") - 1])
+    setModalOpen(true);
+
+  }
+
     // const {isAuthenticated} = useAuth0();
     if (redirect === 'edit' && selectedConnection > 0) {
       console.log('Editing connection ' + selectedConnection.toString() + '...')
@@ -83,6 +93,7 @@ export function Connections (){
     }
     return (
       <MainContainer>
+        <ShareModal model='connection' state={{ open: [modalOpen, setModalOpen], object: [selectedConnectionObject, setSelectedConnectionObject]}} /> 
         <NavBar />
         <SideContainer>
             <GlobalStyle />
@@ -103,6 +114,9 @@ export function Connections (){
                         <span data-index={result._id}>
                           Delete
                         </span>
+                      </CoolButton2>
+                      <CoolButton2 data-index={result._id} onClick={handleShare}>
+                        <span data-index={result._id}> Share </span>
                       </CoolButton2>
                     </ContainerHorizontal>
                     <ModelCard object={result}/>

@@ -172,22 +172,19 @@ export function EditSentenceInput (props){
     
     return (
             <div>
-                {/* <form > */}
-                    <ContainerVertical>
-                        <ContainerHorizontal>
-                            <CoolTextField value={name} type="text" label='Sentence Name' onChange={handleNameChange} />
-                            <ModelSelect title='Connection' list={connections} state={{ selectedID: [connectionID, setConnectionID] }} />
-                        </ContainerHorizontal>
-                        <ContainerHorizontal>
-                            <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
-                        </ContainerHorizontal>
-                        {typeof(connectionStructure) !== 'undefined'?
-                            <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] , params: [visualQueryParams, setVisualQueryParams]}} />:
-                            <p>{typeof(connectionStructure)}</p>
-                        }
-                        {/* <CoolTextField value={SQLQuery} multiline type="text" placeholder='SELECT * FROM movies WHERE stars = 5' label='SQL Query' onChange={handleSQLQueryChange} /> */}
-                    </ContainerVertical>
-                {/* </form> */}
+                <ContainerVertical>
+                    <ContainerHorizontal>
+                        <CoolTextField value={name} type="text" label='Sentence Name' onChange={handleNameChange} />
+                        <ModelSelect title='Connection' list={connections} state={{ selectedID: [connectionID, setConnectionID] }} />
+                    </ContainerHorizontal>
+                    <ContainerHorizontal>
+                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                    </ContainerHorizontal>
+                    {typeof(connectionStructure) !== 'undefined'?
+                        <VisualQueryBuilder connectionStructure={connectionStructure} state={{ query: [SQLQuery, setSQLQuery] , params: [visualQueryParams, setVisualQueryParams]}} />:
+                        <p>{typeof(connectionStructure)}</p>
+                    }
+                </ContainerVertical>
                 <div>
                     <CoolButton onClick={handleTest}> Test </CoolButton>
                     {/* <CoolButton onClick={handleSave}> Save </CoolButton> */}

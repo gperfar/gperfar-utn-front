@@ -9,6 +9,7 @@ import {EditDashboardInput} from '../Components/EditDashboardInput';
 import {CoolButton2} from '../Components/CoolButton';
 import {VisualizationController} from '../Components/Visualizations/VisualizationController';
 import { Divider } from '@material-ui/core';
+import { ShareModal } from '../Components/ShareModal';
 
 export function Dashboards (){
 
@@ -80,6 +81,16 @@ export function Dashboards (){
     }
   }
 
+  const [selectedDashboardObject, setSelectedDashboardObject] = React.useState({});      
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleShare= (event)=>{
+    console.log("Sharing dashboard " + event.target.getAttribute("data-index"));
+    setSelectedDashboard(event.target.getAttribute("data-index"));
+    setSelectedDashboardObject(results[event.target.getAttribute("data-index") - 1])
+    setModalOpen(true);
+    
+  }
+
     if (redirect === 'edit' && selectedDashboard > 0) {
       console.log('Editing dashboard ' + selectedDashboard.toString() + '...')
       return <Redirect to={'/dashboards/edit/'+ selectedDashboard.toString()} />
@@ -92,6 +103,7 @@ export function Dashboards (){
 
     return (
       <MainContainer>
+        <ShareModal model='dashboard' state={{ open: [modalOpen, setModalOpen], object: [selectedDashboardObject, setSelectedDashboardObject]}} /> 
         <NavBar />
         <SideContainer>
             <GlobalStyle />
@@ -112,7 +124,9 @@ export function Dashboards (){
                       <CoolButton2 data-index={result._id} onClick={handleDelete}>
                         <span data-index={result._id}>Delete</span>
                       </CoolButton2>
-
+                      <CoolButton2 data-index={result._id} onClick={handleShare}>
+                        <span data-index={result._id}> Share </span>
+                      </CoolButton2>
                     </ContainerHorizontal>
                     <ModelCard object={result}/>
                   </div>
@@ -222,8 +236,8 @@ export function Dashboards (){
                   <h1>{dashboardName}</h1>
                   {visualsResults.map((visualData,index) => (
                     <div /*style={{textAlign: 'center', justifyContent: 'center'}} */ >
-                      <h2>{dashboardVisuals[index].name}</h2>
-                      <h4 className='coolcolors' style={{marginTop:0}}>{dashboardVisuals[index].comment}</h4>
+                      {/* <h2>{dashboardVisuals[index].name}</h2> */}
+                      {/* <h4 className='coolcolors' style={{marginTop:0}}>{dashboardVisuals[index].comment}</h4> */}
                       {typeof(visualData)=='object'? <VisualizationController data={visualData}/>: <h2>Rendering...</h2>}
                       <Divider style={{marginTop:25}}/>
                     </div>
