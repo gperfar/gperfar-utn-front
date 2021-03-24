@@ -80,7 +80,7 @@ export function VisualQueryBuilder(props) {
   const [showSQL, setShowSQL] = React.useState(false);
 
   // These below are the ones saved in VisualQueryParams
-  const [selectedTable, setSelectedTable] = React.useState(params["selected_table"] || '' );
+  const [selectedTable, setSelectedTable] = React.useState(params["selected_table"]|| '');
   const [selectedColumns, setSelectedColumns] = React.useState(params["selected_columns"]|| []);
   const [selectedFilters, setSelectedFilters] = React.useState(params["selected_filters"]|| []);
   const [selectedTables, setSelectedTables] = React.useState(params["selected_tables"] || [] );
@@ -130,6 +130,7 @@ export function VisualQueryBuilder(props) {
   useEffect(() => {
     const possibleColumns = [...new Set(structure.filter(item => item.table_name === selectedTable))];
     setAllSelectedTableColumns(possibleColumns);
+    setRender(render + 1);
   }, [selectedTable]);
 
   useEffect(() => {
