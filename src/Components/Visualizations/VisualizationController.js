@@ -25,31 +25,31 @@ export function VisualizationController (props){
   const classes = useStyles();
 
     if (props.data.type ==='Line chart') {
-      return ( <div className={classes.root}> <SDALineChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDALineChart  visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     if (props.data.type ==='Bar chart') {
-      return ( <div className={classes.root}> <SDABarChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDABarChart visualizationID={props.visualizationID} data={props.data}/> </div> );
       }
     if (props.data.type ==='Area chart') {
-      return ( <div className={classes.root}> <SDAAreaChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDAAreaChart visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     if (props.data.type ==='Radar chart') {
-      return ( <div className={classes.root}> <SDARadarChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDARadarChart visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     if (props.data.type ==='Pie chart') {
-      return ( <div className={classes.root}> <SDAPieChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDAPieChart visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     if (props.data.type ==='Scatter chart') {
-      return ( <div className={classes.root}> <SDAScatterChart data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDAScatterChart visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     if (props.data.type ==='Text') {
-      return ( <div className={classes.root}> <SDAText data={props.data}/> </div>  );
+      return ( <div className={classes.root}> <SDAText visualizationID={props.visualizationID} data={props.data}/> </div>  );
     }
     if (props.data.type ==='Table') {
-      return ( <div className={classes.root}> <SDATable info={props.data} visualrender='true'/> </div> );
+      return ( <div className={classes.root}> <SDATable visualizationID={props.visualizationID} info={props.data} visualrender='true'/> </div> );
     }
     if (props.data.type ==='Single value indicator') {
-      return ( <div className={classes.root}> <SDASingleValueIndicator data={props.data}/> </div> );
+      return ( <div className={classes.root}> <SDASingleValueIndicator visualizationID={props.visualizationID} data={props.data}/> </div> );
     }
     return( <p>{props.data.type} You shouldn't be seeing this... maybe there's an error!</p> )
   }

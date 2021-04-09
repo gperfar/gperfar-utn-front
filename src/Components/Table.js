@@ -161,7 +161,7 @@ import {CoolButton} from './CoolButton'
     if (typeof props.info !== 'undefined') {
       rows = props.visualrender ? props.info.results : props.info;
       console.log(rows);
-      console.log(props.info);
+      // console.log(props.info);
       row0=rows[0];
       for(var key in row0){
           props.visualrender? props.info.column_data.map(column => column["name"]).includes(key) && headCells.push(key) : headCells.push(key)

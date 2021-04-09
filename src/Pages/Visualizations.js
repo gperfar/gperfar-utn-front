@@ -183,7 +183,7 @@ export function RenderVisualization (props){
               <h1>Render Visualization {id}</h1>
               <div style={{textAlign: 'center', justifyContent: 'center'}}>
                 {typeof(preRenderData.column_data)=='object'?
-                  <VisualizationController data={preRenderData}/>:
+                  <VisualizationController visualizationID={id} data={preRenderData}/>:
                   <h2>Rendering...</h2>
                 }
               </div>

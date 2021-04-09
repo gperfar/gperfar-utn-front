@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend, Label
 } from 'recharts';
+import { Redirect } from "react-router-dom";
 
 // const data01 = [
 //   { x: 100, y: 200, z: 200 }, { x: 120, y: 100, z: 260 },
@@ -22,7 +23,8 @@ export function SDAScatterChart (props){
   const xaxis_label = props.data.xaxis_label;
   const yaxis_label = props.data.yaxis_label;
   const shape = props.data.scatter_shape;
-
+  const name = props.data.name;
+  const comment = props.data.comment;
   // const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'Teal'];
   // const SHAPES = ['circle', 'cross', 'diamond', 'square', 'star', 'triangle', 'wye' ]
   useEffect(() => {
@@ -30,28 +32,44 @@ export function SDAScatterChart (props){
     console.log(yaxis_columns.length);
   }, []);
 
+  const visualizationID = props.visualizationID;
+  const [redirect, setRedirect] = React.useState('');      
+  const [selectedVisualization, setSelectedVisualization] = React.useState();
+  const handleNameClick = (event) => {
+    console.log("Editing visualization " + visualizationID.toString());
+    setSelectedVisualization(visualizationID);
+    setRedirect('edit');
+  }
+  if (redirect === 'edit' && selectedVisualization > 0) {
+    return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
+  }
+
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <ScatterChart margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
-        <CartesianGrid />
-        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-        <XAxis type="number" dataKey={xaxis_column.name} name={xaxis_label} /*unit="cm"*/ >
-          <Label value={xaxis_label} offset={-10} position="bottom" />
-        </XAxis>
-        <YAxis type="number" dataKey={yaxis_columns[0].name} name={yaxis_columns[0].legend} /*unit="kg"*/>
-          <Label value={yaxis_label} offset={-10} angle={-90} position="left" />
-        </YAxis>
-        {yaxis_columns.length > 1 ?
-          <ZAxis type="number" dataKey={yaxis_columns[1].name} name={yaxis_columns[1].legend} range={[50, 500]} />
-          :
-          <p></p>
-        }
-          <Scatter
-            data={data}
-            fill={yaxis_columns[0].color}
-            shape={shape}
-          />
-      </ScatterChart>
-    </ResponsiveContainer>
+    <div style={{height:'100%', textAlign:'center'}}>
+      {name && <h2 style={{cursor:'pointer'}} onClick={handleNameClick}>{name}</h2>}
+      {comment && <h3>{comment}</h3>}
+      <ResponsiveContainer width="100%" height={400}>
+        <ScatterChart margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
+          <CartesianGrid />
+          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+          <XAxis type="number" dataKey={xaxis_column.name} name={xaxis_label} /*unit="cm"*/ >
+            <Label value={xaxis_label} offset={-10} position="bottom" />
+          </XAxis>
+          <YAxis type="number" dataKey={yaxis_columns[0].name} name={yaxis_columns[0].legend} /*unit="kg"*/>
+            <Label value={yaxis_label} offset={-10} angle={-90} position="left" />
+          </YAxis>
+          {yaxis_columns.length > 1 ?
+            <ZAxis type="number" dataKey={yaxis_columns[1].name} name={yaxis_columns[1].legend} range={[50, 500]} />
+            :
+            <p></p>
+          }
+            <Scatter
+              data={data}
+              fill={yaxis_columns[0].color}
+              shape={shape}
+            />
+        </ScatterChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

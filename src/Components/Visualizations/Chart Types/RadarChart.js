@@ -2,6 +2,7 @@ import React from 'react';
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+import { Redirect } from "react-router-dom";
 
 // const data = [
 //   {
@@ -49,27 +50,45 @@ export function SDARadarChart (props){
   var yaxis_columns = props.data.column_data.slice(1,);
   const xaxis_label = props.data.xaxis_label;
   const yaxis_label = props.data.yaxis_label;
-  return (
-    <ResponsiveContainer width="100%" height={400}>
-      <RadarChart 
-        // outerRadius={90} 
-        // width={730} 
-        // height={250} 
-        data={data}
-        >
-          <PolarGrid />
-          <PolarAngleAxis dataKey={xaxis_column.name} />
-          <PolarRadiusAxis 
-            angle={45} 
-            // domain={[0, max_ycolumn_value]} 
-          />
-          {yaxis_columns.map(i => (
-          <Radar name={i.legend} dataKey={i.name} stroke={i.color} fill={i.color} fillOpacity={0.6} />
-          ))}
-          <Legend />
-          <Tooltip />
-      </RadarChart>
+  const name = props.data.name;
+  const comment = props.data.comment;
 
-    </ResponsiveContainer>
+  const visualizationID = props.visualizationID;
+  const [redirect, setRedirect] = React.useState('');      
+  const [selectedVisualization, setSelectedVisualization] = React.useState();
+  const handleNameClick = (event) => {
+    console.log("Editing visualization " + visualizationID.toString());
+    setSelectedVisualization(visualizationID);
+    setRedirect('edit');
+  }
+  if (redirect === 'edit' && selectedVisualization > 0) {
+    return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
+  }
+
+  return (
+    <div style={{height:'100%', textAlign:'center'}}>
+      {name && <h2 style={{cursor:'pointer'}} onClick={handleNameClick}>{name}</h2>}
+      {comment && <h3>{comment}</h3>}
+      <ResponsiveContainer width="100%" height={400}>
+        <RadarChart 
+          // outerRadius={90} 
+          // width={730} 
+          // height={250} 
+          data={data}
+          >
+            <PolarGrid />
+            <PolarAngleAxis dataKey={xaxis_column.name} />
+            <PolarRadiusAxis 
+              angle={45} 
+              // domain={[0, max_ycolumn_value]} 
+            />
+            {yaxis_columns.map(i => (
+            <Radar name={i.legend} dataKey={i.name} stroke={i.color} fill={i.color} fillOpacity={0.6} />
+            ))}
+            <Legend />
+            <Tooltip />
+        </RadarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { Redirect } from "react-router-dom";
 
 // const data = [
 //   { name: 'Group A', value: 400 },
@@ -19,12 +20,23 @@ export function SDAPieChart(props) {
   // const xaxis_label = props.data.xaxis_label;
   // const yaxis_label = props.data.yaxis_label;
   
+  
   const onPieEnter = (data, index) => {
     setActiveIndex(index);
     setActiveValue(queryData[index][xaxis_column.name]);
     // console.log(queryData[index][xaxis_column.name]);
   }
   
+  const name = props.data.name;
+  const comment = props.data.comment;
+  const visualizationID = props.visualizationID;
+  const [redirect, setRedirect] = React.useState('');      
+  const [selectedVisualization, setSelectedVisualization] = React.useState();
+  const handleNameClick = (event) => {
+    console.log("Editing visualization " + visualizationID.toString());
+    setSelectedVisualization(visualizationID);
+    setRedirect('edit');
+  }
   
   const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
@@ -72,36 +84,43 @@ export function SDAPieChart(props) {
       </g>
     );
   };
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'Teal'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'Teal', 'Grey', 'Black', '#C70039', 'DarkMagenta', 'LightCoral'];
   
+  if (redirect === 'edit' && selectedVisualization > 0) {
+    return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
+  }
   return (
-    <ResponsiveContainer width="100%" height={400} style={{alignItems: 'center', justifyContent: 'center'}}>
-      <PieChart 
-      // width={400} height={400}
-      >
-        {yaxis_columns.map((i,index) => (
-          <Pie
-            activeIndex={activeIndex}
-            activeShape={renderActiveShape}
-            activeValue={activeValue}
-            data={queryData}
-            // cx={200}   // We hide these two because they mess with centering 
-            // cy={200}
-            innerRadius={60 * (index+1)}
-            outerRadius={80 * (index + 1)}
-            fill={i.color}
-            dataKey={i.name}
-            onMouseEnter={onPieEnter}
-            // label
-          >
-            {
-              queryData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
-            }
-          </Pie>
-        
-        ))}
-        {/* <Legend /> */}
-      </PieChart>
-    </ResponsiveContainer>
+    <div style={{height:'100%', textAlign:'center'}}>
+      {name && <h2 style={{cursor:'pointer'}} onClick={handleNameClick}>{name}</h2>}
+      {comment && <h3>{comment}</h3>}
+      <ResponsiveContainer width="100%" height={400} style={{alignItems: 'center', justifyContent: 'center'}}>
+        <PieChart 
+        // width={400} height={400}
+        >
+          {yaxis_columns.map((i,index) => (
+            <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              activeValue={activeValue}
+              data={queryData}
+              // cx={200}   // We hide these two because they mess with centering 
+              // cy={200}
+              innerRadius={40 * (index+1)}
+              outerRadius={100 * (index + 1)}
+              fill={i.color}
+              dataKey={i.name}
+              onMouseEnter={onPieEnter}
+              // label
+            >
+              {
+                queryData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+              }
+            </Pie>
+          
+          ))}
+          {/* <Legend /> */}
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

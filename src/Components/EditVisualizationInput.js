@@ -23,7 +23,7 @@ export function EditVisualizationInput (props){
     
     const { user } = useAuth0();
     
-    const visualizationID = props.visualizationID;
+    var visualizationID = props.visualizationID;
 
     async function getVisualizationData(){
         const requestOptions = {
@@ -87,7 +87,6 @@ export function EditVisualizationInput (props){
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 'user_id': user.sub,
-                // 'visualization_id': visualizationID,
                 'sentence_id': sentenceID,
                 'type': visualizationType,
                 'comment': comment,
@@ -300,7 +299,7 @@ export function EditVisualizationInput (props){
             xaxis_label: xAxisLabel !==''? xAxisLabel:'',
             yaxis_label: yAxisLabel !==''? yAxisLabel:''
         });
-        console.log([... new Set(params.columns.map(column => column["name"]))]);
+        // console.log([... new Set(params.columns.map(column => column["name"]))]);
         console.log(params);
     }
     
@@ -318,12 +317,12 @@ export function EditVisualizationInput (props){
         });
     }
 
-    if (visualizationType === 'Radar chart' || visualizationType === 'Pie chart') {
+    if (visualizationType === 'Radar chart') {
         return (
             <div>
                 <form >
                     <ContainerVertical>
-                        <h3>General</h3>
+                        <h3>General {visualizationID}</h3>
                         <ContainerHorizontal>
                             <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
                             <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
@@ -352,7 +351,48 @@ export function EditVisualizationInput (props){
                 </form>
                 <h2>Render of the chart</h2>
                 {typeof(localRenderData.column_data)=='object'?
-                    <VisualizationController data={localRenderData} />
+                    <VisualizationController visualizationID={visualizationID} data={localRenderData} />
+                    :
+                    <h4>Hit Render to see the chart</h4>
+                }
+            </div>
+        );
+    }
+    if (visualizationType === 'Pie chart') {
+        return (
+            <div>
+                <form >
+                    <ContainerVertical>
+                        <h3>General {visualizationID}</h3>
+                        <ContainerHorizontal>
+                            <CoolTextField value={name} type="text" label='Visualization Name' onChange={handleNameChange} style={{width: "100%"}}/>
+                            <ModelSelect title='Sentence' list={sentences} state={{ selectedID: [sentenceID, setSentenceID] }} />
+                            <SimpleSelect title='Visualization type' /*style={{width:"100%"}}*/ list={visualizationTypes} state={{ selectedItem: [visualizationType, setVisualizationType] }} />
+                        </ContainerHorizontal>
+                        <CoolTextField value={comment} type="text" label='Comment' onChange={handleCommentChange} />
+                        <h3>Category Field</h3>
+                        <ContainerHorizontal>
+                            <SimpleSelect title='Column' list={headerRow} state={{ selectedItem: [xAxisColumn, setXAxisColumn] }} />
+                        </ContainerHorizontal>
+                        <h3>Value Field</h3>
+                        {[...Array(yAxisColumnCount).keys()].map(i => (
+                            <ContainerHorizontal>
+                                {/* <CoolTextField value={yAxisColumnLegends[i]} style={{width:"100%"}} type="text" label={'Value text'} onChange={(event) => handleYAxisColumnLegendsChange(event, i)} /> */}
+                                <InsideMapSelect title='Column' list={headerRow} colIndex={i} state={{ columnArray: [yAxisColumnNames, setYAxisColumnNames], render: [render, setRender] }}/>
+                                {/* <CoolTextField value={yAxisColumnColors[i]} style={{width:"100%"}} type="text" label={'Column '+(i+1)+' color'} onChange={(event) => handleYAxisColumnColorsChange(event, i)} /> */}
+                            </ContainerHorizontal>
+                        ))}
+                        <ContainerHorizontal>
+                            <CoolButton onClick={handleRender}> Render </CoolButton>
+                            {visualizationID > 0? 
+                                <CoolButton onClick={handleSave}> Save Changes </CoolButton> : <CoolButton onClick={handleCreate}> Create Visualization </CoolButton>
+                            }
+                        </ContainerHorizontal>
+                    </ContainerVertical>
+                </form>
+                <h2>Render of the chart</h2>
+                {typeof(localRenderData.column_data)=='object'?
+                    <VisualizationController  visualizationID={visualizationID} data={localRenderData} />
                     :
                     <h4>Hit Render to see the chart</h4>
                 }
@@ -407,7 +447,7 @@ export function EditVisualizationInput (props){
             </form>
             <h2>Render of the chart</h2>
             {typeof(localRenderData.column_data)=='object'?
-                <VisualizationController data={localRenderData} />
+                <VisualizationController  visualizationID={visualizationID} data={localRenderData} />
                 :
                 <h4>Hit Render to see the chart</h4>
             }
@@ -444,7 +484,7 @@ export function EditVisualizationInput (props){
                 </form>
                 <h2>Render of the chart</h2>
                 {typeof(localRenderData.column_data)=='object'?
-                    <VisualizationController name={name} comment={comment} data={localRenderData} />
+                    <VisualizationController visualizationID={visualizationID}  name={name} comment={comment} data={localRenderData} />
                     :
                     <h4>Hit Render to see the chart</h4>
                 }
@@ -478,7 +518,7 @@ export function EditVisualizationInput (props){
                 </form>
                 <h2>Render of the chart</h2>
                 {typeof(localRenderData.column_data)=='object'?
-                    <VisualizationController data={localRenderData} />
+                    <VisualizationController  visualizationID={visualizationID} data={localRenderData} />
                     :
                     <h4>Hit Render to see the chart</h4>
                 }
@@ -521,7 +561,7 @@ export function EditVisualizationInput (props){
             </form>
             <h2>Render of the chart</h2>
             {typeof(localRenderData.column_data)=='object'?
-                <VisualizationController name={name} comment={comment} data={localRenderData} />
+                <VisualizationController visualizationID={visualizationID} data={localRenderData} />
                 :
                 <h4>Hit Render to see the chart</h4>
             }

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Label, ResponsiveContainer
 } from 'recharts';
+import { Redirect } from "react-router-dom";
 
 // const data = [
 //   {name: 'Page A', uv: 4000, pv: 2400, amt: 2400,},
@@ -20,7 +21,26 @@ export function SDALineChart (props){
   var yaxis_columns = props.data.column_data.slice(1,);
   const xaxis_label = props.data.xaxis_label;
   const yaxis_label = props.data.yaxis_label;
+
+  const name = props.data.name;
+  const comment = props.data.comment;
+
+  const visualizationID = props.visualizationID;
+  const [redirect, setRedirect] = React.useState('');      
+  const [selectedVisualization, setSelectedVisualization] = React.useState();
+  const handleNameClick = (event) => {
+    console.log("Editing visualization " + visualizationID.toString());
+    setSelectedVisualization(visualizationID);
+    setRedirect('edit');
+  }
+  if (redirect === 'edit' && selectedVisualization > 0) {
+    return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
+  }
+
   return (
+    <div style={{height:'100%', textAlign:'center'}}>
+      {name && <h2 style={{cursor:'pointer'}} onClick={handleNameClick}>{name}</h2>}
+      {comment && <h3>{comment}</h3>}
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
         // width={600}
@@ -44,5 +64,6 @@ export function SDALineChart (props){
           ))}
       </LineChart>
     </ResponsiveContainer>
+    </div>
   );
 }

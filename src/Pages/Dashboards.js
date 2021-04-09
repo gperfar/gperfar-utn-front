@@ -195,6 +195,7 @@ export function Dashboards (){
         };
         const response = await fetch('https://gperfar-utn.herokuapp.com/dashboards', requestOptions);
         const data = await response.json();
+        console.log(data);
         return data;
     }
 
@@ -215,7 +216,7 @@ export function Dashboards (){
     
       useEffect(() => {
         getDashboardData().then(data => {
-          setDashboardVisuals(data.result.dashboard.dashboard_visualizations.sort((a, b) => (a.order > b.order) ? 1 : -1));
+          setDashboardVisuals(data.result.dashboard.dashboard_visualizations);//.sort((a, b) => (a.order > b.order) ? 1 : -1));
           setDashboardName(data.result.dashboard.name);
         })
         }, []);
@@ -238,7 +239,7 @@ export function Dashboards (){
                     <div /*style={{textAlign: 'center', justifyContent: 'center'}} */ >
                       {/* <h2>{dashboardVisuals[index].name}</h2> */}
                       {/* <h4 className='coolcolors' style={{marginTop:0}}>{dashboardVisuals[index].comment}</h4> */}
-                      {typeof(visualData)=='object'? <VisualizationController data={visualData}/>: <h2>Rendering...</h2>}
+                      {typeof(visualData)=='object'? <VisualizationController visualizationID={dashboardVisuals[index]._id} data={visualData}/>: <h2>Rendering...</h2>}
                       <Divider style={{marginTop:25}}/>
                     </div>
                   ))}

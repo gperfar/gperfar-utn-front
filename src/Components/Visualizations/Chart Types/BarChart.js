@@ -2,6 +2,7 @@ import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,Label, ResponsiveContainer
 } from 'recharts';
+import { Redirect } from "react-router-dom";
 
 // const data = [
 //   {name: 'Page A', uv: 4000, pv: 2400, amt: 2400,},
@@ -20,29 +21,47 @@ export function SDABarChart (props){
   var yaxis_columns = props.data.column_data.slice(1,);
   const xaxis_label = props.data.xaxis_label;
   const yaxis_label = props.data.yaxis_label;
+  const name = props.data.name;
+  const comment = props.data.comment;
+
+  const visualizationID = props.visualizationID;
+  const [redirect, setRedirect] = React.useState('');      
+  const [selectedVisualization, setSelectedVisualization] = React.useState();
+  const handleNameClick = (event) => {
+    console.log("Editing visualization " + visualizationID.toString());
+    setSelectedVisualization(visualizationID);
+    setRedirect('edit');
+  }
+  if (redirect === 'edit' && selectedVisualization > 0) {
+    return <Redirect to={'/visualizations/edit/'+ selectedVisualization.toString()} />
+  }
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <BarChart
-        // width={600}
-        // height={400}
-        data={data}
-        margin={{
-          top: 5, right: 30, left: 20, bottom: 20,
-        }}
-        >
-        <CartesianGrid strokeDasharray="3 10" />
-        <XAxis dataKey={xaxis_column.name}>
-          <Label value={xaxis_label} offset={5} position="bottom" />
-        </XAxis>
-        <YAxis>
-          <Label value={yaxis_label} angle={-90} position="left" />
-        </YAxis>
-        <Tooltip />
-        <Legend verticalAlign="top" align="right"/>
-        {yaxis_columns.map(i => (
-          <Bar name={i.legend} dataKey={i.name} fill={i.color} stroke={i.color}/>
-          ))}
-      </BarChart>
-    </ResponsiveContainer>
+    <div style={{height:'100%', textAlign:'center'}}>
+      {name && <h2 style={{cursor:'pointer'}} onClick={handleNameClick}>{name}</h2>}
+      {comment && <h3>{comment}</h3>}
+      <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            // width={600}
+            // height={400}
+            data={data}
+            margin={{
+              top: 5, right: 30, left: 20, bottom: 20,
+            }}
+            >
+            <CartesianGrid strokeDasharray="3 10" />
+            <XAxis dataKey={xaxis_column.name}>
+              <Label value={xaxis_label} offset={5} position="bottom" />
+            </XAxis>
+            <YAxis>
+              <Label value={yaxis_label} angle={-90} position="left" />
+            </YAxis>
+            <Tooltip />
+            <Legend verticalAlign="top" align="right"/>
+            {yaxis_columns.map(i => (
+              <Bar name={i.legend} dataKey={i.name} fill={i.color} stroke={i.color}/>
+              ))}
+          </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

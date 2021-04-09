@@ -36,15 +36,27 @@ const useStyles = makeStyles((theme) => ({
 
     root: {
       marginTop: '15px',
-      marginBottom: '15px',
+    //   marginBottom: '15px',
       // paddingTop: '15px',
-      paddingBottom: '15px',
+    //   paddingBottom: '15px',
       backgroundColor: theme.palette.background.paper,
       // '& .MuiTextField-root': {
       //   margin: theme.spacing(1),
       //   // width: '25ch',
       // },
     },
+
+    root2: {
+        marginTop: '15px',
+        // marginBottom: '15px',
+        paddingTop: '15px',
+        paddingBottom: '15px',
+        backgroundColor: '#DDDDDD',
+        // '& .MuiTextField-root': {
+        //   margin: theme.spacing(1),
+        //   // width: '25ch',
+        // },
+      },
   
     listcontainer: {
       flexGrow: 1,
@@ -230,9 +242,10 @@ export function EditSentenceInput (props){
         const temp_steps = transformationSteps;
         temp_steps.push({
             "type": type,
-            "results": queryResults, 
+            "results": transformationSteps.length > 0? transformationSteps[transformationSteps.length - 1].results: queryResults, 
             "params":
-                type==='Select columns'? {columns: visualQueryParams.selected_columns} 
+                type==='Select columns'? {columns: transformationSteps.length > 0? transformationSteps[transformationSteps.length - 1].params.columns: visualQueryParams.selected_columns} 
+                : type==='Reorder'? {columns: transformationSteps.length > 0? transformationSteps[transformationSteps.length - 1].params.columns: visualQueryParams.selected_columns} 
                 : '',
             "comment": ''
         })
@@ -271,6 +284,13 @@ export function EditSentenceInput (props){
         setTransformationSteps(temp_steps);
         setRender(render + 1);
         console.log('Modified transformationSteps');
+    }
+
+    const handleReorder = (event, stepIndex) => {
+        var temp_steps = transformationSteps;
+        temp_steps[stepIndex].params.columns[0].order = 1;
+        temp_steps[stepIndex].params.columns[1].order = 0
+        console.log(temp_steps[stepIndex].params.columns);
     }
     return (
             <div>
@@ -321,6 +341,38 @@ export function EditSentenceInput (props){
                                                     <CoolButton2 onClick={(event) => handleSelect(event, index, step.params.columns.filter(column => column.checked == true || column.checked == undefined ))}> Save </CoolButton2>
                                                     </List>
                                                 }
+                                                {step.type ==='Reorder' &&
+                                                    // <List className={classes.list}>
+                                                    //     {step.params.columns.map((column, columnIndex) =>(
+                                                    //         <div>
+                                                    //             <ListItem onClick={(event) => handleSelectToggle(event, index, columnIndex)}>
+                                                    //                 <ListItemIcon> <Checkbox edge="start" checked={typeof(step.params.columns[columnIndex].checked)!== 'undefined'? step.params.columns[columnIndex].checked : true} /> </ListItemIcon>
+                                                    //                 <ListItemText primary={column.label} />
+                                                    //             </ListItem>
+                                                    //             <Divider light center/>
+                                                    //         </div>
+                                                    //     ))
+                                                    // }
+                                                    // <CoolButton2 onClick={(event) => handleSelect(event, index, step.params.columns.filter(column => column.checked == true || column.checked == undefined ))}> Save </CoolButton2>
+                                                    // </List>
+                                                    <Button onClick={(event) => handleReorder(event, index)}>Reorder</Button>
+                                                }
+                                                {step.type ==='Reorder' &&
+                                                    // <List className={classes.list}>
+                                                    //     {step.params.columns.map((column, columnIndex) =>(
+                                                    //         <div>
+                                                    //             <ListItem onClick={(event) => handleSelectToggle(event, index, columnIndex)}>
+                                                    //                 <ListItemIcon> <Checkbox edge="start" checked={typeof(step.params.columns[columnIndex].checked)!== 'undefined'? step.params.columns[columnIndex].checked : true} /> </ListItemIcon>
+                                                    //                 <ListItemText primary={column.label} />
+                                                    //             </ListItem>
+                                                    //             <Divider light center/>
+                                                    //         </div>
+                                                    //     ))
+                                                    // }
+                                                    // <CoolButton2 onClick={(event) => handleSelect(event, index, step.params.columns.filter(column => column.checked == true || column.checked == undefined ))}> Save </CoolButton2>
+                                                    // </List>
+                                                    <Button onClick={(event) => handleReorder(event, index)}>Reorder</Button>
+                                                }
                                             </div>
                                         }
                                         <Divider/>
@@ -328,15 +380,22 @@ export function EditSentenceInput (props){
                                 )}
                             </List>
                         </div>
-                        <div style={{display:'flex', width:'100%', justifyContent:'center'}}>
+                        <div style={{display:'flex', width:'100%', justifyContent:'center'}} className={classes.root2}>
                         <ButtonGroup color='primary' size='small'>
+                        <Button onClick={(event) => handleAddTransformationStep(event,'Add column')}>Add column</Button>
                             <Button onClick={(event) => handleAddTransformationStep(event,'Select columns')}>Select columns</Button>
                             <Button onClick={(event) => handleAddTransformationStep(event,'Sort')}>Sort</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Group')}>Group</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Reorder')}>Reorder</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Rename')}>Rename</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Limit rows')}>Limit rows</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Filter')}>Filter</Button>
+                            <Button onClick={(event) => handleAddTransformationStep(event,'Transpose')}>Transpose</Button>
                         </ButtonGroup>
                         </div>
                     </div> 
                     <h2>Query results</h2>
-                    <SDATable info={transformationSteps.length > 0? transformationSteps[transformationSteps.length -1].results : queryResults} />
+                    <SDATable metadata={transformationSteps.length > 0 && transformationSteps[transformationSteps.length -1].params.columns} info={transformationSteps.length > 0? transformationSteps[transformationSteps.length -1].results : queryResults} />
                 </div>         
                 }
                 <div>
